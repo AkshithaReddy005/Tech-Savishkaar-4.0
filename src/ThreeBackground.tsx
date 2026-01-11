@@ -1,24 +1,109 @@
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Stars } from '@react-three/drei'
 import * as THREE from 'three'
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
-function clamp(n: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, n))
+function FloatingShapes({ mouse }: { mouse: { current: { x: number; y: number } } }) {
+  const groupRef = useRef<THREE.Group>(null)
+
+  const material = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: new THREE.Color('#0b1220'),
+        emissive: new THREE.Color('#22d3ee'),
+        emissiveIntensity: 0.18,
+        metalness: 0.55,
+        roughness: 0.25,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.35,
+      }),
+    [],
+  )
+
+  const shapes = useMemo(
+    () =>
+      [
+        {
+          key: 'a',
+          geo: new THREE.IcosahedronGeometry(0.55, 0),
+          pos: new THREE.Vector3(-2.3, 1.1, -2.4),
+          rot: new THREE.Euler(0.1, 0.2, 0.0),
+          speed: new THREE.Vector3(0.10, 0.14, 0.08),
+          float: 0.22,
+        },
+        {
+          key: 'b',
+          geo: new THREE.OctahedronGeometry(0.45, 0),
+          pos: new THREE.Vector3(2.2, 0.2, -1.6),
+          rot: new THREE.Euler(0.2, -0.1, 0.1),
+          speed: new THREE.Vector3(0.12, 0.10, 0.06),
+          float: 0.18,
+        },
+        {
+          key: 'c',
+          geo: new THREE.TetrahedronGeometry(0.42, 0),
+          pos: new THREE.Vector3(0.6, 1.35, -3.2),
+          rot: new THREE.Euler(-0.2, 0.15, -0.05),
+          speed: new THREE.Vector3(0.09, 0.16, 0.07),
+          float: 0.24,
+        },
+        {
+          key: 'd',
+          geo: new THREE.DodecahedronGeometry(0.5, 0),
+          pos: new THREE.Vector3(-0.9, -0.4, -1.3),
+          rot: new THREE.Euler(0.05, -0.25, 0.15),
+          speed: new THREE.Vector3(0.08, 0.11, 0.09),
+          float: 0.16,
+        },
+      ] as const,
+    [],
+  )
+
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime()
+    const g = groupRef.current
+    if (!g) return
+
+    const targetX = mouse.current.x * 0.55
+    const targetY = mouse.current.y * 0.35
+    g.position.x = THREE.MathUtils.lerp(g.position.x, targetX, 0.06)
+    g.position.y = THREE.MathUtils.lerp(g.position.y, targetY, 0.06)
+    g.rotation.y = THREE.MathUtils.lerp(g.rotation.y, mouse.current.x * 0.25, 0.06)
+    g.rotation.x = THREE.MathUtils.lerp(g.rotation.x, -mouse.current.y * 0.18, 0.06)
+
+    for (let i = 0; i < g.children.length; i++) {
+      const child = g.children[i] as THREE.Mesh
+      const s = shapes[i]
+      if (!s) continue
+      child.rotation.x = s.rot.x + t * s.speed.x
+      child.rotation.y = s.rot.y + t * s.speed.y
+      child.rotation.z = s.rot.z + t * s.speed.z
+      child.position.y = s.pos.y + Math.sin(t * 0.9 + i) * s.float
+    }
+  })
+
+  return (
+    <group ref={groupRef}>
+      {shapes.map(s => (
+        <mesh key={s.key} geometry={s.geo} material={material} position={[s.pos.x, s.pos.y, s.pos.z]} />
+      ))}
+    </group>
+  )
 }
 
 function Particles() {
   const pointsRef = useRef<THREE.Points>(null)
 
   const { positions } = useMemo(() => {
-    const count = 1200
+    const count = 800
     const arr = new Float32Array(count * 3)
     for (let i = 0; i < count; i++) {
       const i3 = i * 3
-      const r = 18 * Math.sqrt(Math.random())
+      const r = 15 * Math.sqrt(Math.random())
       const a = Math.random() * Math.PI * 2
       arr[i3 + 0] = Math.cos(a) * r
-      arr[i3 + 1] = (Math.random() - 0.5) * 6
+      arr[i3 + 1] = (Math.random() - 0.5) * 4
       arr[i3 + 2] = Math.sin(a) * r
     }
     return { positions: arr }
@@ -35,13 +120,13 @@ function Particles() {
   return (
     <points ref={pointsRef}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" array={positions} itemSize={3} />
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
       <pointsMaterial
-        size={0.03}
+        size={0.025}
         color={new THREE.Color('#9ee7ff')}
         transparent
-        opacity={0.55}
+        opacity={0.4}
         depthWrite={false}
         blending={THREE.AdditiveBlending}
       />
@@ -50,8 +135,7 @@ function Particles() {
 }
 
 function Scene() {
-  const group = useRef<THREE.Group>(null)
-  const core = useRef<THREE.Mesh>(null)
+  const gridGroup = useRef<THREE.Group>(null)
   const mouse = useRef({ x: 0, y: 0 })
 
   const gridGeo = useMemo(() => new THREE.PlaneGeometry(60, 60, 70, 70), [])
@@ -60,7 +144,7 @@ function Scene() {
       new THREE.MeshBasicMaterial({
         color: new THREE.Color('#22d3ee'),
         transparent: true,
-        opacity: 0.12,
+        opacity: 0.06,
         wireframe: true,
       }),
     [],
@@ -81,80 +165,77 @@ function Scene() {
       new THREE.MeshBasicMaterial({
         color: new THREE.Color('#a78bfa'),
         transparent: true,
-        opacity: 0.08,
+        opacity: 0.04,
         wireframe: true,
       }),
     [],
   )
 
-  useFrame(({ camera, clock }) => {
-    const maxScroll = Math.max(1, document.body.scrollHeight - window.innerHeight)
-    const t = clamp(window.scrollY / maxScroll, 0, 1)
-    const time = clock.getElapsedTime()
+  useFrame((state, delta) => {
+    if (!gridGroup.current) return
+    if (delta > 0.1) return // Skip frames if lagging
 
-    if (group.current) {
-      group.current.rotation.y = time * 0.06 + t * Math.PI * 0.25
-      group.current.position.y = THREE.MathUtils.lerp(0.25, -0.65, t)
-    }
+    const time = state.clock.getElapsedTime()
+    const targetZ = 6.5 + Math.sin(time * 0.15) * 0.8
+    const targetY = 0.4 + Math.cos(time * 0.12) * 0.3
+    const targetX = Math.sin(time * 0.08) * 1.2
 
-    if (core.current) {
-      core.current.rotation.y = time * 0.35 + t * Math.PI * 0.5
-      core.current.rotation.x = time * 0.18
-    }
+    const parallaxX = mouse.current.x * 0.25
+    const parallaxY = mouse.current.y * 0.25
 
-    const targetZ = THREE.MathUtils.lerp(7.5, 5.2, t)
-    const targetY = THREE.MathUtils.lerp(0.8, -0.2, t)
-    const targetX = THREE.MathUtils.lerp(-0.25, 0.35, t)
-
-    const parallaxX = mouse.current.x * 0.55
-    const parallaxY = mouse.current.y * 0.35
-
-    camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 0.06)
-    camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetY + parallaxY, 0.06)
-    camera.position.x = THREE.MathUtils.lerp(camera.position.x, targetX + parallaxX, 0.06)
-    camera.lookAt(0, 0, 0)
+    state.camera.position.z = THREE.MathUtils.lerp(state.camera.position.z, targetZ, 0.04)
+    state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, targetY + parallaxY, 0.04)
+    state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, targetX + parallaxX, 0.04)
+    state.camera.lookAt(0, 0, 0)
   })
 
   return (
     <>
-      <ambientLight intensity={0.7} />
-      <directionalLight position={[3, 3, 2]} intensity={1.2} />
-      <pointLight position={[-4, 2, 2]} intensity={0.85} color={'#22d3ee'} />
-      <pointLight position={[4, -2, 2]} intensity={0.75} color={'#a78bfa'} />
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[3, 3, 2]} intensity={0.8} />
+      <pointLight position={[-4, 2, 2]} intensity={0.6} color={'#22d3ee'} />
+      <pointLight position={[4, -2, 2]} intensity={0.5} color={'#a78bfa'} />
 
-      <group ref={group}>
+      <group ref={gridGroup}>
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.8, 0]} geometry={gridGeo} material={gridMat} />
         <mesh rotation={[0, 0, 0]} position={[0, 0, -8]} geometry={gridGeo} material={gridMat2} />
-
-        <mesh ref={core} position={[0, 0.3, 0]}>
-          <torusKnotGeometry args={[0.9, 0.28, 140, 18]} />
-          <meshStandardMaterial
-            color={new THREE.Color('#0b1220')}
-            metalness={0.75}
-            roughness={0.18}
-            emissive={new THREE.Color('#22d3ee')}
-            emissiveIntensity={0.55}
-            wireframe
-          />
-        </mesh>
-
-        <Particles />
       </group>
 
-      <Stars radius={70} depth={45} count={650} factor={2.2} saturation={0} fade speed={0.35} />
+      <FloatingShapes mouse={mouse} />
+
+      <Particles />
+
+      <Stars radius={50} depth={30} count={400} factor={1.8} saturation={0} fade speed={0.25} />
     </>
   )
 }
 
 export default function ThreeBackground() {
+  const [isLoaded, setIsLoaded] = useState(false)
+
   return (
     <div className="three-wrap" aria-hidden>
       <Canvas
         className="three-canvas"
-        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+        gl={{ 
+          antialias: true, 
+          alpha: true, 
+          powerPreference: 'high-performance',
+          precision: 'lowp',
+          stencil: false,
+          depth: false
+        }}
         camera={{ position: [0, 0.4, 6.5], fov: 45, near: 0.1, far: 200 }}
+        onCreated={() => {
+          setIsLoaded(true)
+          // Reduce render quality for better performance
+          const canvas = document.querySelector('.three-canvas') as HTMLCanvasElement
+          if (canvas) {
+            canvas.style.willChange = 'transform'
+          }
+        }}
       >
-        <Scene />
+        {isLoaded && <Scene />}
       </Canvas>
     </div>
   )
