@@ -28,6 +28,13 @@
 
 html {
   scroll-behavior: smooth;
+  height: 100%;
+}
+
+@media (pointer: coarse) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 * {
@@ -37,8 +44,11 @@ html {
 body {
   margin: 0;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  height: -webkit-fill-available;
   overflow-x: hidden;
+  overscroll-behavior-y: none;
 }
 
 a {
@@ -47,7 +57,9 @@ a {
 }
 
 #app {
-  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  height: -webkit-fill-available;
 }
 
 .container {
@@ -1029,7 +1041,7 @@ a {
   pointer-events: none;
 }
 
-/* Performance optimizations */
+/* Mobile optimizations */
 .three-canvas {
   will-change: transform;
   contain: layout style paint;
@@ -1065,6 +1077,34 @@ a {
 @keyframes glow {
   0%, 100% { box-shadow: 0 0 20px var(--round-color, #22d3ee); }
   50% { box-shadow: 0 0 30px var(--round-color, #22d3ee), 0 0 40px var(--round-color, #22d3ee); }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+  .three-canvas {
+    /* Disable heavy effects on mobile */
+    filter: blur(0.5px);
+  }
+  
+  .domain-img {
+    /* Optimize GIF loading on mobile */
+    content-visibility: auto;
+  }
+  
+  .round-card {
+    /* Reduce animation complexity on mobile */
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  
+  /* Disable heavy animations on mobile */
+  .round-number,
+  .round-connector {
+    animation: none;
+  }
+  
+  .floating-particles {
+    display: none;
+  }
 }
 
 .tilt-card {

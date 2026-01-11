@@ -2,6 +2,7 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { Stars } from '@react-three/drei'
 import * as THREE from 'three'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { isMobile } from 'react-device-detect'
 
 function FloatingShapes({ mouse }: { mouse: { current: { x: number; y: number } } }) {
   const groupRef = useRef<THREE.Group>(null)
@@ -134,7 +135,7 @@ function Particles() {
   )
 }
 
-function Scene() {
+function Scene({ isMobile }: { isMobile: boolean }) {
   const gridGroup = useRef<THREE.Group>(null)
   const mouse = useRef({ x: 0, y: 0 })
 
@@ -191,41 +192,46 @@ function Scene() {
 
   return (
     <>
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[3, 3, 2]} intensity={0.8} />
-      <pointLight position={[-4, 2, 2]} intensity={0.6} color={'#22d3ee'} />
-      <pointLight position={[4, -2, 2]} intensity={0.5} color={'#a78bfa'} />
+      <ambientLight intensity={isMobile ? 0.3 : 0.5} />
+      <directionalLight position={[3, 3, 2]} intensity={isMobile ? 0.5 : 0.8} />
+      <pointLight position={[-4, 2, 2]} intensity={isMobile ? 0.3 : 0.6} color={'#22d3ee'} />
+      <pointLight position={[4, -2, 2]} intensity={isMobile ? 0.25 : 0.5} color={'#a78bfa'} />
 
       <group ref={gridGroup}>
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.8, 0]} geometry={gridGeo} material={gridMat} />
         <mesh rotation={[0, 0, 0]} position={[0, 0, -8]} geometry={gridGeo} material={gridMat2} />
       </group>
 
-      <FloatingShapes mouse={mouse} />
+      {!isMobile && <FloatingShapes mouse={mouse} />}
 
-      <Particles />
+      {!isMobile && <Particles />}
 
-      <Stars radius={50} depth={30} count={400} factor={1.8} saturation={0} fade speed={0.25} />
+      <Stars radius={isMobile ? 30 : 50} depth={isMobile ? 20 : 30} count={isMobile ? 200 : 400} factor={isMobile ? 1.5 : 1.8} saturation={0} fade speed={isMobile ? 0.15 : 0.25} />
     </>
   )
 }
 
 export default function ThreeBackground() {
   const [isLoaded, setIsLoaded] = useState(false)
+  const [isMobileDevice, setIsMobileDevice] = useState(false)
+
+  useEffect(() => {
+    setIsMobileDevice(isMobile)
+  }, [])
 
   return (
     <div className="three-wrap" aria-hidden>
       <Canvas
         className="three-canvas"
         gl={{ 
-          antialias: true, 
+          antialias: !isMobileDevice, 
           alpha: true, 
           powerPreference: 'high-performance',
-          precision: 'lowp',
+          precision: isMobileDevice ? 'lowp' : 'mediump',
           stencil: false,
           depth: false
         }}
-        camera={{ position: [0, 0.4, 6.5], fov: 45, near: 0.1, far: 200 }}
+        camera={{ position: [0, 0.4, isMobileDevice ? 8 : 6.5], fov: 45, near: 0.1, far: 200 }}
         onCreated={() => {
           setIsLoaded(true)
           // Reduce render quality for better performance
@@ -235,7 +241,7 @@ export default function ThreeBackground() {
           }
         }}
       >
-        {isLoaded && <Scene />}
+        {isLoaded && <Scene isMobile={isMobileDevice} />}
       </Canvas>
     </div>
   )

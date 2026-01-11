@@ -189,10 +189,10 @@ export default function App() {
   }, [])
 
   const sectionMotion = {
-    initial: { opacity: 0, y: 30, filter: 'blur(6px)' },
-    whileInView: { opacity: 1, y: 0, filter: 'blur(0px)' },
+    initial: { opacity: 1, y: 0 },
+    whileInView: { opacity: 1, y: 0 },
     transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
-    viewport: { once: true, amount: 0.22 },
+    viewport: { once: false, amount: 0.1 },
   } as const
 
   return (
