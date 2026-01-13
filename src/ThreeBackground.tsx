@@ -11,13 +11,13 @@ function FloatingShapes({ mouse }: { mouse: { current: { x: number; y: number } 
     () =>
       new THREE.MeshStandardMaterial({
         color: new THREE.Color('#0b1220'),
-        emissive: new THREE.Color('#22d3ee'),
-        emissiveIntensity: 0.18,
+        emissive: new THREE.Color('#4ad9ff'),
+        emissiveIntensity: 0.28,
         metalness: 0.55,
         roughness: 0.25,
         wireframe: true,
         transparent: true,
-        opacity: 0.35,
+        opacity: 0.42,
       }),
     [],
   )
@@ -127,7 +127,7 @@ function Particles() {
         size={0.025}
         color={new THREE.Color('#9ee7ff')}
         transparent
-        opacity={0.4}
+        opacity={0.22}
         depthWrite={false}
         blending={THREE.AdditiveBlending}
       />
@@ -143,9 +143,9 @@ function Scene({ isMobile }: { isMobile: boolean }) {
   const gridMat = useMemo(
     () =>
       new THREE.MeshBasicMaterial({
-        color: new THREE.Color('#22d3ee'),
+        color: new THREE.Color('#4ad9ff'),
         transparent: true,
-        opacity: 0.06,
+        opacity: 0.18,
         wireframe: true,
       }),
     [],
@@ -164,9 +164,9 @@ function Scene({ isMobile }: { isMobile: boolean }) {
   const gridMat2 = useMemo(
     () =>
       new THREE.MeshBasicMaterial({
-        color: new THREE.Color('#a78bfa'),
+        color: new THREE.Color('#c4b5fd'),
         transparent: true,
-        opacity: 0.04,
+        opacity: 0.12,
         wireframe: true,
       }),
     [],
@@ -212,7 +212,6 @@ function Scene({ isMobile }: { isMobile: boolean }) {
 }
 
 export default function ThreeBackground() {
-  const [isLoaded, setIsLoaded] = useState(false)
   const [isMobileDevice, setIsMobileDevice] = useState(false)
 
   useEffect(() => {
@@ -224,24 +223,26 @@ export default function ThreeBackground() {
       <Canvas
         className="three-canvas"
         gl={{ 
-          antialias: !isMobileDevice, 
+          antialias: false, 
           alpha: true, 
           powerPreference: 'high-performance',
-          precision: isMobileDevice ? 'lowp' : 'mediump',
+          precision: 'lowp',
           stencil: false,
-          depth: false
+          depth: false,
+          preserveDrawingBuffer: false,
+          failIfMajorPerformanceCaveat: false
         }}
         camera={{ position: [0, 0.4, isMobileDevice ? 8 : 6.5], fov: 45, near: 0.1, far: 200 }}
         onCreated={() => {
-          setIsLoaded(true)
-          // Reduce render quality for better performance
+          // Optimize canvas for better scroll performance
           const canvas = document.querySelector('.three-canvas') as HTMLCanvasElement
           if (canvas) {
-            canvas.style.willChange = 'transform'
+            canvas.style.willChange = 'auto'
+            canvas.style.transform = 'translateZ(0)'
           }
         }}
       >
-        {isLoaded && <Scene isMobile={isMobileDevice} />}
+        <Scene isMobile={isMobileDevice} />
       </Canvas>
     </div>
   )
