@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { Target, Lightbulb, Handshake, Zap, Sprout, Globe, Stethoscope, Menu, X, Brain, Trophy, Award, Users, Lock } from 'lucide-react'
+import Lottie from 'lottie-react'
 import ThreeBackground from './ThreeBackground'
 
 // Floating code snippets component
@@ -95,6 +96,33 @@ const MatrixRain = () => {
   )
 }
 
+const RobotVisual = () => {
+  const [animationData, setAnimationData] = useState<unknown>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    fetch('/domains/Programming.json')
+      .then(r => r.json())
+      .then(data => {
+        if (!cancelled) setAnimationData(data)
+      })
+      .catch(() => {
+        if (!cancelled) setAnimationData(null)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  return (
+    <div className="hero-robot" aria-hidden>
+      {animationData ? (
+        <Lottie animationData={animationData as any} loop autoplay />
+      ) : null}
+    </div>
+  )
+}
+
 type NavItem = {
   id: string
   label: string
@@ -118,9 +146,9 @@ function clamp(n: number, min: number, max: number) {
 }
 
 const EVENT = {
-  name: 'TechSaavishkaar',
+  name: 'Tech Savishkaar',
   edition: '4.0',
-  organiser: 'Vasavi College of Engineering (A)',
+  organiser: 'Vasavi College of\u00A0Engineering',
   department: 'Department of Information Technology',
   tagline: 'Where Creativity Meets Code',
   dateLabel: 'Coming Soon',
@@ -128,8 +156,8 @@ const EVENT = {
   brochureUrl: 'https://example.com/brochure',
   registrationDeadline: 'Registration deadline: 24 January 2026',
   totalPrize: '₹1,25,000',
-  teamSize: 'Team size: 1–5 members',
-  roundsCount: '3 elimination rounds',
+  teamSize: 'Team size: 1–4',
+  roundsCount: '3 elimination',
   eventStartISO: '2026-01-25T09:00:00+05:30',
 }
 
@@ -307,11 +335,11 @@ export default function App() {
       { name: 'Saakshi', role: 'Student Coordinator', phone: '+91 9041850029' },
       { name: 'Aashritha', role: 'Student Coordinator', phone: '+91 9985128512' },
       // Faculty coordinators
-      { name: 'Dr. S.V.Ramana, M.Tech., Ph.D.', role: 'Principal' },
-      { name: 'Dr. K. Ram Mohan Rao, M.Tech., Ph.D.', role: 'Professor & HOD, IT Department' },
-      { name: 'C. Sireesha, M.Tech., Ph.D.', role: 'Faculty Coordinator' },
-      { name: 'Mrs. Sathya Maranganti', role: 'Faculty Coordinator' },
-      { name: 'Mrs. Sruthi Anand', role: 'Faculty Coordinator' },
+      { name: 'Dr. S.V.Ramana', role: 'Principal' },
+      { name: 'Dr. K. Ram Mohan Rao', role: 'Professor & HOD, IT Department' },
+      { name: 'C. Sireesha', role: 'Faculty Coordinator' },
+      { name: ' Sathya Maranganti', role: 'Faculty Coordinator' },
+      { name: 'Sruthi Anand', role: 'Faculty Coordinator' },
     ],
     []
   )
@@ -337,13 +365,6 @@ export default function App() {
     }, 2800)
     return () => window.clearInterval(id)
   }, [])
-
-  const scrollPartners = (dir: -1 | 1) => {
-    const track = partnersTrackRef.current
-    if (!track) return
-    const delta = track.clientWidth
-    track.scrollBy({ left: dir * delta, behavior: 'smooth' })
-  }
 
   // Auto-scroll partners logos horizontally with wrap-around
   useEffect(() => {
@@ -494,19 +515,19 @@ export default function App() {
   }, [hasAnimatedPrize])
 
   const sectionMotion = {
-    initial: { opacity: 0, y: 8 },
+    initial: { opacity: 0, y: 6 },
     whileInView: { 
       opacity: 1, 
       y: 0,
       transition: { 
-        duration: 0.25, 
+        duration: 0.18, 
         ease: [0.25, 0.46, 0.45, 0.94], // Fast, smooth ease-out
       }
     },
     viewport: { 
       once: true, 
       amount: 0.05, // Trigger very early (5% visible)
-      margin: '0px 0px -80px 0px' // Start animating 80px before section enters
+      margin: '0px 0px -140px 0px' // Start animating earlier for snappier reveals
     },
   } as const
 
@@ -522,9 +543,9 @@ export default function App() {
 
       <header className="site-header">
         <div className="container header-inner">
-          <a className="brand" href="#home" aria-label="TechSaavishkaar" onClick={(e) => { e.preventDefault(); scrollToSection('home') }}>
+          <a className="brand" href="#home" aria-label="TechSavishkaar" onClick={(e) => { e.preventDefault(); scrollToSection('home') }}>
             <span className="brand-mark" />
-            <span className="brand-text">TechSaavishkaar</span>
+            <span className="brand-text">TechSavishkaar</span>
           </a>
 
           <nav className="nav" aria-label="Primary">
@@ -580,9 +601,10 @@ export default function App() {
           <BackgroundGlyphs />
           <div className="container hero-inner">
             <div className="hero-copy">
-              <p className="eyebrow">
-                {EVENT.organiser} · {EVENT.department}
-              </p>
+              <div className="eyebrow">
+                <div className="eyebrow-org">{EVENT.organiser}</div>
+                <div className="eyebrow-dept">{EVENT.department}</div>
+              </div>
 
               <h1 className="hero-title">
                 <span className="hero-title-main">{EVENT.name}</span>
@@ -635,36 +657,30 @@ export default function App() {
               <div className="hero-marquee" aria-hidden>
                 <div className="marquee">
                   <div className="marquee-track">
-                    <div className="marquee-group">
-                      {Array.from({ length: 4 }).map((_, rep) =>
-                        [
-                          'Agritech',
-                          'Remote Sensing – Environment & Sustainable Development',
-                          'HealthTech',
-                          'Cyber Security',
-                        ].map((d) => (
-                          <span key={`a-${rep}-${d}`} className="logo-pill">
-                            {EVENT.name} {EVENT.edition} · {d}
-                          </span>
-                        ))
-                      )}
+                    {(() => {
+                      const base = [
+                        'Tech Savishkaar',
+                        'Agritech',
+                        'AIML for Remote Sensing – Environment & Sustainable Development',
+                        'HealthTech',
+                        'Cyber Security',
+                      ]
+
+                      const ticker = base.join('   •   ')
+                      const longTicker = Array.from({ length: 8 }, () => ticker).join('   •   ')
+
+                      return [0, 1].map((i) => (
+                        <span key={i} className="hero-marquee-text">
+                          {longTicker}
+                        </span>
+                      ))
+                    })()}
+                  </div>
                 </div>
-                    <div className="marquee-group" aria-hidden>
-                      {Array.from({ length: 4 }).map((_, rep) =>
-                        [
-                          'Agritech',
-                          'Remote Sensing – Environment & Sustainable Development',
-                          'HealthTech',
-                          'Cyber Security',
-                        ].map((d) => (
-                          <span key={`b-${rep}-${d}`} className="logo-pill">
-                            {EVENT.name} {EVENT.edition} · {d}
-                          </span>
-                        ))
-                      )}
-                </div>
-                </div>
-                </div>
+              </div>
+
+              <div className="hero-visual hero-visual-mobile" aria-hidden>
+                <RobotVisual />
               </div>
 
               <div className="hero-countdown-wrapper" aria-label="Countdown to event start">
@@ -693,6 +709,10 @@ export default function App() {
               </div>
             </div>
 
+            <div className="hero-visual hero-visual-desktop" aria-hidden>
+              <RobotVisual />
+            </div>
+
                       </div>
         </motion.section>
 
@@ -711,7 +731,7 @@ export default function App() {
                       <img
                       className="edition-image"
                         src={item.image}
-                      alt={`TechSaavishkaar ${item.year}`}
+                      alt={`TechSavishkaar ${item.year}`}
                         loading="lazy"
                         onError={e => {
                           const img = e.currentTarget
@@ -733,14 +753,14 @@ export default function App() {
 
         <motion.section id="about" className="section" {...sectionMotion}>
           <div className="container">
-            <h2 className="section-title">About TechSaavishkaar 4.0</h2>
+            <h2 className="section-title">About TechSavishkaar 4.0</h2>
             <p className="section-lead">
-              TechSaavishkaar 4.0 is a national-level hackathon that brings together engineering students from across India
+              TechSavishkaar 4.0 is a national-level hackathon that brings together engineering students from across India
               to showcase their innovative ideas and technical skills. Participants are encouraged to build impactful
               solutions through interdisciplinary collaboration, rapid prototyping, and creative problem solving.
             </p>
             <div className="cards">
-              <motion.div initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.05 }} transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94], delay: 0 * 0.02 }}>
+              <motion.div initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.05 }} transition={{ duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94], delay: 0 * 0.01 }}>
               <TiltCard className="card card-hover">
                 <div className="card-icon"><Target size={24} /></div>
                 <h3>Real-world problem solving</h3>
@@ -748,7 +768,7 @@ export default function App() {
                 <p>Work on pressing challenges with practical outcomes and measurable impact.</p>
               </TiltCard>
               </motion.div>
-              <motion.div initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.05 }} transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94], delay: 1 * 0.02 }}>
+              <motion.div initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.05 }} transition={{ duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94], delay: 1 * 0.01 }}>
               <TiltCard className="card card-hover">
                 <div className="card-icon"><Lightbulb size={24} /></div>
                 <h3>Innovation and creativity</h3>
@@ -756,7 +776,7 @@ export default function App() {
                 <p>Push boundaries with fresh ideas, bold thinking, and future-ready technology.</p>
               </TiltCard>
               </motion.div>
-              <motion.div initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.05 }} transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94], delay: 2 * 0.02 }}>
+              <motion.div initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.05 }} transition={{ duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94], delay: 2 * 0.01 }}>
               <TiltCard className="card card-hover">
                 <div className="card-icon"><Handshake size={24} /></div>
                 <h3>Teamwork and collaboration</h3>
@@ -764,7 +784,7 @@ export default function App() {
                 <p>Build with diverse teammates, mentors, and experts across domains.</p>
               </TiltCard>
               </motion.div>
-              <motion.div initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.05 }} transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94], delay: 3 * 0.02 }}>
+              <motion.div initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.05 }} transition={{ duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94], delay: 3 * 0.01 }}>
               <TiltCard className="card card-hover">
                 <div className="card-icon"><Zap size={24} /></div>
                 <h3>Rapid prototyping</h3>
@@ -852,7 +872,7 @@ export default function App() {
                   initial={{ opacity: 0.6, y: 12, scale: 1 }}
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: true, amount: 0.05 }}
-                  transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94], delay: i * 0.02 }}
+                  transition={{ duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94], delay: i * 0.01 }}
                 >
                   <TiltCard className={`card card-hover card-${domain.variant}`}>
                   {() => (
@@ -889,17 +909,17 @@ export default function App() {
         <motion.section id="timeline" className="section" {...sectionMotion}>
           <div className="container">
             <h2 className="section-title">Event Timeline</h2>
-            <p className="section-lead">Key milestones and deadlines for TechSaavishkaar 4.0</p>
+            <p className="section-lead">Key milestones and deadlines for TechSavishkaar 4.0</p>
             
             <div className="timeline">
               {[
-                { step: '•', title: 'Registrations Open', date: '7 January 2026', desc: 'Registration portal opens for participants' },
-                { step: '•', title: 'Registrations Close', date: '24 January 2026', desc: 'Last date to register for the hackathon' },
-                { step: '•', title: 'Online Test', date: '25 January 2026', desc: 'Aptitude and technical evaluation' },
-                { step: '•', title: 'Online Test Results', date: '29 January 2026', desc: 'Results of Round 1 announced' },
-                { step: '•', title: 'PPT Submission Closes', date: '7 February 2026', desc: 'Deadline for Round 2 submissions' },
-                { step: '•', title: 'Final Shortlists Announced', date: '12 February 2026', desc: 'Teams selected for final round' },
-                { step: '•', title: 'Final Hackathon', date: '21 February 2026', desc: 'Offline hackathon and presentations' },
+                { title: 'Registrations Open', date: '7 January 2026', desc: 'Registration portal opens for participants' },
+                { title: 'Registrations Close', date: '24 January 2026', desc: 'Last date to register for the hackathon' },
+                { title: 'Online Test', date: '25 January 2026', desc: 'Aptitude and technical evaluation' },
+                { title: 'Online Test Results', date: '29 January 2026', desc: 'Results of Round 1 announced' },
+                { title: 'PPT Submission Closes', date: '7 February 2026', desc: 'Deadline for Round 2 submissions' },
+                { title: 'Final Shortlists Announced', date: '12 February 2026', desc: 'Teams selected for final round' },
+                { title: 'Final Hackathon', date: '21 February 2026', desc: 'Offline hackathon and presentations' },
               ].map((item, index) => (
                 <motion.div
                   key={`${item.title}-${index}`}
@@ -907,9 +927,9 @@ export default function App() {
                   initial={{ opacity: 0.6, x: index % 2 === 0 ? -60 : 60 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, amount: 0.05 }}
-                  transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94], delay: index * 0.02 }}
+                  transition={{ duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94], delay: index * 0.01 }}
                 >
-                  <div className="timeline-marker">{item.step}</div>
+                  <div className="timeline-marker"><Target size={14} className="timeline-marker-icon" /></div>
                   <div className="timeline-content">
                     <div className="timeline-date">{item.date}</div>
                     <h3 className="timeline-title">{item.title}</h3>
@@ -931,7 +951,7 @@ export default function App() {
             </div>
 
             <div className="prize-cards">
-              <motion.div className="prize-card main-prize" initial={{opacity:0, scale:0.98, y:8}} whileInView={{opacity:1, scale:1, y:0}} viewport={{once:true, amount:0.05}} transition={{duration:0.25, ease:[0.25, 0.46, 0.45, 0.94]}}>
+              <motion.div className="prize-card main-prize" initial={{opacity:0, scale:0.98, y:8}} whileInView={{opacity:1, scale:1, y:0}} viewport={{once:true, amount:0.05}} transition={{duration:0.18, ease:[0.25, 0.46, 0.45, 0.94]}}>
                 <div className="prize-content">
                   <h3 className="prize-amount" aria-label="Total prize pool">
                     <span className="amount-text">{EVENT.totalPrize}</span>
@@ -978,21 +998,21 @@ export default function App() {
           <div className="container">
             <h2 className="section-title">Participation Rules</h2>
             <div className="cards">
-              <motion.div initial={{opacity:0.6, y:12}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0.2}} transition={{duration:0.35, ease:'easeOut', delay:0*0.04}}>
+              <motion.div initial={{opacity:0.6, y:12}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0.12}} transition={{duration:0.22, ease:'easeOut', delay:0*0.02}}>
               <TiltCard className="card card-hover">
                 <h3>Team Size</h3>
                 <div className="accent-line" />
-                <p>Teams can include 1–5 members. Build a multidisciplinary crew for maximum impact.</p>
+                <p>Teams can include 1–4 members. Build a multidisciplinary crew for maximum impact.</p>
               </TiltCard>
               </motion.div>
-              <motion.div initial={{opacity:0.6, y:12}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0.2}} transition={{duration:0.35, ease:'easeOut', delay:1*0.04}}>
+              <motion.div initial={{opacity:0.6, y:12}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0.12}} transition={{duration:0.22, ease:'easeOut', delay:1*0.02}}>
               <TiltCard className="card card-hover">
                 <h3>Registration</h3>
                 <div className="accent-line" />
                 <p>Rounds 1 and 2 are free. A participation fee applies only for teams shortlisted to the final round.</p>
               </TiltCard>
               </motion.div>
-              <motion.div initial={{opacity:0.6, y:12}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0.2}} transition={{duration:0.35, ease:'easeOut', delay:2*0.04}}>
+              <motion.div initial={{opacity:0.6, y:12}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0.12}} transition={{duration:0.22, ease:'easeOut', delay:2*0.02}}>
               <TiltCard className="card card-hover">
                 <h3>Important Dates</h3>
                 <div className="accent-line" />
@@ -1011,7 +1031,7 @@ export default function App() {
             <h3 className="section-subtitle">Principal & HOD</h3>
             <div className="people-grid" style={{ gridTemplateColumns: '1fr' }}>
               {COORDINATORS.filter(c => c.role === 'Principal' || c.role === 'Professor & HOD, IT Department').map((p, i) => (
-                <motion.article key={p.name} className="person-card" initial={{opacity:0, y:8}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0.05}} transition={{duration:0.25, ease:[0.25, 0.46, 0.45, 0.94], delay:i*0.02}}>
+                <motion.article key={p.name} className="person-card" initial={{opacity:0, y:8}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0.05}} transition={{duration:0.18, ease:[0.25, 0.46, 0.45, 0.94], delay:i*0.01}}>
                   <div className="person-body">
                     <h3 className="person-name">{p.name}</h3>
                     <div className="person-role">{p.role}</div>
@@ -1033,7 +1053,7 @@ export default function App() {
             <h3 className="section-subtitle" style={{ marginTop: 18 }}>Faculty Coordinators</h3>
             <div className="people-grid">
               {COORDINATORS.filter(c => c.role === 'Faculty Coordinator').map((p, i) => (
-                <motion.article key={p.name} className="person-card" initial={{opacity:0, y:8}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0.05}} transition={{duration:0.25, ease:[0.25, 0.46, 0.45, 0.94], delay:i*0.02}}>
+                <motion.article key={p.name} className="person-card" initial={{opacity:0, y:8}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0.05}} transition={{duration:0.18, ease:[0.25, 0.46, 0.45, 0.94], delay:i*0.01}}>
                   <div className="person-body">
                     <h3 className="person-name">{p.name}</h3>
                     <div className="person-role">{p.role}</div>
@@ -1055,7 +1075,7 @@ export default function App() {
             <h3 className="section-subtitle" style={{ marginTop: 18 }}>Student Coordinators</h3>
             <div className="people-grid people-grid-4">
               {COORDINATORS.filter(c => c.role === 'Student Coordinator').map((p, i) => (
-                <motion.article key={p.name} className="person-card" initial={{opacity:0, y:8}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0.05}} transition={{duration:0.25, ease:[0.25, 0.46, 0.45, 0.94], delay:i*0.02}}>
+                <motion.article key={p.name} className="person-card" initial={{opacity:0, y:8}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0.05}} transition={{duration:0.18, ease:[0.25, 0.46, 0.45, 0.94], delay:i*0.01}}>
                   <div className="person-body">
                     <h3 className="person-name">{p.name}</h3>
                     <div className="person-role">{p.role}</div>
@@ -1081,22 +1101,24 @@ export default function App() {
             <h2 className="section-title">In Association with</h2>
             <div className="partners-wrap">
               <div className="partners-carousel partners-marquee" aria-label="Partners marquee">
-                {[0,1].map(rep => (
-                  <div key={rep} className="partners-row">
-                    {[
-                      { src: '/domains/dsacit.jpeg', alt: 'DSACIT' },
-                      { src: '/domains/csi.jpeg', alt: 'CSI' },
-                      { src: '/domains/acm.jpeg', alt: 'ACM' },
-                      { src: '/domains/ieee.jpeg', alt: 'IEEE' },
-                    ].map((logo) => (
-                      <div key={`${rep}-${logo.src}`} className="partner-slide">
-                        <div className="partner-logo">
-                          <img src={logo.src} alt={logo.alt} loading="lazy" />
-                        </div>
+                <div className="partners-row">
+                  {[
+                    { src: '/domains/dsacit.jpeg', alt: 'DSACIT' },
+                    { src: '/domains/csi.jpeg', alt: 'CSI' },
+                    { src: '/domains/acm.jpeg', alt: 'ACM' },
+                    { src: '/domains/ieee.jpeg', alt: 'IEEE' },
+                    { src: '/domains/dsacit.jpeg', alt: 'DSACIT' },
+                    { src: '/domains/csi.jpeg', alt: 'CSI' },
+                    { src: '/domains/acm.jpeg', alt: 'ACM' },
+                    { src: '/domains/ieee.jpeg', alt: 'IEEE' },
+                  ].map((logo, index) => (
+                    <div key={`${index}-${logo.src}`} className="partner-slide">
+                      <div className="partner-logo">
+                        <img src={logo.src} alt={logo.alt} loading="lazy" />
                       </div>
-                    ))}
-                  </div>
-                ))}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -1142,7 +1164,7 @@ export default function App() {
 
         <footer className="footer">
           <div className="container footer-inner">
-            <div className="footer-left">© {new Date().getFullYear()} TechSaavishkaar</div>
+            <div className="footer-left">© {new Date().getFullYear()} TechSavishkaar</div>
             <div className="footer-right">Built for the hackathon stage</div>
           </div>
         </footer>

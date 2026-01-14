@@ -1,5 +1,28 @@
 @media (max-width: 640px) { /* keep single card */ }
 
+@media (min-width: 900px) {
+  .association-logos {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: 24px;
+    row-gap: 16px;
+    align-items: center;
+    justify-items: center; /* center each grid cell */
+  }
+  .association-logo {
+    justify-self: stretch;
+    width: 100%;
+    height: 96px; /* fixed uniform box height for equal spacing */
+    border-radius: 20px;
+    padding: 12px 16px; /* consistent inner spacing */
+  }
+  .association-logo img {
+    max-width: 70%;
+    max-height: 64px;
+    object-fit: contain;
+  }
+}
+
 /* Anchor offset so nav scrolls land below sticky header */
 .section { scroll-margin-top: 90px; }
 :root {
@@ -71,10 +94,8 @@
 
 /* In Association with: partners carousel */
 .partners-wrap {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 12px;
+  width: 100%;
+  overflow: hidden;
 }
 
 .partners-carousel {
@@ -94,11 +115,12 @@
   gap: 28px;
   padding: 12px 8px;
   animation: partnersMarquee 20s linear infinite;
+  width: max-content;
 }
 
 @keyframes partnersMarquee {
   from { transform: translateX(0); }
-  to { transform: translateX(-100%); }
+  to { transform: translateX(-50%); }
 }
 
 .partner-slide { flex: 0 0 auto; pointer-events: none; }
@@ -153,17 +175,23 @@
 }
 
 .partner-logo {
-  width: min(260px, 92%);
+  width: 240px;
+  height: 110px;
   padding: 14px 18px;
   border-radius: 14px;
   background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
   border: 1px solid rgba(255,255,255,0.12);
   box-shadow: 0 10px 26px rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .partner-logo img {
-  height: 110px;
-  width: 100%;
+  max-width: 78%;
+  max-height: 78%;
+  width: auto;
+  height: auto;
   display: block;
   object-fit: contain;
 }
@@ -354,6 +382,11 @@ a {
   text-decoration: none;
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
 #app {
   min-height: 100svh;
   min-height: 100dvh;
@@ -376,40 +409,31 @@ a {
   position: fixed;
   inset: 0;
   z-index: -2;
-  background: rgba(0, 0, 0, 0.28);
+  background: rgba(0, 0, 0, 0.12);
+  overflow: hidden;
 }
 
-/* Very light blue wash behind the grid (subtle) */
+/* Fixed blue overlay that covers the entire viewport */
+.bg::before {
+  content: none;
+}
+
+/* Soft blue overlay to reduce grid visibility */
 .bg::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(1000px 800px at 20% 20%, rgba(34, 211, 238, 0.06), transparent 60%),
-    radial-gradient(900px 700px at 80% 70%, rgba(34, 211, 238, 0.05), transparent 60%);
-  opacity: 0.6;
+  content: none;
 }
 
 .three-wrap {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: -1; /* Above dark overlay, behind content */
   pointer-events: none;
-}
-
-/* Keep 3D subtle and behind the UI */
-.three-wrap {
-  opacity: 0.72;
-  filter: saturate(0.95) contrast(1.03) brightness(1.08);
+  opacity: 1;
+  filter: none;
 }
 
 .three-wrap::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(7, 8, 20, 0.22);
-  pointer-events: none;
+  content: none;
 }
 
 .three-canvas {
@@ -438,21 +462,22 @@ a {
 
 /* Animated gradient layers for creative hero */
 .hero::before {
-  content: '';
+  content: none;
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: -1;
   background:
-    radial-gradient(ellipse 120% 80% at 50% -18%, rgba(34, 211, 238, 0.06), transparent 55%),
-    radial-gradient(ellipse 80% 60% at 80% 90%, rgba(167, 139, 250, 0.04), transparent 55%);
-  opacity: 0.18;
+    radial-gradient(ellipse 120% 100% at 50% -10%, rgba(34, 211, 238, 0.3), transparent 60%),
+    radial-gradient(ellipse 100% 80% at 80% 80%, rgba(167, 139, 250, 0.2), transparent 60%),
+    linear-gradient(180deg, rgba(7, 8, 20, 0.9), rgba(7, 8, 20, 0.6));
+  opacity: 0.9;
   mix-blend-mode: screen;
   pointer-events: none;
 }
 
 /* Floating particles - disabled for performance */
 .hero::after {
-  content: '';
+  content: none;
   position: absolute;
   inset: 0;
   z-index: 0;
@@ -479,21 +504,88 @@ a {
   75% { transform: rotate(0.5deg) scale(1.03); }
 }
 
+/* Ultra subtle grid background */
 .bg-grid {
   position: absolute;
   inset: 0;
-  opacity: 0.18;
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 54px 54px;
+  background-color: transparent;
+  background-image: 
+    /* Extremely subtle grid lines */
+    linear-gradient(to right, rgba(34, 211, 238, 0.02) 0.3px, transparent 0.3px),
+    linear-gradient(to bottom, rgba(34, 211, 238, 0.02) 0.3px, transparent 0.3px),
+    /* Soft cyan wash to unify look across sections */
+    radial-gradient(1000px 700px at 50% 40%, rgba(34, 211, 238, 0.12), transparent 65%),
+    radial-gradient(1200px 800px at 50% 85%, rgba(34, 211, 238, 0.09), transparent 70%);
+  
+  background-size: 80px 80px;  /* Larger grid cells */
+  background-position: center center;
+  
+  /* Very minimal glow */
+  box-shadow: 
+    inset 0 0 100px rgba(34, 211, 238, 0.005);
+  
+  /* Extremely subtle animation */
+  animation: gridPulse 30s ease-in-out infinite alternate;
+  
+  /* Stronger, but still soft blending */
+  mix-blend-mode: screen;
+  
+  /* Performance */
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  pointer-events: none;
+  opacity: 0.35;
 }
 
-.bg-grid {
-  /* Disable transforms during scroll for better performance */
-  transform: translateZ(0);
-  transition: none;
-  will-change: auto;
+@keyframes gridPulse {
+  0% {
+    opacity: 0.12;
+    background-size: 80px 80px;
+  }
+  100% {
+    opacity: 0.18;
+    background-size: 82px 82px;
+  }
+}
+
+/* Base background with soft blue tint */
+.bg {
+  background: #0a0e17 !important;
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+}
+
+/* Soft blue overlay to reduce grid visibility */
+.bg::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(34, 211, 238, 0.12) 0.5px, transparent 0.5px),
+    linear-gradient(to bottom, rgba(34, 211, 238, 0.12) 0.5px, transparent 0.5px),
+    radial-gradient(ellipse at 50% 50%, rgba(34, 211, 238, 0.08), transparent 70%);
+  background-size: 60px 60px;
+  opacity: 0.9;
+  z-index: -1;
+  mix-blend-mode: overlay;
+}
+
+/* Add subtle noise texture */
+.bg::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(1200px 900px at 20% 20%, rgba(34, 211, 238, 0.15), transparent 60%),
+    radial-gradient(1100px 800px at 80% 70%, rgba(34, 211, 238, 0.1), transparent 65%),
+    radial-gradient(1600px 1000px at 50% 85%, rgba(34, 211, 238, 0.08), transparent 70%);
+  z-index: -1;
+  opacity: 0.7;
+  mix-blend-mode: overlay;
 }
 
 /* Continuous scrolling background text in hero */
@@ -827,15 +919,41 @@ a {
   /* Let Framer Motion handle opacity and animations */
   background: transparent; /* Inherit from body/app */
   scroll-margin-top: 90px; /* account for sticky header */
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  inset: -25% -10%;
+  background: 
+    radial-gradient(circle at 25% 25%, rgba(34, 211, 238, 0.12), transparent 55%),
+    radial-gradient(circle at 70% 70%, rgba(167, 139, 250, 0.12), transparent 55%),
+    linear-gradient(135deg, rgba(15, 23, 42, 0.6), transparent 70%);
+  z-index: -1;
+  pointer-events: none;
 }
 
 .hero {
   padding-top: 40px;
-  overflow: hidden;
+  overflow: visible; /* Allow full-bleed marquee to break out */
   position: relative;
   min-height: 100vh;
   /* Let 3D canvas show through; subtle overlay handled by ::before/::after */
   background: transparent;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: auto;
+    overflow: hidden; /* avoid stray bottom gap from overflowing layers */
+  }
+
+  .section.hero {
+    padding-bottom: 8px; /* reduce gap after countdown */
+  }
 }
 
 @media (min-width: 768px) {
@@ -850,9 +968,28 @@ a {
   gap: 24px;
   max-width: 1180px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0; /* Remove padding from grid container */
   position: relative;
   z-index: 1;
+}
+
+.hero-inner > * {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+/* Make hero-copy full-width to allow marquee to break out */
+.hero-inner > .hero-copy {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+@media (min-width: 980px) {
+  .hero-inner {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    align-items: center;
+    gap: 32px;
+  }
 }
 
 .hero-copy {
@@ -861,8 +998,162 @@ a {
   width: 100%;
   max-width: 1180px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0; /* Remove padding from container */
   box-sizing: border-box;
+}
+
+/* Apply padding to children, but not the full-bleed marquee */
+.hero-copy > *:not(.hero-marquee) {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+@media (max-width: 768px) {
+  /* Shift hero content a bit to the left on mobile */
+  .hero-copy > *:not(.hero-marquee) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .container.hero-inner {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .hero-inner > * {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .hero {
+    overflow-x: hidden;
+  }
+
+  /* Make hero marquee bar flush to full screen width */
+  .hero-marquee {
+    width: 100vw;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: -50vw;
+    margin-right: -50vw;
+    padding: 0;
+  }
+  .hero-marquee .marquee { padding: 0; margin: 0; }
+  .hero-marquee .hero-marquee-text { padding: 10px 0; }
+
+  /* Widen the 3 feature badges */
+  .hero-features { padding-left: 0; padding-right: 0; }
+  .hero-features { width: 92%; max-width: 420px; margin-left: auto; margin-right: auto; }
+  .hero-features .feature-badge { width: 100%; margin-left: auto; margin-right: auto; }
+}
+
+@media (min-width: 980px) {
+  .hero-copy {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.hero-visual {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-visual-mobile {
+  display: flex;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.hero-visual-desktop {
+  display: none;
+}
+
+@media (min-width: 980px) {
+  .hero-visual {
+    justify-content: flex-end;
+    align-items: flex-start;
+  }
+
+  .hero-visual-mobile {
+    display: none;
+  }
+
+  .hero-visual-desktop {
+    display: flex;
+  }
+}
+
+.hero-robot {
+  width: min(420px, 92vw);
+  max-width: 420px;
+  filter: drop-shadow(0 30px 70px rgba(0, 0, 0, 0.55));
+  transform: translateZ(0);
+}
+
+@media (min-width: 980px) {
+  .hero-robot {
+    transform: translate(96px, -128px);
+  }
+}
+
+.hero-robot svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.rb-float {
+  transform-origin: 50% 65%;
+  animation: rbFloat 4.5s ease-in-out infinite;
+}
+
+.rb-arm-left {
+  transform-origin: 78px 166px;
+  animation: rbArm 3.2s ease-in-out infinite;
+}
+
+.rb-arm-right {
+  transform-origin: 242px 166px;
+  animation: rbArm 3.2s ease-in-out infinite reverse;
+}
+
+.rb-blink {
+  transform-origin: center;
+  animation: rbBlink 5.2s ease-in-out infinite;
+}
+
+.rb-antenna {
+  transform-origin: center;
+  animation: rbAntenna 2.4s ease-in-out infinite;
+}
+
+@keyframes rbFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes rbArm {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(4deg); }
+}
+
+@keyframes rbBlink {
+  0%, 45%, 100% { opacity: 0; }
+  46%, 49% { opacity: 1; }
+  50%, 53% { opacity: 0; }
+  54%, 56% { opacity: 1; }
+  57%, 100% { opacity: 0; }
+}
+
+@keyframes rbAntenna {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
 }
 
 .hero-prompt {
@@ -994,9 +1285,29 @@ a {
   display: block;
   color: rgba(231, 234, 243, 0.92);
   margin: 0 0 10px 0;
-  font-weight: 800;
-  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  line-height: 1.2;
+}
+
+.eyebrow-org {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  margin-bottom: 12px;
+  display: block;
+}
+
+@media (min-width: 769px) {
+  .eyebrow-org {
+    white-space: nowrap;
+    overflow: visible;
+  }
+}
+
+.eyebrow-dept {
+  font-size: clamp(1.05rem, 2vw, 1.4rem);
+  opacity: 0.92;
 }
 
 .hero-title {
@@ -1138,18 +1449,45 @@ a {
     white-space: normal;
     word-break: break-word;
     overflow-wrap: anywhere;
+    font-size: clamp(1.9rem, 7.8vw, 2.8rem);
+  }
+
+  .eyebrow-org {
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    max-width: 100%;
+    font-size: clamp(1.25rem, 5.6vw, 1.9rem);
+    line-height: 1.15;
+  }
+
+  .eyebrow-dept {
+    font-size: clamp(0.95rem, 3.6vw, 1.15rem);
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
 
   .hero-actions {
     flex-direction: column;
     gap: 10px;
     margin-top: 18px;
+    width: 86%;
+    max-width: 420px;
+    margin-left: 4%;
+    margin-right: auto;
   }
   
   .hero-actions .btn {
     width: 100%;
-    padding: 12px 16px;
-    font-size: 0.95rem;
+    max-width: none;
+    align-self: stretch;
+    padding: 10px 14px;
+    font-size: 0.92rem;
+  }
+  
+  .hero-actions .btn-primary {
+    min-height: 48px;
+    padding: 10px 18px;
   }
 }
 
@@ -1206,6 +1544,21 @@ a {
   gap: 28px;
   margin-top: 32px;
   align-items: start;
+}
+
+/* Domains Section */
+#domains {
+  position: relative;
+  overflow: hidden;
+}
+
+#domains .container {
+  position: relative;
+  z-index: 1;
+}
+
+#domains::before {
+  content: none;
 }
 
 /* Enforce 2x2 layout for Hackathon Domains (4 items) */
@@ -1265,17 +1618,12 @@ a {
 
 #rounds .container {
   max-width: 1040px;
+  position: relative;
+  z-index: 1;
 }
 
 #rounds::before {
-  content: '';
-  position: absolute;
-  inset: -25% -10%;
-  background: 
-    radial-gradient(circle at 25% 25%, rgba(34, 211, 238, 0.12), transparent 55%),
-    radial-gradient(circle at 70% 70%, rgba(167, 139, 250, 0.12), transparent 55%),
-    linear-gradient(135deg, rgba(15, 23, 42, 0.6), transparent 70%);
-  z-index: -2;
+  content: none;
 }
 
 #rounds .section-title,
@@ -1694,10 +2042,7 @@ a {
 
 /* Domains section - Creative & Professional */
 #domains {
-  background: 
-    radial-gradient(ellipse at 20% 30%, rgba(34, 211, 238, 0.08), transparent 50%),
-    radial-gradient(ellipse at 80% 70%, rgba(167, 139, 250, 0.08), transparent 50%);
-  position: relative;
+  background: none;
 }
 
 #domains .container {
@@ -1705,13 +2050,7 @@ a {
 }
 
 #domains::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: 
-    linear-gradient(45deg, transparent 30%, rgba(34, 211, 238, 0.03) 50%, transparent 70%),
-    linear-gradient(-45deg, transparent 30%, rgba(167, 139, 250, 0.03) 50%, transparent 70%);
-  pointer-events: none;
+  content: none;
 }
 
 #domains .section-title {
@@ -1865,6 +2204,7 @@ a {
   line-height: 1.25;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -1887,6 +2227,7 @@ a {
   flex: 1 1 auto;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -1911,29 +2252,37 @@ a {
 
 /* Floating particles effect */
 #domains::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    radial-gradient(2px 2px at 20% 30%, rgba(34, 211, 238, 0.4), transparent),
-    radial-gradient(2px 2px at 60% 70%, rgba(167, 139, 250, 0.4), transparent),
-    radial-gradient(1px 1px at 50% 50%, rgba(245, 158, 11, 0.4), transparent),
-    radial-gradient(1px 1px at 80% 10%, rgba(34, 211, 238, 0.4), transparent);
+  content: none;
   background-size: 200px 200px, 150px 150px, 100px 100px, 180px 180px;
   animation: float 20s ease-in-out infinite;
   pointer-events: none;
 }
 
-/* Mobile optimizations */
+/* 3D Canvas optimizations */
 .three-canvas {
   will-change: transform;
   contain: layout style paint;
+  /* Ensure canvas is interactive on mobile */
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .three-wrap {
   contain: layout style paint;
   transform: translateZ(0);
+  /* Better mobile handling */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
+}
+
+/* When 3D is enabled on mobile */
+body.three-enabled {
+  overflow-x: hidden;
+}
+
+body.three-enabled .three-wrap {
+  opacity: 1;
+  filter: saturate(1.2) contrast(1.15) brightness(1.2);
 }
 
 .domain-img {
@@ -1966,8 +2315,26 @@ a {
 /* Mobile-specific optimizations */
 @media (max-width: 768px) {
   .three-canvas {
-    /* Disable heavy effects on mobile */
-    filter: blur(0.5px);
+    /* Optimized for mobile */
+    filter: none;
+    /* Ensure proper scaling */
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  /* Better mobile performance */
+  .three-wrap {
+    opacity: 1 !important;
+    filter: saturate(1.15) contrast(1.2) brightness(1.15) !important;
+  }
+  
+  /* Reduce particles on mobile */
+  .three-wrap canvas {
+    transform: translate3d(0,0,0);
+    -webkit-transform: translate3d(0,0,0);
   }
   
   .domain-img {
@@ -2321,6 +2688,27 @@ a {
   align-items: stretch;
 }
 
+@media (min-width: 980px) {
+  .hero-features {
+    max-width: 1600px; /* give 3 badges more room on laptop */
+    margin-left: auto;
+    margin-right: auto; /* center the group */
+    grid-template-columns: repeat(3, minmax(0, 1fr)); /* allow shrinking without overflow */
+    gap: 10px; /* tighter to gain more content width */
+  }
+  .feature-badge { padding: 10px 12px; min-width: 0; overflow: visible; }
+  .badge-content { min-width: 0; flex: 1 1 auto; }
+  .feature-badge { gap: 6px; }
+  .badge-value { font-size: clamp(0.76rem, 0.8vw, 0.84rem); letter-spacing: 0; white-space: nowrap; }
+}
+
+/* Narrow laptop widths: tighten spacing and font further so long values fit */
+@media (min-width: 980px) and (max-width: 1200px) {
+  .hero-features { gap: 12px; }
+  .feature-badge { padding: 12px 14px; }
+  .badge-value { font-size: 0.84rem; }
+}
+
 .feature-badge {
   display: flex;
   align-items: center;
@@ -2397,17 +2785,24 @@ a {
 .badge-content {
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
 }
 
 .badge-value {
   font-weight: 900;
   font-size: 1.1rem;
   line-height: 1.2;
-  margin-bottom: 4px;
+  margin: 0;
+  min-height: 1.2em; /* Ensure consistent height even with different digit counts */
   background: linear-gradient(135deg, rgba(231, 234, 243, 1), rgba(231, 234, 243, 0.9));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  /* allow wrapping so full text is visible */
+  white-space: nowrap; /* keep the entire value on one line across all three badges */
 }
 
 .badge-label {
@@ -2416,18 +2811,57 @@ a {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  margin: 0;
+  min-height: 1.2em; /* Ensure consistent height */
+  line-height: 1.2; /* Match line height with badge-value */
+  display: flex;
+  align-items: flex-end; /* Align text to bottom */
+  padding-top: 2px; /* Small spacing between value and label */
+}
+
+/* Desktop override placed after base blocks to win the cascade */
+@media (min-width: 980px) {
+  .feature-badge { overflow: visible; }
+  .badge-content { min-width: 0; flex: 1 1 auto; }
+  .badge-value { white-space: normal; }
 }
 
 /* Innovative countdown design */
 .hero-countdown-wrapper {
-  margin: 48px auto 0;
+  margin: 38px auto 0;
   max-width: 100%;
   width: 100%;
+  display: grid;
+  place-items: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
+}
+
+@media (min-width: 769px) {
+  .hero-countdown-wrapper {
+    width: 100%;
+    max-width: 1180px;
+    margin: 38px auto 0;
+    padding: 0 24px;
+    text-align: center;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Reduce extra gap before Previous Editions on mobile */
+  #editions.section {
+    padding-top: 12px;
+  }
+
+  .hero-countdown-wrapper {
+    margin-top: 8px;
+    margin-bottom: 0;
+  }
+  .countdown-title { margin-bottom: 10px; }
 }
 
 .countdown-title {
@@ -2456,14 +2890,14 @@ a {
 }
 
 .countdown-container {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 16px;
-  flex-wrap: wrap;
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
+  flex-wrap: nowrap;
+  margin: 0 auto; /* center within full-bleed wrapper */
+  width: auto;
+  max-width: 100%;
 }
 
 .countdown-box {
@@ -2592,7 +3026,7 @@ a {
   }
 
   .hero-countdown-wrapper {
-    margin-top: 36px;
+    margin-top: 32px;
     padding: 0 20px;
   }
   
@@ -2889,7 +3323,8 @@ a {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+  object-position: center;
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
   filter: saturate(1.05) contrast(1.05);
 }
 
@@ -2905,7 +3340,7 @@ a {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 10px;
+  gap: 0; /* remove gaps between slides */
   margin-top: 18px;
   overflow: hidden; /* hide any peeking slides */
 }
@@ -2940,31 +3375,31 @@ a {
 .carousel-card {
   scroll-snap-align: start;
   border-radius: var(--radius);
-  padding: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.035)),
-    rgba(7, 8, 20, 0.52);
-  backdrop-filter: blur(14px);
-  box-shadow: 0 10px 34px rgba(0,0,0,0.28);
+  padding: 0; /* remove inner padding so image can be full-bleed */
+  border: 0; /* remove thin border that created gaps */
+  background: transparent;
+  backdrop-filter: none;
+  box-shadow: none;
 }
 
 /* Specific sizing for Previous Editions images */
 .edition-image-container {
   width: 100%;
-  height: clamp(180px, 28vw, 300px);
+  height: clamp(300px, 42vw, 520px);
   border-radius: 14px;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(7,8,20,0.4);
-  box-shadow: 0 10px 26px rgba(0,0,0,0.25);
+  border: 0; /* remove border to avoid visible gaps */
+  background: transparent; /* no background halo/gap */
+  box-shadow: none;
 }
 
 .edition-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* fill without gaps */
+  object-position: center;
   display: block;
+  background: transparent;
 }
 
 .carousel-card-top {
@@ -3030,8 +3465,8 @@ a {
 
 .timeline {
   position: relative;
-  padding: 30px 0;
-  max-width: 800px;
+  padding: 12px 0;
+  max-width: 1180px;
   margin: 0 auto;
 }
 
@@ -3053,7 +3488,7 @@ a {
   position: relative;
   display: flex;
   align-items: center;
-  margin-bottom: 80px;
+  margin-bottom: 36px;
   opacity: 0;
   animation: timelineFadeIn 0.8s ease forwards;
 }
@@ -3071,14 +3506,17 @@ a {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   background: linear-gradient(135deg, var(--cyan), var(--violet));
   border: 4px solid rgba(7, 8, 20, 0.9);
   border-radius: 50%;
   z-index: 3;
   box-shadow: 0 0 30px rgba(34, 211, 238, 0.6);
   animation: markerPulse 2s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @keyframes markerPulse {
@@ -3090,13 +3528,17 @@ a {
   flex: 0 0 calc(50% - 30px);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
   border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 14px 16px;
-  border-radius: 10px;
+  padding: 20px 22px;
+  border-radius: 16px;
   backdrop-filter: blur(12px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
-  max-width: 360px;
+  max-width: 420px;
+}
+
+.timeline-marker-icon {
+  color: rgba(7, 8, 20, 0.92);
 }
 
 .timeline-content::before {
@@ -3143,7 +3585,7 @@ a {
 }
 
 .timeline-title {
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   font-weight: 700;
   margin-bottom: 6px;
   background: linear-gradient(90deg, var(--cyan), var(--violet));
@@ -3155,8 +3597,8 @@ a {
 
 .timeline-desc {
   color: rgba(231, 234, 243, 0.85);
-  line-height: 1.5;
-  font-size: 0.9rem;
+  line-height: 1.45;
+  font-size: 0.98rem;
 }
 
 @keyframes timelineFadeIn {
@@ -3190,7 +3632,7 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(7, 8, 20, 0.55);
   border-radius: 14px;
-  padding: 14px;
+  padding: 16px;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 .timeline-card:hover {
@@ -3907,45 +4349,105 @@ a {
 }
 
 .marquee {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
   border-radius: 999px;
   overflow: hidden;
   width: 100%;
 }
 
 .hero-marquee {
-  width: 100vw;
-  margin: 18px calc(50% - 50vw);
+  width: auto; /* allow stretch via left/right + margins */
+  left: 50%;
+  transform: none;
+  margin-left: -50vw; /* full-bleed: pull to the left by half viewport */
+  margin-right: -50vw; /* full-bleed: pull to the right by half viewport */
+  margin-top: 36px;
+  margin-bottom: 18px;
   position: relative;
-  left: 0;
-  right: 0;
+  right: auto;
   padding: 0;
   background: rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(4px);
+  overflow: hidden;
+  z-index: 2; /* ensure marquee sits above hero visuals on mobile */
 }
 
 .hero-marquee .marquee {
-  border-radius: 0;
-  border-left: 0;
-  border-right: 0;
+  border: 0;
   overflow: hidden;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  left: 0;
+  margin-left: 0;
+  border-radius: 0; /* remove pill rounding so bar reaches viewport edges */
 }
 
-.hero-marquee .marquee-track { padding: 0; gap: 0; }
+.hero-marquee .marquee-track {
+  display: flex;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: max-content;
+  gap: 0 !important;
+  animation: marqueeScroll 65s linear infinite !important;
+  will-change: transform;
+}
 
-/* Nudge hero marquee left by a few pixels so first pill touches the edge */
-.hero-marquee .marquee-track { animation: marqueeHero 30s linear infinite; }
+.hero-marquee .hero-marquee-text {
+  display: inline-block;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 100vw;
+  padding: 10px 0;
+  margin: 0 !important;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: rgba(231, 234, 243, 0.82);
+}
 
-@keyframes marqueeHero {
-  0% { transform: translateX(-6px); }
-  100% { transform: translateX(calc(-50% - 6px)); }
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 @media (max-width: 768px) {
+  .hero-subtitle {
+    margin-bottom: 18px;
+  }
+
+  .hero-marquee {
+    /* Use translate method on mobile to avoid horizontal scrollbars */
+    width: 100vw;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 28px;
+    margin-bottom: 16px;
+    z-index: 3;
+  }
+
   .hero-marquee .marquee-track {
     padding: 0 !important;
     gap: 0;
+  }
+
+  .hero-marquee .hero-marquee-text {
+    min-width: 100vw;
+    padding: 8px 0;
+    font-size: 14px;
+  }
+
+  .hero-marquee .marquee {
+    min-height: 36px; /* prevent collapse on mobile */
+    background: rgba(0, 0, 0, 0.28); /* slight boost for legibility */
+  }
+
+  /* Prevent accidental horizontal scrolling on mobile */
+  body, #app {
+    overflow-x: hidden;
   }
 }
 
@@ -3981,6 +4483,8 @@ a {
   color: rgba(231, 234, 243, 0.86);
   white-space: nowrap;
 }
+
+.hero-marquee .logo-pill { margin-right: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   .marquee-track {
@@ -4339,3 +4843,4 @@ textarea:focus {
     hyphens: manual;
   }
 }
+
