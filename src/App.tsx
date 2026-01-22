@@ -1,127 +1,144 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { motion } from 'framer-motion'
-import { Target, Lightbulb, Handshake, Zap, Sprout, Globe, Stethoscope, Menu, X, Brain, Trophy, Award, Users, Lock } from 'lucide-react'
-import Lottie from 'lottie-react'
+import { Mail, Linkedin, Instagram, Target, Lightbulb, Handshake, Zap, Sprout, Globe, Stethoscope, Menu, X, Trophy, Award, Users, Lock } from 'lucide-react'
 import ThreeBackground from './ThreeBackground'
 
-// Floating code snippets component
-const CodeSnippets = () => {
-  const snippets = [
-    { text: '<div>', top: '15%', left: '10%', delay: 0 },
-    { text: 'function()', top: '25%', left: '80%', delay: 0.2 },
-    { text: '{ }', top: '60%', left: '15%', delay: 0.4 },
-    { text: 'const', top: '70%', left: '85%', delay: 0.6 },
-    { text: '=>', top: '40%', left: '20%', delay: 0.8 },
-    { text: 'return', top: '80%', left: '75%', delay: 1.0 },
-    { text: '</>', top: '35%', left: '12%', delay: 0.3 },
-    { text: 'let x = 1;', top: '18%', left: '65%', delay: 0.7 },
-    { text: 'if()', top: '52%', left: '8%', delay: 1.1 },
-    { text: '() => {}', top: '68%', left: '60%', delay: 1.3 },
-    { text: 'map()', top: '46%', left: '88%', delay: 1.5 },
-    { text: '<span/>', top: '28%', left: '34%', delay: 0.9 },
-  ]
+// (Removed unused "CodeSnippets" and "BackgroundGlyphs" components)
 
-  return (
-    <div className="code-snippets">
-      {snippets.map((snippet, i) => (
-        <motion.span
-          key={i}
-          className="code-snippet"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ 
-            opacity: [0, 0.7, 0],
-            y: [20, 0, -20],
-          }}
-          transition={{
-            duration: 8 + Math.random() * 10,
-            delay: snippet.delay,
-            repeat: Infinity,
-            repeatType: 'loop',
-            ease: 'linear'
-          }}
-          style={{
-            position: 'absolute',
-            top: snippet.top,
-            left: snippet.left,
-            color: 'rgba(34, 211, 238, 0.28)',
-            fontFamily: 'monospace',
-            fontSize: '0.75rem',
-            pointerEvents: 'none',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          {snippet.text}
-        </motion.span>
-      ))}
-    </div>
-  )
-
-}
-
-const BackgroundGlyphs = () => {
-  const items = [
-    { Icon: Trophy, top: '22%', left: '8%', size: 18, delay: 0 },
-    { Icon: Brain, top: '28%', left: '78%', size: 16, delay: 0.2 },
-    { Icon: Lock, top: '62%', left: '12%', size: 16, delay: 0.4 },
-    { Icon: Globe, top: '70%', left: '82%', size: 18, delay: 0.6 },
-    { Icon: Sprout, top: '42%', left: '20%', size: 16, delay: 0.8 },
-    { Icon: Zap, top: '50%', left: '88%', size: 16, delay: 1.0 },
-    { Icon: Target, top: '36%', left: '35%', size: 16, delay: 1.2 },
-    { Icon: Users, top: '76%', left: '60%', size: 16, delay: 1.4 },
-  ]
-
-  return (
-    <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1 }}>
-      {items.map(({ Icon, top, left, size, delay }, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0, y: 6 }}
-          animate={{ opacity: 0.22, y: [6, -6, 6] }}
-          transition={{ duration: 10, delay, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
-          style={{ position: 'absolute', top, left, color: 'rgba(231, 234, 243, 0.18)' }}
-        >
-          <Icon size={size} />
-        </motion.div>
-      ))}
-    </div>
-  )
-}
-
-// Matrix rain effect component
+// Matrix rain effect component (canvas-based)
 const MatrixRain = () => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const wrapRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    let raf = 0
+    let width = canvas.clientWidth
+    let height = canvas.clientHeight
+    const dpr = Math.max(1, Math.min(1.5, window.devicePixelRatio || 1))
+
+    let isActive = true
+    let lastFrame = 0
+    const targetFrameMs = 1000 / 24
+
+    const resize = () => {
+      width = canvas.clientWidth
+      height = canvas.clientHeight
+      canvas.width = width * dpr
+      canvas.height = height * dpr
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+    }
+
+    resize()
+    const onResize = () => {
+      resize()
+      rebuild()
+    }
+    window.addEventListener('resize', onResize)
+
+    const fontSize = window.innerWidth <= 768 ? 18 : 20
+    let columns = Math.max(1, Math.ceil(width / fontSize))
+    let drops = new Array(columns).fill(0).map(() => Math.floor((Math.random() * height) / fontSize))
+    const chars = '01'
+
+    const rebuild = () => {
+      columns = Math.max(1, Math.ceil(width / fontSize))
+      drops = new Array(columns).fill(0).map(() => Math.floor((Math.random() * height) / fontSize))
+    }
+
+    const draw = (now: number) => {
+      if (!isActive || document.hidden) return
+
+      if (now - lastFrame < targetFrameMs) {
+        raf = requestAnimationFrame(draw)
+        return
+      }
+      lastFrame = now
+
+      // Very subtle background for trails
+      ctx.fillStyle = 'rgba(7, 8, 20, 0.15)'
+      ctx.fillRect(0, 0, width, height)
+
+      // Very subtle numbers
+      ctx.fillStyle = 'rgba(34, 211, 238, 0.3)' // cyan tone with 30% opacity
+      ctx.font = `${fontSize}px monospace`
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)]
+        const x = i * fontSize
+        const y = drops[i] * fontSize
+        ctx.fillText(text, x, y)
+
+        if (y > height && Math.random() > 0.975) {
+          drops[i] = 0
+        }
+        drops[i]++
+      }
+
+      raf = requestAnimationFrame(draw)
+    }
+
+    const start = () => {
+      if (raf) cancelAnimationFrame(raf)
+      lastFrame = performance.now()
+      raf = requestAnimationFrame(draw)
+    }
+
+    const stop = () => {
+      if (raf) cancelAnimationFrame(raf)
+      raf = 0
+    }
+
+    const onVis = () => {
+      if (document.hidden) {
+        stop()
+        return
+      }
+      if (isActive) start()
+    }
+
+    const wrapEl = wrapRef.current
+    const io = wrapEl
+      ? new IntersectionObserver(
+          entries => {
+            const anyVisible = entries.some(e => e.isIntersecting)
+            if (anyVisible) {
+              isActive = true
+              start()
+            } else {
+              isActive = false
+              stop()
+            }
+          },
+          { threshold: 0.02 },
+        )
+      : null
+
+    if (wrapEl && io) io.observe(wrapEl)
+    document.addEventListener('visibilitychange', onVis)
+
+    start()
+    return () => {
+      stop()
+      window.removeEventListener('resize', onResize)
+      document.removeEventListener('visibilitychange', onVis)
+      if (io) io.disconnect()
+    }
+  }, [])
+
   return (
-    <div className="matrix-rain">
+    <div ref={wrapRef} className="matrix-rain">
+      <canvas ref={canvasRef} style={{ width: '100%', height: '100%' }} />
       <div className="matrix-rain-inner"></div>
     </div>
   )
 }
 
-const RobotVisual = () => {
-  const [animationData, setAnimationData] = useState<unknown>(null)
-
-  useEffect(() => {
-    let cancelled = false
-    fetch('/domains/Programming.json')
-      .then(r => r.json())
-      .then(data => {
-        if (!cancelled) setAnimationData(data)
-      })
-      .catch(() => {
-        if (!cancelled) setAnimationData(null)
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
-  return (
-    <div className="hero-robot" aria-hidden>
-      {animationData ? (
-        <Lottie animationData={animationData as any} loop autoplay />
-      ) : null}
-    </div>
-  )
-}
+// (Removed unused "RobotVisual" component)
 
 type NavItem = {
   id: string
@@ -147,13 +164,12 @@ function clamp(n: number, min: number, max: number) {
 
 const EVENT = {
   name: 'Tech Savishkaar',
-  edition: '4.0',
-  organiser: 'Vasavi College of\u00A0Engineering',
+  organiser: 'Vasavi College of Engineering (A)',
   department: 'Department of Information Technology',
   tagline: 'Where Creativity Meets Code',
   dateLabel: 'Coming Soon',
-  registrationUrl: 'https://example.com/register',
-  brochureUrl: 'https://example.com/brochure',
+  registrationUrl: 'https://unstop.com/p/tech-savishkaar-40-vasavi-college-of-engineering-vce-hyderabad-1620374?lb=0gRGFHMI&utm_medium=Share&utm_medium=social&utm_source=bommecha9705&utm_source=ig&utm_campaign=Online_coding_challenge&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnvFeGKlM6_NnpOgls9WRwdykEbPe3pc9wAoknauLJc07LWljUU2T2U_D2hPc_aem_8eZV1tVUYqEJNjzSQR7_Gg',
+  brochureUrl: '/domains/TECH%20SAVISHKAR%20BROCHURE.png',
   registrationDeadline: 'Registration deadline: 24 January 2026',
   totalPrize: '₹1,25,000',
   teamSize: 'Team size: 1–4',
@@ -174,7 +190,25 @@ function getTimeLeft(targetISO: string) {
 
 function TiltCard({ className, children }: { className: string; children: ReactNode | ((rotation: { rx: number; ry: number }) => ReactNode) }) {
   const ref = useRef<HTMLDivElement | null>(null)
-  const [rotation, setRotation] = useState({ rx: 0, ry: 0 })
+  const rotationRef = useRef({ rx: 0, ry: 0 })
+  const rafRef = useRef<number | null>(null)
+  const pendingRef = useRef<null | { rx: number; ry: number; px: number; py: number }>(null)
+
+  const flush = () => {
+    rafRef.current = null
+    const el = ref.current
+    const pending = pendingRef.current
+    if (!el || !pending) return
+    pendingRef.current = null
+
+    rotationRef.current = { rx: pending.rx, ry: pending.ry }
+
+    el.style.setProperty('--rx', `${pending.rx.toFixed(2)}deg`)
+    el.style.setProperty('--ry', `${pending.ry.toFixed(2)}deg`)
+    el.style.setProperty('--px', pending.px.toFixed(4))
+    el.style.setProperty('--py', pending.py.toFixed(4))
+    el.style.setProperty('--tilt', '1')
+  }
 
   const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = ref.current
@@ -188,19 +222,20 @@ function TiltCard({ className, children }: { className: string; children: ReactN
     const ry = (px - 0.5) * 10
     const rx = (0.5 - py) * 8
 
-    setRotation({ rx, ry })
-
-    el.style.setProperty('--rx', `${rx.toFixed(2)}deg`)
-    el.style.setProperty('--ry', `${ry.toFixed(2)}deg`)
-    el.style.setProperty('--px', px.toFixed(4))
-    el.style.setProperty('--py', py.toFixed(4))
-    el.style.setProperty('--tilt', '1')
+    pendingRef.current = { rx, ry, px, py }
+    if (rafRef.current) return
+    rafRef.current = window.requestAnimationFrame(flush)
   }
 
   const onLeave = () => {
     const el = ref.current
     if (!el) return
-    setRotation({ rx: 0, ry: 0 })
+    if (rafRef.current) {
+      window.cancelAnimationFrame(rafRef.current)
+      rafRef.current = null
+    }
+    pendingRef.current = null
+    rotationRef.current = { rx: 0, ry: 0 }
     el.style.setProperty('--tilt', '0')
     el.style.setProperty('--rx', `0deg`)
     el.style.setProperty('--ry', `0deg`)
@@ -210,7 +245,7 @@ function TiltCard({ className, children }: { className: string; children: ReactN
 
   return (
     <div ref={ref} className={`tilt-card ${className}`} onPointerMove={onMove} onPointerLeave={onLeave}>
-      {typeof children === 'function' ? children(rotation) : children}
+      {typeof children === 'function' ? children(rotationRef.current) : children}
     </div>
   )
 }
@@ -220,7 +255,6 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const headerRef = useRef<HTMLElement | null>(null)
   const [timeLeft, setTimeLeft] = useState(() => getTimeLeft(EVENT.eventStartISO))
-  const [typedTagline, setTypedTagline] = useState('')
   const editionsTrackRef = useRef<HTMLDivElement | null>(null)
   const partnersTrackRef = useRef<HTMLDivElement | null>(null)
   const editionsFallbackImage = '/vite.svg'
@@ -233,67 +267,8 @@ export default function App() {
     if (!targetEl) return
     const headerHeight = headerRef.current?.offsetHeight || 0
     const targetPosition = targetEl.offsetTop - headerHeight - 20
-    // Primary way
     window.scrollTo({ top: Math.max(0, targetPosition), behavior: 'smooth' })
-    // Fallback: ensure we land correctly after native scroll settles
-    setTimeout(() => {
-      // If still not near target, use scrollIntoView then nudge by header height
-      const near = Math.abs(window.scrollY - targetPosition) < 6
-      if (!near) {
-        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        setTimeout(() => {
-          window.scrollTo({ top: Math.max(0, targetEl.offsetTop - headerHeight - 20), behavior: 'auto' })
-        }, 300)
-      }
-    }, 120)
   }
-  
-  // Type out the hero tagline in a continuous loop
-  useEffect(() => {
-    const text = EVENT.tagline
-    if (!text) return
-    
-    let i = 0
-    let isDeleting = false
-    let currentText = ''
-    const speed = 80 // Typing speed in ms
-    const pauseDuration = 2000 // Pause at full text in ms
-    
-    const type = () => {
-      if (isDeleting) {
-        // Delete text
-        currentText = text.substring(0, currentText.length - 1)
-      } else {
-        // Type text
-        currentText = text.substring(0, i + 1)
-        i++
-      }
-      
-      setTypedTagline(currentText)
-      
-      if (!isDeleting && currentText === text) {
-        // Pause at full text
-        setTimeout(() => {
-          isDeleting = true
-          type()
-        }, pauseDuration)
-      } else if (isDeleting && currentText === '') {
-        // Start typing again after deleting
-        isDeleting = false
-        i = 0
-        setTimeout(type, 500)
-      } else {
-        // Continue typing/deleting
-        const timeout = isDeleting ? speed / 2 : speed
-        setTimeout(type, timeout)
-      }
-    }
-    
-    // Start the typing effect
-    const timeoutId = setTimeout(type, 1000) // Initial delay
-    
-    return () => clearTimeout(timeoutId)
-  }, [])
 
   const PREVIOUS_EDITIONS = useMemo(
     () =>
@@ -355,7 +330,11 @@ export default function App() {
   useEffect(() => {
     const el = editionsTrackRef.current
     if (!el) return
+    const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
+    const coarse = window.matchMedia?.('(pointer: coarse)')?.matches
+    if (reducedMotion || coarse || window.innerWidth <= 768) return
     const id = window.setInterval(() => {
+      if (document.hidden) return
       const nearEnd = el.scrollLeft + el.clientWidth + 10 >= el.scrollWidth
       if (nearEnd) {
         el.scrollTo({ left: 0, behavior: 'smooth' })
@@ -370,7 +349,11 @@ export default function App() {
   useEffect(() => {
     const track = partnersTrackRef.current
     if (!track) return
+    const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
+    const coarse = window.matchMedia?.('(pointer: coarse)')?.matches
+    if (reducedMotion || coarse || window.innerWidth <= 768) return
     const id = window.setInterval(() => {
+      if (document.hidden) return
       const maxScroll = track.scrollWidth - track.clientWidth
       const step = track.clientWidth
       const next = track.scrollLeft + step
@@ -391,17 +374,46 @@ export default function App() {
 
     const root = document.documentElement
 
-    const onMouseMove = (e: MouseEvent) => {
-      const mx = (e.clientX / Math.max(1, window.innerWidth)) * 2 - 1
-      const my = (e.clientY / Math.max(1, window.innerHeight)) * 2 - 1
+    const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
+    const coarse = window.matchMedia?.('(pointer: coarse)')?.matches
+
+    let mouseRaf: number | null = null
+    let lastMouseX = window.innerWidth / 2
+    let lastMouseY = window.innerHeight / 2
+    const flushMouse = () => {
+      mouseRaf = null
+      const mx = (lastMouseX / Math.max(1, window.innerWidth)) * 2 - 1
+      const my = (lastMouseY / Math.max(1, window.innerHeight)) * 2 - 1
       root.style.setProperty('--mx', mx.toFixed(4))
       root.style.setProperty('--my', my.toFixed(4))
+    }
+    const onMouseMove = (e: MouseEvent) => {
+      lastMouseX = e.clientX
+      lastMouseY = e.clientY
+      if (mouseRaf) return
+      mouseRaf = window.requestAnimationFrame(flushMouse)
     }
 
     let scrollRaf: number | null = null
     let lastScrollY = window.scrollY
     let isUserScrolling = false
     let scrollTimeout: number | null = null
+
+    let resizeRaf: number | null = null
+    let sectionTops: Array<{ id: string; top: number }> = []
+    const computeSectionTops = () => {
+      sectionTops = sections.map(id => {
+        const el = document.getElementById(id)
+        return { id, top: el ? el.offsetTop : Number.POSITIVE_INFINITY }
+      })
+    }
+    const onResize = () => {
+      if (resizeRaf) return
+      resizeRaf = window.requestAnimationFrame(() => {
+        resizeRaf = null
+        computeSectionTops()
+      })
+    }
 
     const onScroll = () => {
       // On mobile, only update UI, don't interfere with scroll
@@ -433,12 +445,10 @@ export default function App() {
       const y = window.scrollY + headerOffset
 
       let current = 'home'
-      for (const id of sections) {
-        const el = document.getElementById(id)
-        if (!el) continue
-        if (el.offsetTop <= y) current = id
+      for (const s of sectionTops) {
+        if (s.top <= y) current = s.id
       }
-      setActive(current)
+      setActive(prev => (prev === current ? prev : current))
 
       // Disable background updates during scroll for better performance
       // const glow = document.querySelector<HTMLElement>('.bg-glow')
@@ -452,22 +462,35 @@ export default function App() {
 
     // Removed global anchor delegation; using explicit onClick handlers on links
 
-    window.addEventListener('mousemove', onMouseMove, { passive: true })
+    computeSectionTops()
+    window.addEventListener('resize', onResize, { passive: true })
+    if (!reducedMotion && !coarse) {
+      window.addEventListener('mousemove', onMouseMove, { passive: true })
+      onMouseMove(new MouseEvent('mousemove', { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 }))
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
-    onMouseMove(new MouseEvent('mousemove', { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 }))
     onScroll()
     
     return () => {
+      window.removeEventListener('resize', onResize)
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('scroll', onScroll)
       if (scrollRaf) {
         window.cancelAnimationFrame(scrollRaf)
+      }
+      if (mouseRaf) {
+        window.cancelAnimationFrame(mouseRaf)
+      }
+      if (resizeRaf) {
+        window.cancelAnimationFrame(resizeRaf)
       }
       if (scrollTimeout) {
         clearTimeout(scrollTimeout)
       }
     }
   }, [sections])
+
+  // (Removed curved timeline overlay & scroll logic)
 
   useEffect(() => {
     setTimeLeft(getTimeLeft(EVENT.eventStartISO))
@@ -476,6 +499,31 @@ export default function App() {
     }, 1000)
     return () => window.clearInterval(id)
   }, [EVENT.eventStartISO])
+
+  // Click particle burst (for rocket cursor effect)
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
+      const coarse = window.matchMedia?.('(pointer: coarse)')?.matches
+      if (reducedMotion || coarse || window.innerWidth <= 768) return
+      const colors = ['#22d3ee', '#a78bfa', '#60a5fa', '#f472b6']
+      const count = 8
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement('span')
+        el.className = 'click-particle'
+        const angle = (Math.PI * 2 * i) / count
+        el.style.left = `${e.clientX}px`
+        el.style.top = `${e.clientY}px`
+        el.style.background = colors[i % colors.length]
+        el.style.setProperty('--x', `${Math.cos(angle)}`)
+        el.style.setProperty('--y', `${Math.sin(angle)}`)
+        document.body.appendChild(el)
+        setTimeout(() => el.remove(), 700)
+      }
+    }
+    window.addEventListener('mousedown', onClick)
+    return () => window.removeEventListener('mousedown', onClick)
+  }, [])
 
   useEffect(() => {
     const el = prizesRef.current
@@ -597,28 +645,57 @@ export default function App() {
       <main>
         <motion.section id="home" className="section hero" {...sectionMotion}>
           <MatrixRain />
-          <CodeSnippets />
-          <BackgroundGlyphs />
           <div className="container hero-inner">
             <div className="hero-copy">
-              <div className="eyebrow">
-                <div className="eyebrow-org">{EVENT.organiser}</div>
-                <div className="eyebrow-dept">{EVENT.department}</div>
+              <div className="eyebrow" style={{
+                display: 'block',
+                textAlign: 'center',
+                marginBottom: '24px'
+              }}>
+                <div className="eyebrow-line" style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '16px',
+                  fontFamily: '"Audiowide", system-ui, sans-serif',
+                  fontWeight: 900,
+                  fontSize: 'clamp(22px, 3vw, 42px)',
+                  lineHeight: 1.1,
+                  color: 'rgba(255, 255, 255, 0.95)',
+                  textShadow: '0 10px 30px rgba(0, 0, 0, 0.55)'
+                }}>
+                  <img
+                    src="/domains/vce-logo.jpg"
+                    alt="VCE Logo"
+                    style={{ 
+                      height: 'clamp(50px, 7vw, 95px)',  /* Increased from 40px,5vw,80px */
+                      width: 'auto',
+                      transition: 'transform 0.3s ease',
+                      transform: 'translateZ(0)' /* Hardware acceleration */
+                    }}
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+                  />
+                  <span>Vasavi College of Engineering</span>
+                </div>
+                
+                <div className="eyebrow-line" style={{
+                  fontFamily: '"Audiowide", system-ui, sans-serif',
+                  fontWeight: 700,
+                  fontSize: 'clamp(18px, 2.5vw, 26px)',
+                  marginTop: '8px',
+                  lineHeight: 1.1,
+                  color: 'rgba(255, 255, 255, 0.9)',
+                  textShadow: '0 0 8px rgba(167, 139, 250, 0.3)'
+                }}>Department of Information Technology</div>
               </div>
 
               <h1 className="hero-title">
-                <span className="hero-title-main">{EVENT.name}</span>
-                <span className="hero-title-edition">{EVENT.edition}</span>
+                <span className="hero-title-main" data-text={EVENT.name}>{EVENT.name}</span>
               </h1>
 
-              <p className="hero-subtitle retro" aria-label={EVENT.tagline}>
-                {typedTagline}
-                <span className="typing-cursor" aria-hidden>
-                  |
-                </span>
+              <p className="hero-subtitle retro hero-center" aria-label={EVENT.tagline}>
+                <span className="typewriter">{EVENT.tagline}</span>
               </p>
-
-             
 
               <div className="hero-meta">
                 <span className="pill">{EVENT.registrationDeadline}</span>
@@ -626,7 +703,7 @@ export default function App() {
 
               <div className="hero-actions">
                 <a className="btn btn-primary" href={EVENT.registrationUrl} target="_blank" rel="noopener">Register Now</a>
-                <a className="btn btn-ghost" href={EVENT.brochureUrl} target="_blank" rel="noopener">Download Brochure</a>
+                <a className="btn btn-ghost" href={EVENT.brochureUrl} download="Tech-Savishkaar-Brochure.png">Download Brochure</a>
                 <a className="btn btn-ghost" href="#rounds" onClick={(e) => { e.preventDefault(); scrollToSection('rounds') }}>View Rounds</a>
               </div>
 
@@ -636,7 +713,7 @@ export default function App() {
                   <div className="badge-content">
                     <div className="badge-value">{EVENT.totalPrize}</div>
                     <div className="badge-label">Total Prizes</div>
-                </div>
+                  </div>
                 </div>
                 <div className="feature-badge">
                   <div className="badge-accent" aria-hidden />
@@ -654,66 +731,118 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="hero-marquee" aria-hidden>
-                <div className="marquee">
-                  <div className="marquee-track">
-                    {(() => {
-                      const base = [
-                        'Tech Savishkaar',
-                        'Agritech',
-                        'AIML for Remote Sensing – Environment & Sustainable Development',
-                        'HealthTech',
-                        'Cyber Security',
-                      ]
+              {/* Marquee and countdown moved to dedicated section below */}
+            </div>
+          </div>
+        </motion.section>
 
-                      const ticker = base.join('   •   ')
-                      const longTicker = Array.from({ length: 8 }, () => ticker).join('   •   ')
-
-                      return [0, 1].map((i) => (
-                        <span key={i} className="hero-marquee-text">
-                          {longTicker}
-                        </span>
-                      ))
-                    })()}
-                  </div>
+        {/* Announcement + Countdown Section (after hero) */}
+        <motion.section id="announcement" className="section" {...sectionMotion}>
+          <div style={{ position: 'relative', width: '100vw', marginLeft: 'calc(50% - 50vw)' }}>
+            <div style={{ position: 'relative', height: '170px', overflow: 'hidden', marginBottom: '1rem' }}>
+              {/* Top dark ribbon */}
+              <div style={{
+                position: 'absolute',
+                left: '-30%',
+                right: '-30%',
+                top: '36px',
+                transform: 'rotate(-6deg)',
+                transformOrigin: 'center',
+                background: '#0b0b0c',
+                color: '#fff',
+                borderTop: '1px solid rgba(255,255,255,0.08)',
+                borderBottom: '1px solid rgba(255,255,255,0.08)',
+                boxShadow: '0 8px 18px rgba(0,0,0,0.35)',
+                zIndex: 2
+              }}>
+                <div style={{
+                  display: 'flex',
+                  gap: '56px',
+                  width: 'max-content',
+                  padding: '14px 0',
+                  fontWeight: 700,
+                  letterSpacing: '0.4px',
+                  textTransform: 'uppercase',
+                  whiteSpace: 'nowrap',
+                  animation: 'ribbonA 18s linear infinite'
+                }}>
+                  <span>🌐 Student Run</span>
+                  <span>🌐 Student Run</span>
+                  <span>🌐 Student Run</span>
+                  <span>🌐 Student Run</span>
+                  <span aria-hidden>🌐 Student Run</span>
+                  <span aria-hidden>🌐 Student Run</span>
+                  <span aria-hidden>🌐 Student Run</span>
                 </div>
               </div>
-
-              <div className="hero-visual hero-visual-mobile" aria-hidden>
-                <RobotVisual />
+              {/* Bottom blue ribbon */}
+              <div style={{
+                position: 'absolute',
+                left: '-30%',
+                right: '-30%',
+                bottom: '36px',
+                transform: 'rotate(6deg)',
+                transformOrigin: 'center',
+                background: '#1f3cf0',
+                color: '#fff',
+                borderTop: '1px solid rgba(255,255,255,0.1)',
+                borderBottom: '1px solid rgba(0,0,0,0.2)',
+                boxShadow: '0 10px 22px rgba(0,0,0,0.35)',
+                zIndex: 1
+              }}>
+                <div style={{
+                  display: 'flex',
+                  gap: '56px',
+                  width: 'max-content',
+                  padding: '14px 0',
+                  fontWeight: 800,
+                  letterSpacing: '0.4px',
+                  textTransform: 'uppercase',
+                  whiteSpace: 'nowrap',
+                  animation: 'ribbonA 22s linear infinite',
+                  animationDirection: 'reverse'
+                }}>
+                  <span>🌐 Biggest Hackathon</span>
+                  <span>🌐 Biggest Hackathon</span>
+                  <span>🌐 Biggest Hackathon</span>
+                  <span>🌐 Biggest Hackathon</span>
+                  <span aria-hidden>🌐 Biggest Hackathon</span>
+                  <span aria-hidden>🌐 Biggest Hackathon</span>
+                  <span aria-hidden>🌐 Biggest Hackathon</span>
+                </div>
               </div>
+              <style>{`
+                @keyframes ribbonA { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+              `}</style>
+            </div>
+          </div>
 
-              <div className="hero-countdown-wrapper" aria-label="Countdown to event start">
-                <div className="countdown-title">Event Starts In</div>
-                <div className="countdown-container">
-                  <div className="countdown-box">
-                    <div className="countdown-number">{String(timeLeft.days).padStart(2, '0')}</div>
-                    <div className="countdown-text">Days</div>
-                  </div>
-                  <div className="countdown-separator">:</div>
-                  <div className="countdown-box">
-                    <div className="countdown-number">{String(timeLeft.hours).padStart(2, '0')}</div>
-                    <div className="countdown-text">Hours</div>
-                  </div>
-                  <div className="countdown-separator">:</div>
-                  <div className="countdown-box">
-                    <div className="countdown-number">{String(timeLeft.minutes).padStart(2, '0')}</div>
-                    <div className="countdown-text">Minutes</div>
-                  </div>
-                  <div className="countdown-separator">:</div>
-                  <div className="countdown-box">
-                    <div className="countdown-number">{String(timeLeft.seconds).padStart(2, '0')}</div>
-                    <div className="countdown-text">Seconds</div>
-                  </div>
+          <div className="container">
+            <div className="hero-countdown-wrapper" style={{ marginTop: '0.5rem' }}>
+              <div className="countdown-title">Event starts in</div>
+              <div className="countdown-container">
+                <div className="countdown-box">
+                  <div className="countdown-number">{timeLeft.days}</div>
+                  <div className="countdown-text">Days</div>
+                </div>
+                <div className="countdown-separator">:</div>
+                <div className="countdown-box">
+                  <div className="countdown-number">{timeLeft.hours}</div>
+                  <div className="countdown-text">Hours</div>
+                </div>
+                <div className="countdown-separator">:</div>
+                <div className="countdown-box">
+                  <div className="countdown-number">{timeLeft.minutes}</div>
+                  <div className="countdown-text">Minutes</div>
+                </div>
+                <div className="countdown-separator">:</div>
+                <div className="countdown-box">
+                  <div className="countdown-number">{timeLeft.seconds}</div>
+                  <div className="countdown-text">Seconds</div>
                 </div>
               </div>
             </div>
-
-            <div className="hero-visual hero-visual-desktop" aria-hidden>
-              <RobotVisual />
-            </div>
-
-                      </div>
+          </div>
         </motion.section>
 
         <motion.section id="editions" className="section" {...sectionMotion}>
@@ -729,24 +858,25 @@ export default function App() {
                 {PREVIOUS_EDITIONS.map(item => (
                   <div key={item.year} className="edition-image-container">
                       <img
-                      className="edition-image"
+                    className="edition-image"
                         src={item.image}
                       alt={`TechSavishkaar ${item.year}`}
-                        loading="lazy"
-                        onError={e => {
-                          const img = e.currentTarget
-                          if (img.dataset.fallbackApplied) return
-                          img.dataset.fallbackApplied = '1'
-                          img.src = editionsFallbackImage
-                        }}
-                      />
-                    </div>
+                      loading="lazy"
+                      decoding="async"
+                      onError={(e) => { (e.currentTarget as HTMLImageElement).src = editionsFallbackImage }}
+                    />
+                  </div>
                 ))}
               </div>
 
               <button className="carousel-btn" type="button" aria-label="Next editions" onClick={() => scrollCarousel(1)}>
                 ›
               </button>
+            </div>
+            <div className="edition-links" role="group" aria-label="Edition PDFs">
+              <a className="btn btn-ghost" href="#" target="_blank" rel="noopener">Version 1</a>
+              <a className="btn btn-ghost" href="#" target="_blank" rel="noopener">Version 2</a>
+              <a className="btn btn-ghost" href="#" target="_blank" rel="noopener">Version 3</a>
             </div>
           </div>
         </motion.section>
@@ -759,6 +889,8 @@ export default function App() {
               to showcase their innovative ideas and technical skills. Participants are encouraged to build impactful
               solutions through interdisciplinary collaboration, rapid prototyping, and creative problem solving.
             </p>
+            
+            <div className="about-clouds" aria-hidden />
             <div className="cards">
               <motion.div initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.05 }} transition={{ duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94], delay: 0 * 0.01 }}>
               <TiltCard className="card card-hover">
@@ -800,57 +932,30 @@ export default function App() {
           <div className="container">
             <h2 className="section-title">Rounds & Schedule</h2>
             <p className="section-lead">All three rounds are elimination rounds.</p>
-            <div className="rounds-holo">
-              <div className="rounds-track" aria-hidden />
+            <div className="timeline-road">
               {[
-                {
-                  label: 'Round 1',
-                  title: 'Coding Challenge',
-                  mode: 'Online',
-                  date: '25-01-2026',
-                  meta: ['Coding Tasks', 'Problem Solving'],
-                  description: 'Timed online coding challenge to evaluate technical skills.'
-                },
-                {
-                  label: 'Round 2',
-                  title: 'Idea Presentation',
-                  mode: 'Online',
-                  date: '07-02-2026',
-                  meta: ['Innovation', 'Feasibility', 'Clarity'],
-                  description: 'Present your idea clearly with impact and feasibility.'
-                },
-                {
-                  label: 'Round 3',
-                  title: 'Build & Present Application',
-                  mode: 'Offline',
-                  date: '21-02-2026',
-                  meta: ['Prototype', 'Demo', 'Presentation'],
-                  description: 'Build and present your working application in the offline finale.'
-                }
-              ].map((round, index) => (
-                <div key={round.label} className="round-panel" data-accent={index + 1}>
-                  <div className="round-panel-glow" aria-hidden />
-                  <div className="round-panel-header">
-                    <span className="round-step">{String(index + 1).padStart(2, '0')}</span>
-                    <div className="round-meta-block">
-                      <span className="round-phase">{round.label}</span>
-                      <span className="round-window">Date: {round.date}</span>
+                { title: 'Coding & Ideation Round', date: '25 January 2026', mode: 'Online', desc: 'Coding test + MCQs. Evaluation on correctness, efficiency, and originality. Outcome: Shortlisting for Round 2.' },
+                { title: 'Idea Submission', date: '30 Jan – 07 Feb 2026', mode: 'Online', desc: 'Submit your idea focusing on problem identification, innovation, feasibility, and impact.' },
+                { title: 'Build & Present Prototype', date: '21 February 2026', mode: 'Offline', desc: 'Prototype • Demo • Presentation at Vasavi College of Engineering, Hyderabad.' },
+              ].map((item, index) => (
+                <motion.article
+                  key={`${item.title}-${index}`}
+                  className="tl-item"
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.1 }}
+                  transition={{ duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94], delay: index * 0.02 }}
+                >
+                  <div className="tl-number" aria-hidden>{index + 1}</div>
+                  <div className="tl-content">
+                    <h3 className="tl-title">
+                      {item.title}
+                      <span className="tl-dash" aria-hidden />
+                    </h3>
+                    <div className="tl-duration">Duration - {item.date} • {item.mode}</div>
+                    <p className="tl-desc">{item.desc}</p>
                   </div>
-                        </div>
-                  <h3 className="round-title">{round.title}</h3>
-                  <div className="round-mode" aria-label="Round mode">
-                    <span className="round-mode-label">Mode</span>
-                    <span className="round-mode-badge">{round.mode}</span>
-                      </div>
-                  <p className="round-copy">{round.description}</p>
-                  <div className="round-chips">
-                    {round.meta.map((item) => (
-                      <span className="round-chip" key={item}>
-                        {item}
-                      </span>
-                    ))}
-                    </div>
-                  </div>
+                </motion.article>
               ))}
             </div>
           </div>
@@ -883,6 +988,7 @@ export default function App() {
                           src={domain.image}
                           alt=""
                           loading="lazy"
+                          decoding="async"
                           onError={e => {
                             const img = e.currentTarget
                             if (img.dataset.fallbackApplied) return
@@ -909,8 +1015,8 @@ export default function App() {
         <motion.section id="timeline" className="section" {...sectionMotion}>
           <div className="container">
             <h2 className="section-title">Event Timeline</h2>
-            <p className="section-lead">Key milestones and deadlines for TechSavishkaar 4.0</p>
-            
+            <p className="section-lead">Key milestones and deadlines for Tech Savishkaar</p>
+
             <div className="timeline">
               {[
                 { title: 'Registrations Open', date: '7 January 2026', desc: 'Registration portal opens for participants' },
@@ -980,12 +1086,7 @@ export default function App() {
                     alt=""
                     className="prize-image"
                     loading="lazy"
-                    onError={e => {
-                      const img = e.currentTarget
-                      if (img.dataset.fallbackApplied) return
-                      img.dataset.fallbackApplied = '1'
-                      img.src = '/vite.svg'
-                    }}
+                    decoding="async"
                   />
                 </div>
               </motion.div>
@@ -996,28 +1097,49 @@ export default function App() {
 
         <motion.section id="rules" className="section" {...sectionMotion}>
           <div className="container">
-            <h2 className="section-title">Participation Rules</h2>
+            <h2 className="section-title">Rules & Guidelines</h2>
             <div className="cards">
               <motion.div initial={{opacity:0.6, y:12}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0.12}} transition={{duration:0.22, ease:'easeOut', delay:0*0.02}}>
-              <TiltCard className="card card-hover">
-                <h3>Team Size</h3>
-                <div className="accent-line" />
-                <p>Teams can include 1–4 members. Build a multidisciplinary crew for maximum impact.</p>
-              </TiltCard>
+                <TiltCard className="card card-hover">
+                  <h3>Timelines</h3>
+                  <div className="accent-line" />
+                  <p>Teams must adhere strictly to the timelines of each round.</p>
+                </TiltCard>
               </motion.div>
               <motion.div initial={{opacity:0.6, y:12}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0.12}} transition={{duration:0.22, ease:'easeOut', delay:1*0.02}}>
-              <TiltCard className="card card-hover">
-                <h3>Registration</h3>
-                <div className="accent-line" />
-                <p>Rounds 1 and 2 are free. A participation fee applies only for teams shortlisted to the final round.</p>
-              </TiltCard>
+                <TiltCard className="card card-hover">
+                  <h3>Plagiarism</h3>
+                  <div className="accent-line" />
+                  <p>Plagiarism or reuse of existing solutions without attribution will lead to immediate disqualification.</p>
+                </TiltCard>
               </motion.div>
               <motion.div initial={{opacity:0.6, y:12}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0.12}} transition={{duration:0.22, ease:'easeOut', delay:2*0.02}}>
-              <TiltCard className="card card-hover">
-                <h3>Important Dates</h3>
-                <div className="accent-line" />
-                <p>Refer to the rounds and event timeline above to plan your submissions and participation.</p>
-              </TiltCard>
+                <TiltCard className="card card-hover">
+                  <h3>Malpractice</h3>
+                  <div className="accent-line" />
+                  <p>Any form of malpractice during online rounds will result in elimination.</p>
+                </TiltCard>
+              </motion.div>
+              <motion.div initial={{opacity:0.6, y:12}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0.12}} transition={{duration:0.22, ease:'easeOut', delay:3*0.02}}>
+                <TiltCard className="card card-hover">
+                  <h3>Judging</h3>
+                  <div className="accent-line" />
+                  <p>The decision of the judging panel is final and binding.</p>
+                </TiltCard>
+              </motion.div>
+              <motion.div initial={{opacity:0.6, y:12}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0.12}} transition={{duration:0.22, ease:'easeOut', delay:4*0.02}}>
+                <TiltCard className="card card-hover">
+                  <h3>Attendance</h3>
+                  <div className="accent-line" />
+                  <p>Teams qualifying for the final round must be present physically at the venue.</p>
+                </TiltCard>
+              </motion.div>
+              <motion.div initial={{opacity:0.6, y:12}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0.12}} transition={{duration:0.22, ease:'easeOut', delay:5*0.02}}>
+                <TiltCard className="card card-hover">
+                  <h3>Final Round Fee</h3>
+                  <div className="accent-line" />
+                  <p>Final round entry fee: ₹1000 per team (applicable only for teams selected to Round 3).</p>
+                </TiltCard>
               </motion.div>
             </div>
           </div>
@@ -1129,11 +1251,17 @@ export default function App() {
             <h2 className="section-title">Contact</h2>
             <div className="contact">
               <TiltCard className="card card-hover">
-                <h3>Let’s connect</h3>
+                <h3>Follow Us</h3>
                 <div className="contact-links" aria-label="Social links">
-                  <a className="btn btn-ghost" href="#" target="_blank" rel="noreferrer">Email</a>
-                  <a className="btn btn-ghost" href="#" target="_blank" rel="noreferrer">LinkedIn</a>
-                  <a className="btn btn-ghost" href="#" target="_blank" rel="noreferrer">Instagram</a>
+                  <a className="btn btn-ghost" href="mailto:techsavishkaar@gmail.com" target="_blank" rel="noreferrer">
+                    <Mail size={16} style={{ marginRight: 8 }} /> Email
+                  </a>
+                  <a className="btn btn-ghost" href="https://www.linkedin.com/company/dsac-it-vce/" target="_blank" rel="noreferrer">
+                    <Linkedin size={16} style={{ marginRight: 8 }} /> LinkedIn
+                  </a>
+                  <a className="btn btn-ghost" href="https://www.instagram.com/dsac_it?igsh=MXZxZmZpYWNtcmJtbg==" target="_blank" rel="noreferrer">
+                    <Instagram size={16} style={{ marginRight: 8 }} /> Instagram
+                  </a>
                 </div>
               </TiltCard>
 
@@ -1142,18 +1270,31 @@ export default function App() {
                 <p>
                   Share your email and message. We’ll reply with details and updates.
                 </p>
-                <form className="form" onSubmit={e => e.preventDefault()}>
+                <form
+                  className="form"
+                  onSubmit={e => {
+                    e.preventDefault()
+                    const form = e.currentTarget as HTMLFormElement
+                    const data = new FormData(form)
+                    const name = (data.get('name') as string) || ''
+                    const email = (data.get('email') as string) || ''
+                    const message = (data.get('message') as string) || ''
+                    const subject = encodeURIComponent(`Message from ${name || 'Guest'} - TechSavishkaar`)
+                    const body = encodeURIComponent(`From: ${name}\nEmail: ${email}\n\n${message}`)
+                    window.location.href = `mailto:techsavishkaar@gmail.com?subject=${subject}&body=${body}`
+                  }}
+                >
                   <label>
                     Name
-                    <input placeholder="Your name" />
+                    <input name="name" placeholder="Your name" required />
                   </label>
                   <label>
                     Email
-                    <input placeholder="your@email.com" type="email" />
+                    <input name="email" placeholder="your@email.com" type="email" required />
                   </label>
                   <label>
                     Message
-                    <textarea placeholder="Write your message…" rows={4} />
+                    <textarea name="message" placeholder="Write your message…" rows={4} required />
                   </label>
                   <button className="btn btn-primary" type="submit">Send</button>
                 </form>
@@ -1163,9 +1304,47 @@ export default function App() {
         </motion.section>
 
         <footer className="footer">
-          <div className="container footer-inner">
-            <div className="footer-left">© {new Date().getFullYear()} TechSavishkaar</div>
-            <div className="footer-right">Built for the hackathon stage</div>
+          <div className="container">
+            <div className="footer-grid">
+              <div className="footer-section">
+                <h3>About Department</h3>
+                <p>The IT department was established in the year 2000. It offers a 4 year undergraduate programme B.E. in Information Technology with an annual intake of 180 students. The curriculum of I.T. emphasizes the ongoing Convergence of Computers, Communications and Control Systems.</p>
+              </div>
+              
+              <div className="footer-section">
+                <h3>Contact Details</h3>
+                <address>
+                  <strong>VASAVI COLLEGE OF ENGINEERING (A)</strong><br />
+                  ACCREDITED BY NAAC WITH 'A++' GRADE<br />
+                  Sponsored by Vasavi Academy of Education<br />
+                  Affiliated to Osmania University, Hyderabad<br />
+                  Approved by AICTE, New Delhi
+                </address>
+              </div>
+              
+              <div className="footer-section">
+                <h3>In Association With</h3>
+                <div className="associations">
+                  <div className="association-logo">
+                    <img src="/domains/dsac.jpeg" alt="DSAC" title="DSAC" />
+                  </div>
+                  <div className="association-logo">
+                    <img src="/domains/ieee.jpeg" alt="IEEE" title="IEEE" />
+                  </div>
+                  <div className="association-logo">
+                    <img src="/domains/csi.jpeg" alt="Computer Society of India" title="Computer Society of India" />
+                  </div>
+                  <div className="association-logo">
+                    <img src="/domains/acm.jpeg" alt="Association for Computing Machinery" title="ACM" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="footer-bottom">
+              <div className="footer-left">© {new Date().getFullYear()} TechSavishkaar</div>
+              <div className="footer-right">Department of Information Technology</div>
+            </div>
           </div>
         </footer>
 

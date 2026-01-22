@@ -6,6 +6,7 @@ import { isMobile } from 'react-device-detect'
 
 function FloatingShapes({ mouse }: { mouse: { current: { x: number; y: number } } }) {
   const groupRef = useRef<THREE.Group>(null)
+  const accRef = useRef(0)
 
   const material = useMemo(
     () =>
@@ -61,7 +62,12 @@ function FloatingShapes({ mouse }: { mouse: { current: { x: number; y: number } 
     [],
   )
 
-  useFrame(({ clock }) => {
+  useFrame(({ clock }, delta) => {
+    if (document.hidden) return
+    accRef.current += delta
+    if (accRef.current < 1 / 30) return
+    accRef.current = 0
+
     const t = clock.getElapsedTime()
     const g = groupRef.current
     if (!g) return
@@ -95,9 +101,10 @@ function FloatingShapes({ mouse }: { mouse: { current: { x: number; y: number } 
 
 function Particles() {
   const pointsRef = useRef<THREE.Points>(null)
+  const accRef = useRef(0)
 
   const { positions } = useMemo(() => {
-    const count = 800
+    const count = 450
     const arr = new Float32Array(count * 3)
     for (let i = 0; i < count; i++) {
       const i3 = i * 3
@@ -110,7 +117,12 @@ function Particles() {
     return { positions: arr }
   }, [])
 
-  useFrame(({ clock }) => {
+  useFrame(({ clock }, delta) => {
+    if (document.hidden) return
+    accRef.current += delta
+    if (accRef.current < 1 / 30) return
+    accRef.current = 0
+
     const t = clock.getElapsedTime()
     if (pointsRef.current) {
       pointsRef.current.rotation.y = t * 0.03
@@ -135,9 +147,10 @@ function Particles() {
   )
 }
 
-function Scene({ isMobile }: { isMobile: boolean }) {
+function Scene({ isMobile, reducedMotion }: { isMobile: boolean; reducedMotion: boolean }) {
   const gridGroup = useRef<THREE.Group>(null)
   const mouse = useRef({ x: 0, y: 0 })
+  const accRef = useRef(0)
 
   const gridGeo = useMemo(() => new THREE.PlaneGeometry(60, 60, 70, 70), [])
   const gridMat = useMemo(
@@ -152,6 +165,7 @@ function Scene({ isMobile }: { isMobile: boolean }) {
   )
 
   useEffect(() => {
+    if (isMobile || reducedMotion) return
     const onMove = (e: MouseEvent) => {
       const mx = (e.clientX / Math.max(1, window.innerWidth)) * 2 - 1
       const my = (e.clientY / Math.max(1, window.innerHeight)) * 2 - 1
@@ -160,7 +174,7 @@ function Scene({ isMobile }: { isMobile: boolean }) {
     }
     window.addEventListener('mousemove', onMove, { passive: true })
     return () => window.removeEventListener('mousemove', onMove)
-  }, [])
+  }, [isMobile, reducedMotion])
   const gridMat2 = useMemo(
     () =>
       new THREE.MeshBasicMaterial({
@@ -173,8 +187,13 @@ function Scene({ isMobile }: { isMobile: boolean }) {
   )
 
   useFrame((state, delta) => {
+    if (document.hidden) return
     if (!gridGroup.current) return
     if (delta > 0.1) return // Skip frames if lagging
+
+    accRef.current += delta
+    if (accRef.current < 1 / 30) return
+    accRef.current = 0
 
     const time = state.clock.getElapsedTime()
     const targetZ = 6.5 + Math.sin(time * 0.15) * 0.8
@@ -202,11 +221,11 @@ function Scene({ isMobile }: { isMobile: boolean }) {
         <mesh rotation={[0, 0, 0]} position={[0, 0, -8]} geometry={gridGeo} material={gridMat2} />
       </group>
 
-      {!isMobile && <FloatingShapes mouse={mouse} />}
+      {!isMobile && !reducedMotion && <FloatingShapes mouse={mouse} />}
 
-      {!isMobile && <Particles />}
+      {!isMobile && !reducedMotion && <Particles />}
 
-      <Stars radius={isMobile ? 30 : 50} depth={isMobile ? 20 : 30} count={isMobile ? 200 : 400} factor={isMobile ? 1.5 : 1.8} saturation={0} fade speed={isMobile ? 0.15 : 0.25} />
+      <Stars radius={isMobile ? 28 : 48} depth={isMobile ? 18 : 28} count={isMobile ? 120 : 250} factor={isMobile ? 1.4 : 1.7} saturation={0} fade speed={isMobile ? 0.12 : 0.18} />
     </>
   )
 }
@@ -214,15 +233,27 @@ function Scene({ isMobile }: { isMobile: boolean }) {
 export default function ThreeBackground() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [isMobileDevice, setIsMobileDevice] = useState(false)
+  const [reducedMotion, setReducedMotion] = useState(false)
+  const [isRunning, setIsRunning] = useState(true)
 
   useEffect(() => {
     setIsMobileDevice(isMobile)
+    setReducedMotion(window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false)
+
+    const onVis = () => {
+      setIsRunning(!document.hidden)
+    }
+    document.addEventListener('visibilitychange', onVis)
+    onVis()
+    return () => document.removeEventListener('visibilitychange', onVis)
   }, [])
 
   return (
     <div className="three-wrap" aria-hidden>
       <Canvas
         className="three-canvas"
+        frameloop={isRunning ? 'always' : 'never'}
+        dpr={isMobileDevice ? 1 : 1.25}
         gl={{ 
           antialias: !isMobileDevice, 
           alpha: true, 
@@ -241,7 +272,7 @@ export default function ThreeBackground() {
           }
         }}
       >
-        {isLoaded && <Scene isMobile={isMobileDevice} />}
+        {isLoaded && <Scene isMobile={isMobileDevice} reducedMotion={reducedMotion} />}
       </Canvas>
     </div>
   )
