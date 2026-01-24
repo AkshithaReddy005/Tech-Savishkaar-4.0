@@ -99,12 +99,11 @@ function FloatingShapes({ mouse }: { mouse: { current: { x: number; y: number } 
   )
 }
 
-function Particles() {
+function Particles({ count }: { count: number }) {
   const pointsRef = useRef<THREE.Points>(null)
   const accRef = useRef(0)
 
   const { positions } = useMemo(() => {
-    const count = 450
     const arr = new Float32Array(count * 3)
     for (let i = 0; i < count; i++) {
       const i3 = i * 3
@@ -216,14 +215,18 @@ function Scene({ isMobile, reducedMotion }: { isMobile: boolean; reducedMotion: 
       <pointLight position={[-4, 2, 2]} intensity={isMobile ? 0.3 : 0.6} color={'#22d3ee'} />
       <pointLight position={[4, -2, 2]} intensity={isMobile ? 0.25 : 0.5} color={'#a78bfa'} />
 
-      <group ref={gridGroup}>
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.8, 0]} geometry={gridGeo} material={gridMat} />
-        <mesh rotation={[0, 0, 0]} position={[0, 0, -8]} geometry={gridGeo} material={gridMat2} />
-      </group>
+      {/* Grid removed as requested */}
+      {false && (
+        <group ref={gridGroup}>
+          <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.8, 0]} geometry={gridGeo} material={gridMat} />
+          <mesh rotation={[0, 0, 0]} position={[0, 0, -8]} geometry={gridGeo} material={gridMat2} />
+        </group>
+      )}
 
-      {!isMobile && !reducedMotion && <FloatingShapes mouse={mouse} />}
+      {/* Remove floating shapes per user request */}
 
-      {!isMobile && !reducedMotion && <Particles />}
+      {/* Increase particle density for a richer field */}
+      <Particles count={isMobile ? 600 : 1000} />
 
       <Stars radius={isMobile ? 28 : 48} depth={isMobile ? 18 : 28} count={isMobile ? 120 : 250} factor={isMobile ? 1.4 : 1.7} saturation={0} fade speed={isMobile ? 0.12 : 0.18} />
     </>

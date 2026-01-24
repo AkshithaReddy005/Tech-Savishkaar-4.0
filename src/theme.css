@@ -756,37 +756,8 @@ html, body {
 }
 
 /* Ultra subtle grid background */
-.bg-grid {
-  position: absolute;
-  inset: 0;
-  background-color: transparent;
-  background-image: 
-    /* Extremely subtle grid lines */
-    linear-gradient(to right, rgba(34, 211, 238, 0.02) 0.3px, transparent 0.3px),
-    linear-gradient(to bottom, rgba(34, 211, 238, 0.02) 0.3px, transparent 0.3px),
-    /* Soft cyan wash to unify look across sections */
-    radial-gradient(1000px 700px at 50% 40%, rgba(34, 211, 238, 0.12), transparent 65%),
-    radial-gradient(1200px 800px at 50% 85%, rgba(34, 211, 238, 0.09), transparent 70%);
-  
-  background-size: 80px 80px;  /* Larger grid cells */
-  background-position: center center;
-  
-  /* Very minimal glow */
-  box-shadow: 
-    inset 0 0 100px rgba(34, 211, 238, 0.005);
-  
-  /* Extremely subtle animation */
-  animation: gridPulse 30s ease-in-out infinite alternate;
-  
-  /* Stronger, but still soft blending */
-  mix-blend-mode: screen;
-  
-  /* Performance */
-  transform: translateZ(0);
-  will-change: transform, opacity;
-  pointer-events: none;
-  opacity: 0.35;
-}
+/* Remove any site-wide grid layer */
+.bg-grid { display: none !important; background: none !important; }
 
 @keyframes gridPulse {
   0% {
@@ -809,20 +780,8 @@ html, body {
 }
 
 /* Soft blue overlay to reduce grid visibility */
-.bg::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(to right, rgba(34, 211, 238, 0.12) 0.5px, transparent 0.5px),
-    linear-gradient(to bottom, rgba(34, 211, 238, 0.12) 0.5px, transparent 0.5px),
-    radial-gradient(ellipse at 50% 50%, rgba(34, 211, 238, 0.08), transparent 70%);
-  background-size: 60px 60px;
-  opacity: 0.9;
-  z-index: -1;
-  mix-blend-mode: overlay;
-}
+/* Remove fixed grid overlay */
+.bg::after { content: none !important; }
 
 /* Add subtle noise texture */
 .bg::before {
@@ -843,31 +802,31 @@ html, body {
 .bg-marquee {
   position: relative;
   width: 100%;
-  height: 80px;
+  height: 72px;
   overflow: hidden;
-  margin: 40px 0 20px 0;
+  margin: 32px 0 16px 0;
   z-index: 0;
   pointer-events: none;
   opacity: 1;
-  mask-image: none;
-  -webkit-mask-image: none;
+  mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
 }
 
 .marquee-text {
   position: absolute;
   white-space: nowrap;
-  font-size: 3.5rem;
-  font-weight: 500;
-  letter-spacing: 0.4em;
+  font-size: 3rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
   will-change: transform;
   line-height: 1;
-  color: rgba(255, 255, 255, 0.08);
-  animation: marqueeScroll 45s linear infinite;
+  color: rgba(34, 211, 238, 0.09); /* subtle cyan to match theme */
+  animation: marqueeScroll 38s linear infinite;
   top: 50%;
   left: 0;
   transform: translateY(-50%);
-  filter: none;
+  text-shadow: none;
   display: inline-block;
   width: max-content;
 }
@@ -887,16 +846,31 @@ html, body {
 }
 
 @media (max-width: 768px) {
-  .bg-marquee {
-    height: 60px;
-    margin: 30px 0 15px 0;
-  }
-  
-  .marquee-text {
-    font-size: 2rem;
-    letter-spacing: 0.3em;
-    color: rgba(255, 255, 255, 0.08);
-  }
+  .bg-marquee { height: 54px; margin: 24px 0 12px 0; }
+  .marquee-text { font-size: 1.6rem; letter-spacing: 0.22em; color: rgba(34, 211, 238, 0.10); }
+}
+
+/* Mobile/tablet layout fixes */
+@media (max-width: 992px) {
+  /* Prizes: stack all items so none get cut off */
+  .prize-grid { grid-template-columns: 1fr !important; }
+  .prize-hero, .prize-mini { grid-column: 1 / -1 !important; }
+  .prize-card.main-prize { grid-template-columns: 1fr !important; }
+  .prize-content { padding: 20px 16px !important; }
+  .prize-amount { font-size: 2.2rem !important; }
+  .prize-amount .currency { font-size: 1.6rem !important; }
+
+  /* Principal / HOD two-up equal cards */
+  .people-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .people-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .person-card { min-height: 160px; }
+
+  /* Hero feature badges smaller */
+  .hero-features { width: 92%; gap: 10px !important; }
+  .feature-badge { padding: 10px 12px !important; gap: 8px !important; }
+  .badge-icon svg { width: 22px !important; height: 22px !important; }
+  .badge-value { font-size: 0.95rem !important; }
+  .badge-label { font-size: 0.72rem !important; }
 }
 
 .bg-noise {
@@ -5067,9 +5041,28 @@ textarea:focus {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, minmax(280px, 1fr));
   gap: 32px;
   margin-bottom: 40px;
+}
+
+@media (max-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.footer-grid .associations-wrapper {
+  grid-column: 1 / -1;
+  margin-top: 16px;
+  width: 100%;
+  max-width: 100%;
 }
 
 .footer-section h3 {
