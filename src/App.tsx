@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, Linkedin, Instagram, Target, Lightbulb, Handshake, Zap, Sprout, Globe, Stethoscope, Menu, X, Trophy, Award, Users, Lock } from 'lucide-react'
 import ThreeBackground from './ThreeBackground'
+import CurveAnimation from './components/CurveAnimation'
+import TimelineWithCurve from './components/TimelineWithCurve'
 
 // (Removed unused "CodeSnippets" and "BackgroundGlyphs" components)
 
@@ -440,6 +442,24 @@ export default function App() {
     }
   }, [GALLERY_IMAGES])
 
+  // Trigger timeline SVG draw when in view (desktop)
+  useEffect(() => {
+    const el = document.querySelector('.tl2-canvas') as HTMLElement | null
+    if (!el) return
+    const io = new IntersectionObserver(
+      entries => {
+        if (entries.some(e => e.isIntersecting)) {
+          el.classList.add('inview')
+        } else {
+          el.classList.remove('inview')
+        }
+      },
+      { threshold: 0.15 }
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
   const sections = useMemo(() => NAV.map(n => n.id), [])
 
   useEffect(() => {
@@ -677,8 +697,8 @@ export default function App() {
               src="/domains/logo.jpeg" 
               alt="TechSavishkaar" 
               style={{ 
-                height: '80px',
-                width: '80px',
+                height: 'clamp(50px, 12vw, 80px)',
+                width: 'clamp(50px, 12vw, 80px)',
                 objectFit: 'cover',
                 borderRadius: '50%',
                 border: '2px solid rgba(255, 255, 255, 0.25)',
@@ -771,9 +791,9 @@ export default function App() {
                     }}
                     onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
                   />
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: '1.2', textAlign: 'center' }}>
-                    <span>VASAVI COLLEGE OF ENGINEERING (A)</span>
-                    <span style={{ fontSize: '0.6em', opacity: 0.85, marginTop: '1px', fontWeight: 500, letterSpacing: '0.3px' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: '1.2', width: '100%' }}>
+                    <span style={{ textAlign: 'center', width: '100%' }}>VASAVI COLLEGE OF ENGINEERING (A)</span>
+                    <span style={{ fontSize: '0.6em', opacity: 0.85, marginTop: '1px', fontWeight: 500, letterSpacing: '0.3px', textAlign: 'center', display: 'block', width: '100%' }}>
                       Accredited by NAAC with 'A++' grade
                     </span>
                   </div>
@@ -785,8 +805,8 @@ export default function App() {
                   fontFamily: '"Didact Gothic", system-ui, sans-serif',
                   fontWeight: 400,
                   fontSize: 'clamp(8px, 1.5vw, 11px)',
-                  marginTop: '2px',
-                  letterSpacing: '0.4px',
+                  margin: '2px 0 0 10px',
+                  letterSpacing: '0.5px',
                   lineHeight: 1.1,
                   color: 'rgba(255, 255, 255, 0.9)',
                   textShadow: '0 0 4px rgba(167, 139, 250, 0.2)'
@@ -849,21 +869,44 @@ export default function App() {
 
               .hex-gallery-section { position: relative; padding: 12px 0 32px; max-width: 1200px; margin: 0 auto; }
 
-              /* Hero background: dark with pixel grid, blue glows, subtle vignette */
+              /* Hero background with robot GIF and blur effect */
               .hero { 
                 position: relative; 
-                background-color: #0a0f1e; 
-                background-image:
-                  radial-gradient(1000px 600px at 20% 25%, rgba(0, 178, 255, 0.10), transparent 60%),
-                  radial-gradient(900px 600px at 80% 55%, rgba(0, 255, 200, 0.08), transparent 60%);
+                background-color: #0a0f1e;
                 overflow: hidden;
               }
-              /* Grid removed as requested */
-              .hero::after { /* vignette */
+              
+              /* Robot GIF background with blur */
+              .hero::before {
                 content: '';
-                position: absolute; inset: 0;
-                background: radial-gradient(ellipse at center, rgba(0,0,0,0) 40%, rgba(0,0,0,0.45) 100%);
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: url('/domains/robo.gif') center/cover no-repeat;
+                filter: blur(4px) brightness(0.6);
+                z-index: 0;
+                opacity: 0.6;
+              }
+              
+              /* Gradient overlays */
+              .hero::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: 
+                  radial-gradient(1000px 600px at 20% 25%, rgba(0, 178, 255, 0.15), transparent 60%),
+                  radial-gradient(900px 600px at 80% 55%, rgba(0, 255, 200, 0.12), transparent 60%),
+                  radial-gradient(ellipse at center, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.7) 100%);
                 pointer-events: none;
+                z-index: 1;
+              }
+              
+              /* Ensure content stays above background */
+              .hero .container {
+                position: relative;
+                z-index: 2;
               }
 
               /* Marquee */
@@ -1112,18 +1155,43 @@ export default function App() {
                   margin-top: 8px !important;
                 }
               }
-              .badge-value { font-size: 20px; }
+              .badge-value { 
+                font-size: 20px; 
+                transition: font-size 0.2s ease;
+              }
               @media (max-width: 768px) {
                 .feature-badge .badge-value.rounds-count {
-                  font-size: 26px !important;
+                  font-size: 18px !important;
                   font-weight: 700;
-                  line-height: 1;
+                  line-height: 1.2;
                 }
               }
               @media (max-width: 768px) {
+                .feature-badge .badge-content {
+                  display: flex !important;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-items: center;
+                  height: 100%;
+                  text-align: center;
+                }
                 .feature-badge .badge-value {
-                  font-size: 24px !important;
+                  font-size: 18px !important;
                   font-weight: 700;
+                  margin-bottom: 0 !important;
+                  line-height: 1.2;
+                }
+                .feature-badge .badge-label {
+                  font-size: 10px !important;
+                  letter-spacing: 0.2px;
+                  margin-top: 2px;
+                }
+                .feature-badge {
+                  padding: 8px 10px !important;
+                  min-height: 50px;
+                  display: flex !important;
+                  align-items: center;
+                  justify-content: center;
                 }
               }
               .hex-grid { position: relative; margin: 0 auto; width: 100%; }
@@ -1544,7 +1612,7 @@ export default function App() {
           </div>
         </motion.section>
 
-        <motion.section id="timeline" className="section" {...sectionMotion}>
+ <motion.section id="timeline" className="section" {...sectionMotion}>
           <div className="container">
             <h2 className="section-title">Event Timeline</h2>
             <p className="section-lead">Key milestones and deadlines for Tech Savishkaar</p>
@@ -1623,7 +1691,9 @@ export default function App() {
               })}
             </div>
           </div>
-        </motion.section>
+          </motion.section>
+
+
 
         <motion.section id="prizes" className="section" {...sectionMotion} ref={prizesRef}>
           <div className="container">

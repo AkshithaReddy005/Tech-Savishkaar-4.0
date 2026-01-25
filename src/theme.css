@@ -1935,7 +1935,11 @@ html, body {
     translate3d(0, calc(var(--scroll-t) * -6px), 0);
   transition: transform 0.18s ease-out;
 }
-
+.bg-grid-white {
+  background-image: linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
 .hero-card-inner {
   position: relative;
   border-radius: 15px;
