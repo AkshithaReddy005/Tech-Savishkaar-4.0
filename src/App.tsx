@@ -269,31 +269,7 @@ export default function App() {
     return () => window.removeEventListener('resize', onResize)
   }, [])
 
-  const scrollToSection = (id: string) => {
-    const el = document.getElementById(id)
-    if (!el) return
-    const headerHeight = headerRef.current?.offsetHeight || 0
-    const y = el.getBoundingClientRect().top + window.scrollY - headerHeight - 20
-    // Use scrollTo for consistent offset behavior
-    try {
-      window.scrollTo({ top: y, behavior: 'smooth' })
-    } catch {
-      window.scrollTo(0, y)
-    }
-    // Update URL hash without jumping
-    try {
-      history.replaceState(null, '', `#${id}`)
-    } catch {}
-    // Fallback: if layout shifts, ensure final alignment
-    setTimeout(() => {
-      const el2 = document.getElementById(id)
-      if (!el2) return
-      const y2 = el2.getBoundingClientRect().top + window.scrollY - (headerRef.current?.offsetHeight || 0) - 20
-      if (Math.abs(window.scrollY - y2) > 4) {
-        window.scrollTo({ top: y2, behavior: 'smooth' as ScrollBehavior })
-      }
-    }, 150)
-  }
+  // Removed unused scrollToSection helper (native anchors used with scroll-margin-top)
 
   // Removed unused PREVIOUS_EDITIONS (replaced by GALLERY_IMAGES)
 
@@ -1490,9 +1466,9 @@ export default function App() {
             <p className="section-lead">All three rounds are elimination rounds.</p>
             <div className="timeline-road">
               {[
-                { title: 'Coding & Ideation Round', date: '1st Feb 2026', mode: 'Online', desc: 'Coding test + MCQs. Evaluation on correctness, efficiency, and originality. Outcome: Shortlisting for Round 2.' },
-                { title: 'Idea Submission', date: '1st Feb – 08 Feb 2026', mode: 'Online', desc: 'Submit your idea focusing on problem identification, innovation, feasibility, and impact.' },
-                { title: 'Build & Present Prototype', date: '21 Feb 2026', mode: 'Offline', desc: 'Prototype • Demo • Presentation at Vasavi College of Engineering, Hyderabad.' },
+                { title: 'Coding & Ideation Round', date: '1st Feb 2026', mode: 'Online', desc: 'Test your coding skills and showcase your innovative thinking through a coding challenge. Keep your tech stack and project abstract ready to upload immediately after the test..' },
+                { title: 'Idea Submission', date: '1st Feb – 08 Feb 2026', mode: 'Online', desc: 'Submit your detailed idea along with a video demonstration of your working prototype, highlighting its innovation, feasibility, and potential impact.' },
+                { title: 'Build & Present Prototype', date: '21 Feb 2026', mode: 'Offline', desc: 'Present your complete and functional prototype before the jury panel to demonstrate your solution\'s real-world applicability and technical execution.' },
               ].map((item, index) => (
                 <motion.article
                   key={`${item.title}-${index}`}
@@ -1659,17 +1635,17 @@ export default function App() {
             <div className="podium-wrap" style={{ display: 'grid', gridTemplateColumns: isNarrow ? '1fr' : '1fr 1.2fr 1fr', gap: isNarrow ? 12 : 16, alignItems: isNarrow ? 'stretch' : 'end', marginBottom: 24 }}>
               <div style={{ background: 'radial-gradient(120% 120% at 0% 0%, rgba(96,165,250,0.15), transparent 60%), rgba(11,12,16,0.7)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, boxShadow: '0 10px 24px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.04)', padding: isNarrow ? '16px 14px' : '22px 18px', textAlign: 'center' }}>
                 <div style={{ opacity: 0.85, letterSpacing: 1, fontWeight: 700 }}>RUNNER UP</div>
-                <div style={{ fontSize: isNarrow ? 22 : 28, fontWeight: 900, margin: '10px 0 14px', color: '#93c5fd' }}>₹75,000</div>
+                <div style={{ fontSize: isNarrow ? 22 : 28, fontWeight: 900, margin: '10px 0 14px', color: '#93c5fd' }}>₹8000</div>
                 <a className="btn btn-ghost" href="#prizes" style={{ marginTop: 4 }}>View</a>
               </div>
               <div style={{ background: 'radial-gradient(120% 120% at 0% 0%, rgba(250,204,21,0.18), transparent 60%), rgba(11,12,16,0.7)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 18, boxShadow: '0 18px 36px rgba(0,0,0,0.45), 0 0 24px rgba(234,179,8,0.12) inset', padding: isNarrow ? '18px 16px' : '26px 20px', textAlign: 'center', transform: isNarrow ? 'none' : 'translateY(-10px)' }}>
-                <div style={{ opacity: 0.9, letterSpacing: 1, fontWeight: 800 }}>CHAMPION</div>
-                <div style={{ fontSize: isNarrow ? 28 : 36, fontWeight: 900, margin: '10px 0 14px', color: '#fde047', textShadow: '0 0 24px rgba(234,179,8,0.3)' }}>₹1,00,000</div>
+                <div style={{ opacity: 0.9, letterSpacing: 1, fontWeight: 800 }}>WINNER</div>
+                <div style={{ fontSize: isNarrow ? 28 : 36, fontWeight: 900, margin: '10px 0 14px', color: '#fde047', textShadow: '0 0 24px rgba(234,179,8,0.3)' }}>₹18,000</div>
                 <a className="btn btn-primary" href="#prizes" style={{ marginTop: 4 }}>View</a>
               </div>
               <div style={{ background: 'radial-gradient(120% 120% at 0% 0%, rgba(244,63,94,0.12), transparent 60%), rgba(11,12,16,0.7)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, boxShadow: '0 10px 24px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.04)', padding: isNarrow ? '16px 14px' : '22px 18px', textAlign: 'center' }}>
                 <div style={{ opacity: 0.85, letterSpacing: 1, fontWeight: 700 }}>2ND RUNNER UP</div>
-                <div style={{ fontSize: isNarrow ? 22 : 28, fontWeight: 900, margin: '10px 0 14px', color: '#fca5a5' }}>₹50,000</div>
+                <div style={{ fontSize: isNarrow ? 22 : 28, fontWeight: 900, margin: '10px 0 14px', color: '#fca5a5' }}>₹5000</div>
                 <a className="btn btn-ghost" href="#prizes" style={{ marginTop: 4 }}>View</a>
               </div>
             </div>
