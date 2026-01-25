@@ -2,8 +2,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, Linkedin, Instagram, Target, Lightbulb, Handshake, Zap, Sprout, Globe, Stethoscope, Menu, X, Trophy, Award, Users, Lock } from 'lucide-react'
 import ThreeBackground from './ThreeBackground'
-import CurveAnimation from './components/CurveAnimation'
-import TimelineWithCurve from './components/TimelineWithCurve'
+
 
 // (Removed unused "CodeSnippets" and "BackgroundGlyphs" components)
 
