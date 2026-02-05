@@ -677,7 +677,7 @@ html, body {
 .three-wrap {
   position: fixed;
   inset: 0;
-  z-index: -1; /* Above dark overlay, behind content */
+  z-index: -1; /* Behind all content so it doesn't block sections */
   pointer-events: none;
   opacity: 1;
   filter: none;
@@ -709,6 +709,26 @@ html, body {
   transform: translateZ(0);
   transition: none;
   will-change: auto;
+}
+
+/* Subtle blue shine around the surroundings */
+.bg-shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(1200px 800px at 90% 40%, rgba(34, 211, 238, 0.10), transparent 60%),
+    radial-gradient(1200px 800px at 10% 70%, rgba(167, 139, 250, 0.08), transparent 60%);
+  filter: blur(10px);
+  opacity: 0.6;
+}
+
+@media (max-width: 768px) {
+  .bg-shine {
+    opacity: 0.5;
+    filter: blur(8px);
+  }
 }
 
 /* Animated gradient layers for creative hero */

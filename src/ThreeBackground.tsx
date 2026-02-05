@@ -122,13 +122,11 @@ function Scene({ isMobile, reducedMotion }: { isMobile: boolean; reducedMotion: 
       <pointLight position={[-4, 2, 2]} intensity={isMobile ? 0.3 : 0.6} color={'#22d3ee'} />
       <pointLight position={[4, -2, 2]} intensity={isMobile ? 0.25 : 0.5} color={'#a78bfa'} />
 
-      {/* Grid removed as requested */}
-      {false && (
-        <group ref={gridGroup}>
-          <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.8, 0]} geometry={gridGeo} material={gridMat} />
-          <mesh rotation={[0, 0, 0]} position={[0, 0, -8]} geometry={gridGeo} material={gridMat2} />
-        </group>
-      )}
+      {/* 3D grid background */}
+      <group ref={gridGroup}>
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.8, 0]} geometry={gridGeo} material={gridMat} />
+        <mesh rotation={[0, 0, 0]} position={[0, 0, -6]} geometry={gridGeo} material={gridMat2} />
+      </group>
 
       {/* Remove floating shapes per user request */}
 

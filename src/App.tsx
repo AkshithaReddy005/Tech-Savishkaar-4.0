@@ -678,6 +678,7 @@ export default function App() {
       <div className="scroll-progress" aria-hidden />
       <div className="bg">
         <div className="bg-glow" />
+        <div className="bg-shine" />
         <div className="bg-grid" />
         <div className="bg-noise" />
       </div>
@@ -868,26 +869,15 @@ export default function App() {
 
               .hex-gallery-section { position: relative; padding: 12px 0 32px; max-width: 1200px; margin: 0 auto; }
 
-              /* Hero background with robot GIF and blur effect */
+              /* Hero background - transparent so 3D canvas shows through */
               .hero { 
                 position: relative; 
-                background-color: #0a0f1e;
+                background: transparent;
                 overflow: hidden;
               }
               
-              /* Robot GIF background with blur */
-              .hero::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: url('/domains/robo.gif') center/cover no-repeat;
-                filter: blur(4px) brightness(0.6);
-                z-index: 0;
-                opacity: 0.6;
-              }
+              /* Disable image overlay so ThreeBackground shows through */
+              .hero::before { content: none; }
               
               /* Gradient overlays */
               .hero::after {
@@ -899,7 +889,7 @@ export default function App() {
                   radial-gradient(900px 600px at 80% 55%, rgba(0, 255, 200, 0.12), transparent 60%),
                   radial-gradient(ellipse at center, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.7) 100%);
                 pointer-events: none;
-                z-index: 1;
+                z-index: 0;
               }
               
               /* Ensure content stays above background */
