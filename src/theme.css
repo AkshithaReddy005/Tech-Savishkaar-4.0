@@ -48,6 +48,343 @@
   --scroll-t: 0;
   /* Cursor styles removed - using system default */
 
+/* Search Input Styles */
+.search-container {
+  margin-bottom: 30px;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 12px;
+  padding: 12px 16px;
+  transition: all 0.3s ease;
+}
+
+.search-input-wrapper:hover {
+  border-color: rgba(34, 211, 238, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.search-input-wrapper:focus-within {
+  border-color: rgba(34, 211, 238, 0.6);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
+}
+
+.search-icon {
+  color: rgba(231, 234, 243, 0.6);
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.search-input::placeholder {
+  color: rgba(231, 234, 243, 0.5);
+}
+
+/* Results Page Styles – let global 3D background show through */
+.results-page {
+  min-height: 100vh;
+  background: transparent; /* let dedicated grid layer show */
+  font-family: 'Lato', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Inter,
+    Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+  font-weight: 400;
+  color: var(--text);
+  position: relative;
+  z-index: 0;
+}
+
+.results-page > header,
+.results-page > .results-section {
+  position: relative;
+  z-index: 1;
+}
+
+.page-header {
+  background: rgba(7, 10, 25, 0.65);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(34, 211, 238, 0.32);
+  padding: 10px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+}
+
+.title-nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  width: 100%;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-start;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  border-radius: 8px;
+  color: #e2e8f0;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.nav-btn:hover {
+  background: rgba(34, 211, 238, 0.1);
+  border-color: rgba(34, 211, 238, 0.5);
+  transform: translateY(-2px);
+  color: #22d3ee;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(135deg, #22d3ee, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  flex: 1;
+  text-shadow: 0 0 20px rgba(34, 211, 238, 0.5);
+}
+
+.results-section {
+  padding: 5px 0;
+  min-height: calc(100vh - 80px);
+}
+
+.filter-container {
+  margin-bottom: 40px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  backdrop-filter: blur(10px);
+}
+
+.filter-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  color: #22d3ee;
+}
+
+.filter-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.domain-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.domain-btn {
+  padding: 8px 16px;
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.domain-btn:hover {
+  background: rgba(34, 211, 238, 0.1);
+  border-color: rgba(34, 211, 238, 0.5);
+  transform: translateY(-2px);
+}
+
+.domain-btn.active {
+  background: linear-gradient(135deg, #22d3ee, #0891b2);
+  border-color: #22d3ee;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.table-container {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 16px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.results-table th {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.1), rgba(8, 145, 178, 0.1));
+  padding: 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #22d3ee;
+  border-bottom: 2px solid rgba(34, 211, 238, 0.3);
+}
+
+.table-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.results-table td {
+  padding: 16px;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.1);
+  color: #e2e8f0;
+}
+
+.table-row {
+  transition: background-color 0.3s ease;
+}
+
+.table-row:hover {
+  background: rgba(34, 211, 238, 0.05);
+}
+
+.timestamp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+}
+
+.team-name {
+  font-weight: 600;
+  color: #22d3ee;
+}
+
+.team-leader {
+  font-weight: 500;
+}
+
+.email-link {
+  color: #22d3ee;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.email-link:hover {
+  color: #0891b2;
+  text-decoration: underline;
+}
+
+.domain-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: linear-gradient(135deg, #22d3ee, #0891b2);
+  color: #0f172a;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.no-results {
+  text-align: center;
+  padding: 40px;
+  color: #94a3b8;
+}
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.stat-card h4 {
+  margin: 0 0 8px 0;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #22d3ee;
+}
+
+@media (max-width: 768px) {
+  .results-section {
+    padding: 40px 0;
+  }
+
+  .domain-filters {
+    justify-content: center;
+  }
+
+  .results-table {
+    font-size: 0.8rem;
+  }
+
+  .results-table th,
+  .results-table td {
+    padding: 12px 8px;
+  }
+
+  .table-header {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .timestamp {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .stats-container {
+    grid-template-columns: 1fr;
+  }
+}
+
   font-family: 'Lato', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Inter,
     Helvetica, Arial, sans-serif;
   line-height: 1.55;

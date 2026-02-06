@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, Linkedin, Instagram, Target, Lightbulb, Handshake, Zap, Sprout, Globe, Stethoscope, Menu, X, Trophy, Award, Users, Lock } from 'lucide-react'
+import { Routes, Route, Link } from 'react-router-dom'
 import ThreeBackground from './ThreeBackground'
+import ResultsPage from './pages/ResultsPage'
 
 
 // (Removed unused "CodeSnippets" and "BackgroundGlyphs" components)
@@ -875,14 +877,27 @@ export default function App() {
 
           <nav className="nav" aria-label="Primary">
             {NAV.map(item => (
-              <a
-                key={item.id}
-                href={`#${item.id}`}
-                className={active === item.id ? 'nav-link active' : 'nav-link'}
-                onClick={() => { setMobileMenuOpen(false) }}
-              >
-                {item.label}
-              </a>
+              item.id === 'results' ? (
+                <a
+                  key={item.id}
+                  href="/results"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="nav-link"
+                  onClick={() => { setMobileMenuOpen(false) }}
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  className={active === item.id ? 'nav-link active' : 'nav-link'}
+                  onClick={() => { setMobileMenuOpen(false) }}
+                >
+                  {item.label}
+                </a>
+              )
             ))}
           </nav>
 
@@ -901,14 +916,27 @@ export default function App() {
 
           <nav className={`mobile-menu ${mobileMenuOpen ? 'active' : ''}`} aria-label="Mobile navigation">
             {NAV.map(item => (
-              <a
-                key={item.id}
-                href={`#${item.id}`}
-                className={active === item.id ? 'mobile-nav-link active' : 'mobile-nav-link'}
-                onClick={() => { setMobileMenuOpen(false) }}
-              >
-                {item.label}
-              </a>
+              item.id === 'results' ? (
+                <a
+                  key={item.id}
+                  href="/results"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mobile-nav-link"
+                  onClick={() => { setMobileMenuOpen(false) }}
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  className={active === item.id ? 'mobile-nav-link active' : 'mobile-nav-link'}
+                  onClick={() => { setMobileMenuOpen(false) }}
+                >
+                  {item.label}
+                </a>
+              )
             ))}
             {/* Mobile register button removed */}
           </nav>
@@ -920,6 +948,9 @@ export default function App() {
       </header>
 
       <main>
+        <Routes>
+          <Route path="/" element={
+            <>
         {/* Scrolling ribbon just below navbar */}
         <div
           style={{
@@ -2274,9 +2305,6 @@ export default function App() {
           </div>
         </motion.section>
 
-        {/* Results section temporarily removed. Keep an empty anchor so navbar link remains functional. */}
-        <div id="results" aria-hidden style={{ height: 0, width: 0, overflow: 'hidden' }} />
-
         <motion.section id="contact" className="section" {...sectionMotion}>
           <div className="container">
             <h2 className="section-title">Contact</h2>
@@ -2415,6 +2443,10 @@ export default function App() {
 
         {/* Floating back-to-top button */}
         <a href="#home" className="back-to-top-fab" aria-label="Back to top">↑</a>
+            </>
+          } />
+          <Route path="/results" element={<ResultsPage />} />
+        </Routes>
       </main>
     </div>
   )
