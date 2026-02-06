@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, Linkedin, Instagram, Menu, X, Trophy, Award, Users, Lock, Sprout, Globe, Stethoscope } from 'lucide-react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import ThreeBackground from './ThreeBackground'
 import ResultsPage from './pages/ResultsPage'
 
@@ -825,6 +825,16 @@ export default function App() {
     },
   } as const
 
+  const location = useLocation()
+  const isResultsRoute = location.pathname === '/results' || location.pathname.startsWith('/results')
+  
+  // Debug: Log current route
+  console.log('Current pathname:', location.pathname, 'isResultsRoute:', isResultsRoute)
+  
+  // Force Results route detection
+  const forceResultsRoute = location.pathname.includes('results')
+  console.log('Force Results route:', forceResultsRoute)
+
   return (
     <div className="app">
       <ThreeBackground />
@@ -836,6 +846,7 @@ export default function App() {
         <div className="bg-noise" />
       </div>
 
+      {!forceResultsRoute && (
       <header className="site-header">
         <div className="container header-inner">
           <a className="brand" href="#home" aria-label="TechSavishkaar" style={{ 
@@ -868,7 +879,7 @@ export default function App() {
               item.id === 'results' ? (
                 <a
                   key={item.id}
-                  href="https://tech-savishkaar-40-35w152nji.vercel.app/results"
+                  href="/results"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="nav-link"
@@ -907,7 +918,7 @@ export default function App() {
               item.id === 'results' ? (
                 <a
                   key={item.id}
-                  href="https://tech-savishkaar-40-35w152nji.vercel.app/results"
+                  href="/results"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mobile-nav-link"
@@ -934,6 +945,7 @@ export default function App() {
           )}
         </div>
       </header>
+      )}
 
       <main>
         <Routes>
