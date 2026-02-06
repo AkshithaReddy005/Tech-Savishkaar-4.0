@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { motion } from 'framer-motion'
-import { Mail, Linkedin, Instagram, Target, Lightbulb, Handshake, Zap, Sprout, Globe, Stethoscope, Menu, X, Trophy, Award, Users, Lock } from 'lucide-react'
-import { Routes, Route, Link } from 'react-router-dom'
+import { Mail, Linkedin, Instagram, Menu, X, Trophy, Award, Users, Lock, Sprout, Globe, Stethoscope } from 'lucide-react'
+import { Routes, Route } from 'react-router-dom'
 import ThreeBackground from './ThreeBackground'
 import ResultsPage from './pages/ResultsPage'
 
@@ -179,16 +179,6 @@ const EVENT = {
   eventStartISO: '2026-01-31T09:00:00+05:30',
 }
 
-function getTimeLeft(targetISO: string) {
-  const target = new Date(targetISO).getTime()
-  const now = Date.now()
-  const diff = Math.max(0, target - now)
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
-  const minutes = Math.floor((diff / (1000 * 60)) % 60)
-  const seconds = Math.floor((diff / 1000) % 60)
-  return { diff, days, hours, minutes, seconds }
-}
 
 function TiltCard({ className, children }: { className: string; children: ReactNode | ((rotation: { rx: number; ry: number }) => ReactNode) }) {
   const ref = useRef<HTMLDivElement | null>(null)
@@ -345,12 +335,12 @@ const EditionsImageCarousel = () => {
                 transition: 'all 0.3s ease'
               }}
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLDivElement).style.transform = 'scale(1.05)'
-                (e.currentTarget as HTMLDivElement).style.boxShadow = '0 12px 32px rgba(167, 139, 250, 0.3)'
+                (e.currentTarget as HTMLDivElement).style.transform = 'scale(1.05)';
+                (e.currentTarget as HTMLDivElement).style.boxShadow = '0 12px 32px rgba(167, 139, 250, 0.3)';
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLDivElement).style.transform = 'scale(1)'
-                (e.currentTarget as HTMLDivElement).style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.3)'
+                (e.currentTarget as HTMLDivElement).style.transform = 'scale(1)';
+                (e.currentTarget as HTMLDivElement).style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.3)';
               }}
             >
               <img
@@ -420,7 +410,6 @@ export default function App() {
   const [active, setActive] = useState<string>('home')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const headerRef = useRef<HTMLElement | null>(null)
-  const [timeLeft, setTimeLeft] = useState(() => getTimeLeft(EVENT.eventStartISO))
   const partnersTrackRef = useRef<HTMLDivElement | null>(null)
   const prizesRef = useRef<HTMLElement | null>(null)
   const [, setPrizeValue] = useState(0)
@@ -751,12 +740,11 @@ export default function App() {
   // (Removed curved timeline overlay & scroll logic)
 
   useEffect(() => {
-    setTimeLeft(getTimeLeft(EVENT.eventStartISO))
     const id = window.setInterval(() => {
-      setTimeLeft(getTimeLeft(EVENT.eventStartISO))
+      // Timer logic removed
     }, 1000)
     return () => window.clearInterval(id)
-  }, [EVENT.eventStartISO])
+  }, [])
 
   // Click particle burst (for rocket cursor effect)
   useEffect(() => {
@@ -880,7 +868,7 @@ export default function App() {
               item.id === 'results' ? (
                 <a
                   key={item.id}
-                  href="/results"
+                  href="https://tech-savishkaar-40-35w152nji.vercel.app/results"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="nav-link"
@@ -919,7 +907,7 @@ export default function App() {
               item.id === 'results' ? (
                 <a
                   key={item.id}
-                  href="/results"
+                  href="https://tech-savishkaar-40-35w152nji.vercel.app/results"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mobile-nav-link"
