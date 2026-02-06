@@ -951,99 +951,61 @@ export default function App() {
         <Routes>
           <Route path="/" element={
             <>
-        {/* Scrolling ribbon just below navbar */}
-        <div
-          style={{
-            position: 'relative',
-            width: '100%',
-            overflow: 'hidden',
-            borderBottom: '1px solid rgba(148, 163, 184, 0.35)',
-            display: 'flex',
-            justifyContent: 'center',
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              gap: '48px',
-              width: 'max-content',
-              padding: '10px 0px',
-              fontWeight: 750,
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-              whiteSpace: 'nowrap',
-              animation: 'ribbonA 22s linear infinite',
-              flexWrap: 'nowrap',
-              color: 'rgba(229, 231, 235, 0.9)',
-            }}
-          >
-            <span style={{ color: 'rgba(229, 231, 235, 0.9)' }}>Tech Savishkaar 4.0</span>
-            <span style={{ color: 'rgb(34, 211, 238)' }}>•</span>
-            <span style={{ color: 'rgba(229, 231, 235, 0.9)' }}>Vasavi College of Engineering</span>
-            <span style={{ color: 'rgb(34, 211, 238)' }}>•</span>
-            <span style={{ color: 'rgba(229, 231, 235, 0.9)' }}>National Level Hackathon</span>
-            <span style={{ color: 'rgb(34, 211, 238)' }}>•</span>
-            <span aria-hidden style={{ color: 'rgba(229, 231, 235, 0.9)' }}>Tech Savishkaar 4.0</span>
-            <span style={{ color: 'rgb(34, 211, 238)' }}>•</span>
-            <span aria-hidden style={{ color: 'rgba(229, 231, 235, 0.9)' }}>Vasavi College of Engineering</span>
-          </div>
-        </div>
+              <motion.section id="home" className="section hero" {...sectionMotion}>
+                <MatrixRain />
+                <div className="container hero-inner">
+                  <div className="hero-copy">
+                    <div className="eyebrow" style={{
+                      display: 'block',
+                      textAlign: 'center',
+                      marginBottom: '16px'
+                    }}>
+                      <div className="eyebrow-line" style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px',
+                        height: '100%',
+                        fontFamily: '"Playfair Display SC", serif',
+                        fontWeight: 600,
+                        fontSize: 'clamp(8px, 1.8vw, 12px)',
+                        letterSpacing: '1.2px',
+                        lineHeight: 1.1,
+                        color: 'rgba(255, 255, 255, 0.95)',
+                        textShadow: '0 10px 30px rgba(0, 0, 0, 0.55)'
+                      }}>
+                        <img
+                          src="/domains/logo.png"
+                          alt="VCE Logo"
+                          style={{ 
+                            height: 'clamp(20px, 3.5vw, 40px)',
+                            width: 'auto',
+                            transition: 'transform 0.3s ease',
+                            transform: 'translateZ(0)' /* Hardware acceleration */
+                          }}
+                          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+                        />
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: '1.2', width: '100%' }}>
+                          <span style={{ textAlign: 'center', width: '100%' }}>VASAVI COLLEGE OF ENGINEERING (A)</span>
+                          <span style={{ fontSize: '0.6em', opacity: 0.85, marginTop: '1px', fontWeight: 500, letterSpacing: '0.3px', textAlign: 'center', display: 'block', width: '100%' }}>
+                            Accredited by NAAC with 'A++' grade
+                          </span>
+                        </div>
+                      </div>
 
-        <motion.section id="home" className="section hero" {...sectionMotion}>
-          <MatrixRain />
-          <div className="container hero-inner">
-            <div className="hero-copy">
-              <div className="eyebrow" style={{
-                display: 'block',
-                textAlign: 'center',
-                marginBottom: '16px'
-              }}>
-                <div className="eyebrow-line" style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  height: '100%',
-                  fontFamily: '"Playfair Display SC", serif',
-                  fontWeight: 600,
-                  fontSize: 'clamp(8px, 1.8vw, 12px)',
-                  letterSpacing: '1.2px',
-                  lineHeight: 1.1,
-                  color: 'rgba(255, 255, 255, 0.95)',
-                  textShadow: '0 10px 30px rgba(0, 0, 0, 0.55)'
-                }}>
-                  <img
-                    src="/domains/logo.png"
-                    alt="VCE Logo"
-                    style={{ 
-                      height: 'clamp(20px, 3.5vw, 40px)',
-                      width: 'auto',
-                      transition: 'transform 0.3s ease',
-                      transform: 'translateZ(0)' /* Hardware acceleration */
-                    }}
-                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-                  />
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: '1.2', width: '100%' }}>
-                    <span style={{ textAlign: 'center', width: '100%' }}>VASAVI COLLEGE OF ENGINEERING (A)</span>
-                    <span style={{ fontSize: '0.6em', opacity: 0.85, marginTop: '1px', fontWeight: 500, letterSpacing: '0.3px', textAlign: 'center', display: 'block', width: '100%' }}>
-                      Accredited by NAAC with 'A++' grade
-                    </span>
-                  </div>
-                </div>
-
-              
-                
-                <div className="eyebrow-line" style={{
-                  fontFamily: '"Didact Gothic", system-ui, sans-serif',
-                  fontWeight: 400,
-                  fontSize: 'clamp(8px, 1.5vw, 11px)',
-                  margin: '2px 0 0 10px',
-                  letterSpacing: '0.5px',
-                  lineHeight: 1.1,
-                  color: 'rgba(255, 255, 255, 0.9)',
-                  textShadow: '0 0 4px rgba(167, 139, 250, 0.2)'
-                }}>Department of Information Technology</div>
-              </div>
+                      
+                      
+                      <div className="eyebrow-line" style={{
+                        fontFamily: '"Didact Gothic", system-ui, sans-serif',
+                        fontWeight: 400,
+                        fontSize: 'clamp(8px, 1.5vw, 11px)',
+                        margin: '2px 0 0 10px',
+                        letterSpacing: '0.5px',
+                        lineHeight: 1.1,
+                        color: 'rgba(255, 255, 255, 0.9)',
+                        textShadow: '0 0 4px rgba(167, 139, 250, 0.2)'
+                      }}>Department of Information Technology</div>
+                    </div>
 
               <h1 className="hero-title">
                 <span className="hero-title-main glitch" data-text="TECH SAVISHKAAR">
@@ -1478,7 +1440,74 @@ export default function App() {
           </div>
         </motion.section>
 
-
+        {/* Scrolling Banner Section */}
+        <section className="scrolling-banner-section">
+          <div
+            style={{
+              position: 'relative',
+              width: '100%',
+              overflow: 'hidden',
+              borderBottom: '1px solid rgba(148, 163, 184, 0.35)',
+              backgroundColor: 'rgba(7, 8, 20, 0.6)',
+              backdropFilter: 'blur(8px)',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                animation: 'ribbonA 15s linear infinite',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {[
+                'NATIONAL LEVEL HACKATHON',
+                'TECH SAVISHKAAR 4.0',
+                'VASAVI COLLEGE OF ENGINEERING',
+                'DEPARTMENT OF INFORMATION TECHNOLOGY',
+              ].map((text, i) => (
+                <span
+                  key={i}
+                  style={{
+                    padding: '16px 32px',
+                    fontSize: '16px',
+                    fontWeight: 600,
+                    letterSpacing: '0.12em',
+                    color: 'rgba(229, 231, 235, 0.95)',
+                    textTransform: 'uppercase',
+                    textShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
+                    fontFamily: '"League Spartan", sans-serif',
+                  }}
+                >
+                  {text}
+                  <span style={{ color: 'rgb(34, 211, 238)', margin: '0 8px' }}>•</span>
+                </span>
+              ))}
+              {[
+                'NATIONAL LEVEL HACKATHON',
+                'TECH SAVISHKAAR 4.0',
+                'VASAVI COLLEGE OF ENGINEERING',
+                'DEPARTMENT OF INFORMATION TECHNOLOGY',
+              ].map((text, i) => (
+                <span
+                  key={`dup-${i}`}
+                  style={{
+                    padding: '16px 32px',
+                    fontSize: '16px',
+                    fontWeight: 600,
+                    letterSpacing: '0.12em',
+                    color: 'rgba(229, 231, 235, 0.95)',
+                    textTransform: 'uppercase',
+                    textShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
+                    fontFamily: '"League Spartan", sans-serif',
+                  }}
+                >
+                  {text}
+                  <span style={{ color: 'rgb(34, 211, 238)', margin: '0 8px' }}>•</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
 
         <motion.section id="about" className="section" {...sectionMotion} style={{ padding: 0 }}>
           <div className="container" style={{ maxWidth: '100%', padding: 0, overflow: 'hidden' }}>
@@ -1942,7 +1971,6 @@ export default function App() {
               >
                 <div style={{ opacity: 0.85, letterSpacing: 1, fontWeight: 700 }}>RUNNER UP</div>
                 <div style={{ fontSize: isNarrow ? 22 : 28, fontWeight: 900, margin: '10px 0 14px', color: '#93c5fd' }}>₹8000</div>
-                <a className="btn btn-ghost" href="#prizes" style={{ marginTop: 4 }}>View</a>
               </div>
               <div 
                 className="reward-card-3d"
@@ -1974,7 +2002,6 @@ export default function App() {
               >
                 <div style={{ opacity: 0.9, letterSpacing: 1, fontWeight: 800 }}>WINNER</div>
                 <div style={{ fontSize: isNarrow ? 28 : 36, fontWeight: 900, margin: '10px 0 14px', color: '#fde047', textShadow: '0 0 24px rgba(234,179,8,0.3)' }}>₹18,000</div>
-                <a className="btn btn-primary" href="#prizes" style={{ marginTop: 4 }}>View</a>
               </div>
               <div 
                 className="reward-card-3d"
@@ -2005,7 +2032,6 @@ export default function App() {
               >
                 <div style={{ opacity: 0.85, letterSpacing: 1, fontWeight: 700 }}>2ND RUNNER UP</div>
                 <div style={{ fontSize: isNarrow ? 22 : 28, fontWeight: 900, margin: '10px 0 14px', color: '#fca5a5' }}>₹5000</div>
-                <a className="btn btn-ghost" href="#prizes" style={{ marginTop: 4 }}>View</a>
               </div>
             </div>
             <div className="prize-cards">
