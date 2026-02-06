@@ -154,8 +154,7 @@ const NAV: NavItem[] = [
   { id: 'domains', label: 'Domains' },
   { id: 'timeline', label: 'Timeline' },
   { id: 'prizes', label: 'Rewards' },
-  { id: 'rules', label: 'Rules' },
-  { id: 'coordinators', label: 'Coordinators' },
+  { id: 'results', label: 'Results' },
   { id: 'contact', label: 'Contact' },
 ]
 
@@ -247,6 +246,170 @@ function TiltCard({ className, children }: { className: string; children: ReactN
   return (
     <div ref={ref} className={`tilt-card ${className}`} onPointerMove={onMove} onPointerLeave={onLeave}>
       {typeof children === 'function' ? children(rotationRef.current) : children}
+    </div>
+  )
+}
+
+const EditionsImageCarousel = () => {
+  const [scrollOffset, setScrollOffset] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
+  const [isNarrow, setIsNarrow] = useState(window.innerWidth < 768)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  const images = Array.from({ length: 21 }, (_, i) => ({
+    id: i + 1,
+    src: `/edition-img/${i + 1}.jpeg`
+  }))
+
+  const containerHeight = isNarrow ? 280 : 360
+  const gap = 16
+  const estimatedImageWidth = isNarrow ? 420 : 540 // Estimate for landscape images
+  const singleItemWidth = estimatedImageWidth + gap
+  const totalWidth = images.length * singleItemWidth
+
+  useEffect(() => {
+    const handleResize = () => setIsNarrow(window.innerWidth < 768)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  // Continuous marquee scroll
+  useEffect(() => {
+    if (isPaused) return
+
+    let animationFrameId: number
+    let currentOffset = scrollOffset
+
+    const animate = () => {
+      currentOffset -= 0.5 // Speed: slow scroll at 0.5px per frame (~30fps = 15px/s)
+      
+      // Infinite loop: when we've scrolled past all images, reset
+      if (Math.abs(currentOffset) >= totalWidth) {
+        currentOffset = 0
+      }
+      
+      setScrollOffset(currentOffset)
+      animationFrameId = requestAnimationFrame(animate)
+    }
+
+    animationFrameId = requestAnimationFrame(animate)
+    return () => cancelAnimationFrame(animationFrameId)
+  }, [isPaused, totalWidth, images.length])
+
+  return (
+    <div style={{
+      width: '100%',
+      padding: '60px 20px',
+      marginTop: '40px'
+    }}>
+      {/* Carousel Container */}
+      <div 
+        ref={containerRef}
+        style={{
+          position: 'relative',
+          maxWidth: '100%',
+          margin: '0 auto',
+          height: isNarrow ? '280px' : '360px',
+          overflow: 'hidden',
+          borderRadius: '12px'
+        }}
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
+        {/* Scrolling Track */}
+        <div
+          style={{
+            display: 'flex',
+            gap: `${gap}px`,
+            padding: '0 20px',
+            transform: `translateX(${scrollOffset}px)`,
+            willChange: 'transform',
+            transition: isPaused ? 'none' : 'none' // No easing during continuous scroll
+          }}
+        >
+          {/* Render images twice for seamless loop */}
+          {[...images, ...images].map((image, index) => (
+            <div
+              key={`${image.id}-${Math.floor(index / images.length)}`}
+              style={{
+                flex: '0 0 auto',
+                height: containerHeight,
+                borderRadius: '16px',
+                overflow: 'hidden',
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)',
+                border: '1px solid rgba(167, 139, 250, 0.3)',
+                backgroundColor: 'rgba(30, 41, 59, 0.8)',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLDivElement).style.transform = 'scale(1.05)'
+                (e.currentTarget as HTMLDivElement).style.boxShadow = '0 12px 32px rgba(167, 139, 250, 0.3)'
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLDivElement).style.transform = 'scale(1)'
+                (e.currentTarget as HTMLDivElement).style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.3)'
+              }}
+            >
+              <img
+                src={image.src}
+                alt={`Edition ${image.id}`}
+                style={{
+                  width: 'auto',
+                  height: '100%',
+                  objectFit: 'contain',
+                  display: 'block',
+                  userSelect: 'none'
+                }}
+                draggable={false}
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = `data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="${estimatedImageWidth}" height="${containerHeight}" viewBox="0 0 ${estimatedImageWidth} ${containerHeight}"%3E%3Crect fill="%23374151" width="${estimatedImageWidth}" height="${containerHeight}"/%3E%3Ctext x="50%25" y="50%25" font-size="16" fill="%239CA3AF" text-anchor="middle" dominant-baseline="middle"%3EEdition ${image.id}%3C/text%3E%3C/svg%3E`
+                }}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Gradient overlays for fade effect */}
+        <div style={{
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          bottom: 0,
+          width: '60px',
+          background: 'linear-gradient(90deg, rgba(7, 8, 20, 0.8), transparent)',
+          pointerEvents: 'none',
+          zIndex: 10
+        }} />
+        <div style={{
+          position: 'absolute',
+          right: 0,
+          top: 0,
+          bottom: 0,
+          width: '60px',
+          background: 'linear-gradient(270deg, rgba(7, 8, 20, 0.8), transparent)',
+          pointerEvents: 'none',
+          zIndex: 10
+        }} />
+      </div>
+
+      {/* Hover hint */}
+      <div style={{
+        textAlign: 'center',
+        marginTop: '20px',
+        fontSize: '12px',
+        color: 'rgba(255, 255, 255, 0.5)',
+        letterSpacing: '0.1em'
+      }}>
+      </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .carousel-scroll {
+            padding: 0 10px;
+          }
+        }
+      `}</style>
     </div>
   )
 }
@@ -757,6 +920,44 @@ export default function App() {
       </header>
 
       <main>
+        {/* Scrolling ribbon just below navbar */}
+        <div
+          style={{
+            position: 'relative',
+            width: '100%',
+            overflow: 'hidden',
+            borderBottom: '1px solid rgba(148, 163, 184, 0.35)',
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              gap: '48px',
+              width: 'max-content',
+              padding: '10px 0px',
+              fontWeight: 750,
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
+              whiteSpace: 'nowrap',
+              animation: 'ribbonA 22s linear infinite',
+              flexWrap: 'nowrap',
+              color: 'rgba(229, 231, 235, 0.9)',
+            }}
+          >
+            <span style={{ color: 'rgba(229, 231, 235, 0.9)' }}>Tech Savishkaar 4.0</span>
+            <span style={{ color: 'rgb(34, 211, 238)' }}>•</span>
+            <span style={{ color: 'rgba(229, 231, 235, 0.9)' }}>Vasavi College of Engineering</span>
+            <span style={{ color: 'rgb(34, 211, 238)' }}>•</span>
+            <span style={{ color: 'rgba(229, 231, 235, 0.9)' }}>National Level Hackathon</span>
+            <span style={{ color: 'rgb(34, 211, 238)' }}>•</span>
+            <span aria-hidden style={{ color: 'rgba(229, 231, 235, 0.9)' }}>Tech Savishkaar 4.0</span>
+            <span style={{ color: 'rgb(34, 211, 238)' }}>•</span>
+            <span aria-hidden style={{ color: 'rgba(229, 231, 235, 0.9)' }}>Vasavi College of Engineering</span>
+          </div>
+        </div>
+
         <motion.section id="home" className="section hero" {...sectionMotion}>
           <MatrixRain />
           <div className="container hero-inner">
@@ -764,7 +965,7 @@ export default function App() {
               <div className="eyebrow" style={{
                 display: 'block',
                 textAlign: 'center',
-                marginBottom: '24px'
+                marginBottom: '16px'
               }}>
                 <div className="eyebrow-line" style={{
                   display: 'flex',
@@ -781,7 +982,7 @@ export default function App() {
                   textShadow: '0 10px 30px rgba(0, 0, 0, 0.55)'
                 }}>
                   <img
-                    src="/domains/vce-logo.jpg"
+                    src="/domains/logo.png"
                     alt="VCE Logo"
                     style={{ 
                       height: 'clamp(20px, 3.5vw, 40px)',
@@ -814,10 +1015,10 @@ export default function App() {
               </div>
 
               <h1 className="hero-title">
-                <span className="hero-title-main glitch" data-text={EVENT.name}>
-                  <span aria-hidden className="glitch__color glitch__color--red">{EVENT.name}</span>
-                  <span aria-hidden className="glitch__color glitch__color--blue">{EVENT.name}</span>
-                  <span className="glitch__main">{EVENT.name}</span>
+                <span className="hero-title-main glitch" data-text="TECH SAVISHKAAR">
+                  <span aria-hidden className="glitch__color glitch__color--red">TECH SAVISHKAAR</span>
+                  <span aria-hidden className="glitch__color glitch__color--blue">TECH SAVISHKAAR</span>
+                  <span className="glitch__main">TECH SAVISHKAAR</span>
                   <span className="glitch__line glitch__line--first"></span>
                   <span className="glitch__line glitch__line--second"></span>
                 </span>
@@ -827,12 +1028,8 @@ export default function App() {
                 <span className="typewriter">{EVENT.tagline}</span>
               </p>
 
-              <div className="hero-meta">
-                <span className="pill">{EVENT.registrationDeadline}</span>
-              </div>
 
-              <div className="hero-actions" style={{ gap: 12 }}>
-                <a className="btn btn-primary" href={EVENT.registrationUrl} target="_blank" rel="noopener" style={{ fontWeight: 800, letterSpacing: 0.2, fontSize: 16 }}>Register Now</a>
+              <div className="hero-actions" style={{ gap: 12, marginBottom: 32 }}>
                 <a className="btn btn-ghost" href={EVENT.brochureUrl} download="Tech-Savishkaar-Brochure.png" style={{ fontWeight: 700, fontSize: 16 }}>Download Brochure</a>
                 <a className="btn btn-ghost" href="#rounds" style={{ fontWeight: 700, fontSize: 16 }}>View Rounds</a>
               </div>
@@ -840,21 +1037,21 @@ export default function App() {
               <div className="hero-features">
                 <a className="feature-badge" href="#prizes" style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
                   <div className="badge-accent" aria-hidden />
-                  <div className="badge-content" style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
+                  <div className="badge-content">
                     <div className="badge-value" style={{ fontFamily: '"Playfair Display", serif', fontWeight: 800, letterSpacing: 0.3, marginBottom: '2px' }}>{EVENT.totalPrize}</div>
                     <div className="badge-label" style={{ fontFamily: '"Didact Gothic", system-ui, sans-serif', fontWeight: 600, letterSpacing: 0.4, fontSize: '0.85rem' }}>Total Prizes</div>
                   </div>
                 </a>
                 <a className="feature-badge" href="#rules" style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
                   <div className="badge-accent" aria-hidden />
-                  <div className="badge-content" style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
+                  <div className="badge-content">
                     <div className="badge-value" style={{ fontFamily: '"Playfair Display", serif', fontWeight: 800, letterSpacing: 0.3, marginBottom: '2px' }}>{EVENT.teamSize}</div>
                     <div className="badge-label" style={{ fontFamily: '"Didact Gothic", system-ui, sans-serif', fontWeight: 600, letterSpacing: 0.4, fontSize: '0.85rem' }}>Team Size</div>
                   </div>
                 </a>
                 <a className="feature-badge" href="#rules" style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
                   <div className="badge-accent" aria-hidden />
-                  <div className="badge-content" style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
+                  <div className="badge-content">
                     <div className="badge-value rounds-count" style={{ fontFamily: '"Playfair Display", serif', fontWeight: 800, letterSpacing: 0.3, marginBottom: '2px' }}>{EVENT.roundsCount}</div>
                     <div className="badge-label" style={{ fontFamily: '"Didact Gothic", system-ui, sans-serif', fontWeight: 600, letterSpacing: 0.4, fontSize: '0.85rem' }}>Rounds</div>
                   </div>
@@ -902,6 +1099,12 @@ export default function App() {
               @keyframes marquee {
                 0% { transform: translateX(0); }
                 100% { transform: translateX(-100%); }
+              }
+
+              /* Ribbon animation */
+              @keyframes ribbonA {
+                from { transform: translateX(0); }
+                to { transform: translateX(-50%); }
               }
 
               /* Ensure anchor targets aren't hidden under fixed header */
@@ -1130,8 +1333,8 @@ export default function App() {
               /* Desktop/laptop overrides: keep original sizes on wider screens */
               @media (min-width: 992px) {
                 /* Reduce extra space above hero title on laptop */
-                .hero .hero-inner { padding-top: 8px !important; }
-                .hero .eyebrow { margin-top: 4px !important; }
+                .hero .hero-inner { padding-top: 12px !important; }
+                .hero .eyebrow { margin-top: 0px !important; }
                 .eyebrow-line:first-child {
                   font-size: clamp(22px, 3vw, 42px) !important;
                   font-weight: 900 !important;
@@ -1244,102 +1447,7 @@ export default function App() {
           </div>
         </motion.section>
 
-        {/* Announcement + Countdown Section (after hero) */}
-        <motion.section id="announcement" className="section" {...sectionMotion} style={{ paddingTop: 8 }}>
-          <div style={{ position: 'relative', width: '100%', marginLeft: 0 }}>
-            <div style={{ 
-              position: 'relative', 
-              height: '80px', 
-              overflow: 'hidden', 
-              margin: '0 0 1.2rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <div style={{
-                display: 'flex',
-                gap: '48px',
-                width: 'max-content',
-                padding: '10px 0',
-                fontWeight: 750,
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                whiteSpace: 'nowrap',
-                animation: 'ribbonA 22s linear infinite',
-                flexWrap: 'nowrap',
-                color: 'rgba(229, 231, 235, 0.9)'
-              }}>
-                <span style={{ color: 'rgba(229, 231, 235, 0.9)' }}>Tech Savishkaar 2024</span>
-                <span style={{ color: '#22d3ee' }}>•</span>
-                <span style={{ color: 'rgba(229, 231, 235, 0.9)' }}>Vasavi College of Engineering</span>
-                <span style={{ color: '#22d3ee' }}>•</span>
-                <span style={{ color: 'rgba(229, 231, 235, 0.9)' }}>National Level Hackathon</span>
-                <span style={{ color: '#22d3ee' }}>•</span>
-                <span style={{ color: 'rgba(229, 231, 235, 0.9)' }}>Register Now</span>
-                <span style={{ color: '#22d3ee' }}>•</span>
-                <span aria-hidden style={{ color: 'rgba(229, 231, 235, 0.9)' }}>Tech Savishkaar 2024</span>
-                <span style={{ color: '#22d3ee' }}>•</span>
-                <span aria-hidden style={{ color: 'rgba(229, 231, 235, 0.9)' }}>Vasavi College of Engineering</span>
-              </div>
-              <style>{`
-                @keyframes ribbonA { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-                /* Edge fade mask for ribbon */
-                [id="announcement"] div[style*="height: 80px"]::before,
-                [id="announcement"] div[style*="height: 80px"]::after {
-                  content: '';
-                  position: absolute;
-                  top: 0; bottom: 0; width: 80px;
-                  pointer-events: none;
-                }
-                [id="announcement"] div[style*="height: 80px"]::before { left: 0; background: linear-gradient(90deg, rgba(7,8,20,0.0), rgba(7,8,20,0.0)); }
-                [id="announcement"] div[style*="height: 80px"]::after { right: 0; background: linear-gradient(270deg, rgba(7,8,20,0.0), rgba(7,8,20,0.0)); }
-              `}</style>
-            </div>
-          </div>
 
-          <div className="container">
-            <div className="hero-countdown-wrapper" style={{ marginTop: '0.5rem' }}>
-              <div className="countdown-title">Event starts in</div>
-              <div className="countdown-container">
-                <div className="countdown-box">
-                  <div className="countdown-number">{timeLeft.days}</div>
-                  <div className="countdown-text">Days</div>
-                </div>
-                <div className="countdown-separator">:</div>
-                <div className="countdown-box">
-                  <div className="countdown-number">{timeLeft.hours}</div>
-                  <div className="countdown-text">Hours</div>
-                </div>
-                <div className="countdown-separator">:</div>
-                <div className="countdown-box">
-                  <div className="countdown-number">{timeLeft.minutes}</div>
-                  <div className="countdown-text">Minutes</div>
-                </div>
-                <div className="countdown-separator">:</div>
-                <div className="countdown-box">
-                  <div className="countdown-number">{timeLeft.seconds}</div>
-                  <div className="countdown-text">Seconds</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.section>
-
-        <motion.section id="editions" className="section" {...sectionMotion}>
-          <div className="container">
-            <h2 className="section-title">Previous Editions</h2>
-
-            <section className="hex-gallery-section">
-              <div ref={hexGridRef} className="hex-grid" aria-label="Hexagon gallery" />
-            </section>
-
-            <div className="edition-links" role="group" aria-label="Edition PDFs">
-              <a className="btn btn-ghost" href="/domains/TS1.pdf" target="_blank" rel="noopener">Tech Savishkaar 1.0</a>
-              <a className="btn btn-ghost" href="/domains/TS2.pdf" target="_blank" rel="noopener">Tech Savishkaar 2.0</a>
-              <a className="btn btn-ghost" href="/domains/TS3.pdf" target="_blank" rel="noopener">Tech Savishkaar 3.0</a>
-            </div>
-          </div>
-        </motion.section>
 
         <motion.section id="about" className="section" {...sectionMotion} style={{ padding: 0 }}>
           <div className="container" style={{ maxWidth: '100%', padding: 0, overflow: 'hidden' }}>
@@ -1363,49 +1471,6 @@ export default function App() {
             </div>
             
             <div className="about-clouds" aria-hidden />
-            <div className="cards" style={{ 
-              margin: '60px auto',
-              maxWidth: '1200px',
-              padding: '0 20px',
-              width: '100%',
-              boxSizing: 'border-box'
-            }}>
-              <motion.div initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.05 }} transition={{ duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94], delay: 0 * 0.01 }}>
-              <TiltCard className="card card-hover">
-                <div className="card-icon"><Target size={24} /></div>
-                <h3>Real-world problem solving</h3>
-                <div className="accent-line" />
-                <p>Work on pressing challenges with practical outcomes and measurable impact.</p>
-              </TiltCard>
-              </motion.div>
-              <motion.div initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.05 }} transition={{ duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94], delay: 1 * 0.01 }}>
-              <TiltCard className="card card-hover">
-                <div className="card-icon"><Lightbulb size={24} /></div>
-                <h3>Innovation and creativity</h3>
-                <div className="accent-line" />
-                <p>Push boundaries with fresh ideas, bold thinking, and future-ready technology.</p>
-              </TiltCard>
-              </motion.div>
-              <motion.div initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.05 }} transition={{ duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94], delay: 2 * 0.01 }}>
-              <TiltCard className="card card-hover">
-                <div className="card-icon"><Handshake size={24} /></div>
-                <h3>Teamwork and collaboration</h3>
-                <div className="accent-line" />
-                <p>Build with diverse teammates, mentors, and experts across domains.</p>
-              </TiltCard>
-              </motion.div>
-              <motion.div initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.05 }} transition={{ duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94], delay: 3 * 0.01 }}>
-              <TiltCard className="card card-hover">
-                <div className="card-icon"><Zap size={24} /></div>
-                <h3>Rapid prototyping</h3>
-                <div className="accent-line" />
-                <p>Ideate, design, and demonstrate working prototypes within high-energy timelines.</p>
-              </TiltCard>
-              </motion.div>
-            </div>
-
-            {/* Spacer between cards and VCE section */}
-            <div style={{ height: '80px' }} />
 
             {/* VCE Section - Full Width */}
             <style>
@@ -1517,6 +1582,47 @@ export default function App() {
           </div>
         </motion.section>
 
+        <motion.section id="editions" className="section" {...sectionMotion}>
+          <div className="container">
+            <h2 className="section-title">Previous Editions</h2>
+
+            <EditionsImageCarousel />
+
+            <div className="cards" style={{ 
+              margin: '60px auto',
+              maxWidth: '1200px',
+              padding: '0 20px',
+              width: '100%',
+              boxSizing: 'border-box'
+            }}>
+              <motion.div initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.05 }} transition={{ duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94], delay: 0 * 0.01 }}>
+              <TiltCard className="card card-hover">
+                <h3>Tech Savishkaar 1.0</h3>
+                <div className="accent-line" />
+                <p>The first edition of Tech Savishkaar laid the foundation for a structured national-level hackathon aimed at encouraging student innovation and problem-solving.</p>
+                <a className="btn btn-ghost" href="/domains/TS1.pdf" target="_blank" rel="noopener" style={{ marginTop: '12px', display: 'inline-block' }}>View Details</a>
+              </TiltCard>
+              </motion.div>
+              <motion.div initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.05 }} transition={{ duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94], delay: 1 * 0.01 }}>
+              <TiltCard className="card card-hover">
+                <h3>Tech Savishkaar 2.0</h3>
+                <div className="accent-line" />
+                <p>The second edition strengthened the hackathon framework by increasing nationwide participation and promoting domain-oriented technological solutions.</p>
+                <a className="btn btn-ghost" href="/domains/TS2.pdf" target="_blank" rel="noopener" style={{ marginTop: '12px', display: 'inline-block' }}>View Details</a>
+              </TiltCard>
+              </motion.div>
+              <motion.div initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.05 }} transition={{ duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94], delay: 2 * 0.01 }}>
+              <TiltCard className="card card-hover">
+                <h3>Tech Savishkaar 3.0</h3>
+                <div className="accent-line" />
+                <p>The third edition marked a significant expansion in scale and outreach, facilitating multidisciplinary innovation and advanced problem-solving at the national level.</p>
+                <a className="btn btn-ghost" href="/domains/TS3.pdf" target="_blank" rel="noopener" style={{ marginTop: '12px', display: 'inline-block' }}>View Details</a>
+              </TiltCard>
+              </motion.div>
+            </div>
+          </div>
+        </motion.section>
+
         <motion.section id="rounds" className="section" {...sectionMotion}>
           <div className="container">
             <h2 className="section-title">Rounds & Schedule</h2>
@@ -1554,47 +1660,131 @@ export default function App() {
           <div className="container">
             <h2 className="section-title">Hackathon Domains</h2>
 
-            <div className="cards">
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: isNarrow ? '1fr' : window.innerWidth < 1024 ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+              gap: isNarrow ? '16px' : '24px',
+              marginTop: '40px'
+            }}>
               {[
-                { variant: 'agritech', title: 'Agritech', desc: 'Innovations for modern agriculture and sustainable farming.', icon: <Sprout size={24} />, image: '/domains/agritech.gif' },
-                { variant: 'environment', title: 'Remote Sensing – Environment & Sustainable Development', desc: 'Earth observation, environmental monitoring, and sustainability solutions.', icon: <Globe size={24} />, image: '/domains/geospatial.gif' },
-                { variant: 'health', title: 'HealthTech', desc: 'Technology-driven solutions for healthcare and wellbeing.', icon: <Stethoscope size={24} />, image: '/domains/health.gif' },
-                { variant: 'cyber', title: 'Cyber Security', desc: 'Network security, encryption, and threat protection.', icon: <Lock size={24} />, image: '/domains/cyber.gif' },
+                { variant: 'agritech', title: 'Agritech', desc: 'Innovations for modern agriculture and sustainable farming.', icon: <Sprout size={24} />, image: '/domains/agritech.gif', color: '#10b981' },
+                { variant: 'environment', title: 'Remote Sensing', desc: 'Earth observation, environmental monitoring, and sustainability.', icon: <Globe size={24} />, image: '/domains/geospatial.gif', color: '#06b6d4' },
+                { variant: 'health', title: 'HealthTech', desc: 'Technology-driven solutions for healthcare and wellbeing.', icon: <Stethoscope size={24} />, image: '/domains/health.gif', color: '#f43f5e' },
+                { variant: 'cyber', title: 'Cyber Security', desc: 'Network security, encryption, and threat protection.', icon: <Lock size={24} />, image: '/domains/cyber.gif', color: '#8b5cf6' },
               ].map((domain, i) => (
                 <motion.div
                   key={domain.title}
-                  initial={{ opacity: 0.6, y: 12, scale: 1 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ once: true, amount: 0.05 }}
-                  transition={{ duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94], delay: i * 0.01 }}
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.45, ease: 'easeOut', delay: i * 0.08 }}
+                  style={{
+                    height: '100%',
+                    cursor: 'pointer'
+                  }}
                 >
-                  <TiltCard className={`card card-hover card-${domain.variant}`}>
-                  {() => (
-                    <>
-                      <div className="domain-media" aria-hidden>
-                        <img
-                          className="domain-img"
-                          src={domain.image}
-                          alt=""
-                          loading="lazy"
-                          decoding="async"
-                          onError={e => {
-                            const img = e.currentTarget
-                            if (img.dataset.fallbackApplied) return
-                            img.dataset.fallbackApplied = '1'
-                            img.src = '/vite.svg'
-                          }}
-                        />
-                        <div className="domain-media-overlay" />
-                      </div>
-                        <div className="domain-body">
-                      <h3>{domain.title}</h3>
-                      <div className="accent-line" />
-                      <p>{domain.desc}</p>
-                        </div>
-                    </>
-                  )}
-                </TiltCard>
+                  <div
+                    style={{
+                      position: 'relative',
+                      height: '100%',
+                      background: `linear-gradient(135deg, rgba(${domain.color === '#10b981' ? '16, 185, 129' : domain.color === '#06b6d4' ? '6, 182, 212' : domain.color === '#f43f5e' ? '244, 63, 94' : '139, 92, 246'}, 0.08), rgba(${domain.color === '#10b981' ? '16, 185, 129' : domain.color === '#06b6d4' ? '6, 182, 212' : domain.color === '#f43f5e' ? '244, 63, 94' : '139, 92, 246'}, 0.02))`,
+                      border: `1.5px solid rgba(${domain.color === '#10b981' ? '16, 185, 129' : domain.color === '#06b6d4' ? '6, 182, 212' : domain.color === '#f43f5e' ? '244, 63, 94' : '139, 92, 246'}, 0.2)`,
+                      borderRadius: '16px',
+                      padding: '24px',
+                      backdropFilter: 'blur(10px)',
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      overflow: 'hidden',
+                      display: 'flex',
+                      flexDirection: 'column'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.border = `1.5px solid rgba(${domain.color === '#10b981' ? '16, 185, 129' : domain.color === '#06b6d4' ? '6, 182, 212' : domain.color === '#f43f5e' ? '244, 63, 94' : '139, 92, 246'}, 0.6)`;
+                      e.currentTarget.style.background = `linear-gradient(135deg, rgba(${domain.color === '#10b981' ? '16, 185, 129' : domain.color === '#06b6d4' ? '6, 182, 212' : domain.color === '#f43f5e' ? '244, 63, 94' : '139, 92, 246'}, 0.15), rgba(${domain.color === '#10b981' ? '16, 185, 129' : domain.color === '#06b6d4' ? '6, 182, 212' : domain.color === '#f43f5e' ? '244, 63, 94' : '139, 92, 246'}, 0.05))`;
+                      e.currentTarget.style.boxShadow = `0 16px 48px rgba(${domain.color === '#10b981' ? '16, 185, 129' : domain.color === '#06b6d4' ? '6, 182, 212' : domain.color === '#f43f5e' ? '244, 63, 94' : '139, 92, 246'}, 0.2), inset 0 0 24px rgba(${domain.color === '#10b981' ? '16, 185, 129' : domain.color === '#06b6d4' ? '6, 182, 212' : domain.color === '#f43f5e' ? '244, 63, 94' : '139, 92, 246'}, 0.08)`;
+                      e.currentTarget.style.transform = 'translateY(-4px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.border = `1.5px solid rgba(${domain.color === '#10b981' ? '16, 185, 129' : domain.color === '#06b6d4' ? '6, 182, 212' : domain.color === '#f43f5e' ? '244, 63, 94' : '139, 92, 246'}, 0.2)`;
+                      e.currentTarget.style.background = `linear-gradient(135deg, rgba(${domain.color === '#10b981' ? '16, 185, 129' : domain.color === '#06b6d4' ? '6, 182, 212' : domain.color === '#f43f5e' ? '244, 63, 94' : '139, 92, 246'}, 0.08), rgba(${domain.color === '#10b981' ? '16, 185, 129' : domain.color === '#06b6d4' ? '6, 182, 212' : domain.color === '#f43f5e' ? '244, 63, 94' : '139, 92, 246'}, 0.02))`;
+                      e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.25)';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    {/* Image */}
+                    <div style={{
+                      width: '100%',
+                      height: '160px',
+                      marginBottom: '16px',
+                      borderRadius: '12px',
+                      overflow: 'hidden',
+                      backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                      border: `1px solid rgba(${domain.color === '#10b981' ? '16, 185, 129' : domain.color === '#06b6d4' ? '6, 182, 212' : domain.color === '#f43f5e' ? '244, 63, 94' : '139, 92, 246'}, 0.1)`
+                    }}>
+                      <img
+                        src={domain.image}
+                        alt={domain.title}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          transition: 'transform 0.3s ease'
+                        }}
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = `/vite.svg`
+                        }}
+                      />
+                    </div>
+
+                    {/* Icon */}
+                    <div style={{
+                      width: '48px',
+                      height: '48px',
+                      borderRadius: '12px',
+                      background: `linear-gradient(135deg, ${domain.color}22, ${domain.color}11)`,
+                      border: `1px solid ${domain.color}44`,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: domain.color,
+                      marginBottom: '16px',
+                      boxShadow: `0 4px 12px ${domain.color}22`,
+                      transition: 'all 0.3s ease'
+                    }}>
+                      {domain.icon}
+                    </div>
+
+                    {/* Title */}
+                    <h3 style={{
+                      margin: '0 0 12px 0',
+                      color: '#e0f2fe',
+                      fontSize: '1.1rem',
+                      fontWeight: 600,
+                      lineHeight: 1.3,
+                      transition: 'color 0.3s ease'
+                    }}>
+                      {domain.title}
+                    </h3>
+
+                    {/* Accent Line */}
+                    <div style={{
+                      height: '2px',
+                      background: `linear-gradient(90deg, ${domain.color}, transparent)`,
+                      marginBottom: '12px',
+                      borderRadius: '1px'
+                    }} />
+
+                    {/* Description */}
+                    <p style={{
+                      margin: 0,
+                      color: 'rgba(255, 255, 255, 0.8)',
+                      fontSize: '0.95rem',
+                      lineHeight: 1.6,
+                      flex: 1,
+                      transition: 'color 0.3s ease'
+                    }}>
+                      {domain.desc}
+                    </p>
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -1691,18 +1881,97 @@ export default function App() {
             <h2 className="section-title">Rewards & Recognition</h2>
               <p className="section-lead">Prize pool worth ₹1.25 Lakh + recognition, certificates, and more.</p>
             </div>
-            <div className="podium-wrap" style={{ display: 'grid', gridTemplateColumns: isNarrow ? '1fr' : '1fr 1.2fr 1fr', gap: isNarrow ? 12 : 16, alignItems: isNarrow ? 'stretch' : 'end', marginBottom: 24 }}>
-              <div style={{ background: 'radial-gradient(120% 120% at 0% 0%, rgba(96,165,250,0.15), transparent 60%), rgba(11,12,16,0.7)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, boxShadow: '0 10px 24px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.04)', padding: isNarrow ? '16px 14px' : '22px 18px', textAlign: 'center' }}>
+            <div className="podium-wrap" style={{ display: 'grid', gridTemplateColumns: isNarrow ? '1fr' : '1fr 1.2fr 1fr', gap: isNarrow ? 12 : 16, alignItems: isNarrow ? 'stretch' : 'end', marginBottom: 24, perspective: '1200px' }}>
+              <div 
+                className="reward-card-3d"
+                style={{ 
+                  background: 'radial-gradient(120% 120% at 0% 0%, rgba(96,165,250,0.15), transparent 60%), rgba(11,12,16,0.7)', 
+                  border: '1px solid rgba(255,255,255,0.08)', 
+                  borderRadius: 16, 
+                  boxShadow: '0 10px 24px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.04)', 
+                  padding: isNarrow ? '16px 14px' : '22px 18px', 
+                  textAlign: 'center',
+                  transition: 'transform 0.4s cubic-bezier(0.23, 1, 0.320, 1), box-shadow 0.4s ease',
+                  transformStyle: 'preserve-3d',
+                  cursor: 'pointer'
+                }}
+                onMouseMove={(e) => {
+                  const card = e.currentTarget;
+                  const rect = card.getBoundingClientRect();
+                  const x = (e.clientX - rect.left) / rect.width - 0.5;
+                  const y = (e.clientY - rect.top) / rect.height - 0.5;
+                  card.style.transform = `perspective(1000px) rotateX(${y * 8}deg) rotateY(${x * 8}deg) translateZ(20px)`;
+                  card.style.boxShadow = `0 ${12 + Math.abs(y) * 8}px ${32 + Math.abs(x) * 12}px rgba(96,165,250,${0.25 + Math.sqrt(x*x + y*y) * 0.15})`;
+                }}
+                onMouseLeave={(e) => {
+                  const card = e.currentTarget;
+                  card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+                  card.style.boxShadow = '0 10px 24px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.04)';
+                }}
+              >
                 <div style={{ opacity: 0.85, letterSpacing: 1, fontWeight: 700 }}>RUNNER UP</div>
                 <div style={{ fontSize: isNarrow ? 22 : 28, fontWeight: 900, margin: '10px 0 14px', color: '#93c5fd' }}>₹8000</div>
                 <a className="btn btn-ghost" href="#prizes" style={{ marginTop: 4 }}>View</a>
               </div>
-              <div style={{ background: 'radial-gradient(120% 120% at 0% 0%, rgba(250,204,21,0.18), transparent 60%), rgba(11,12,16,0.7)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 18, boxShadow: '0 18px 36px rgba(0,0,0,0.45), 0 0 24px rgba(234,179,8,0.12) inset', padding: isNarrow ? '18px 16px' : '26px 20px', textAlign: 'center', transform: isNarrow ? 'none' : 'translateY(-10px)' }}>
+              <div 
+                className="reward-card-3d"
+                style={{ 
+                  background: 'radial-gradient(120% 120% at 0% 0%, rgba(250,204,21,0.18), transparent 60%), rgba(11,12,16,0.7)', 
+                  border: '1px solid rgba(255,255,255,0.1)', 
+                  borderRadius: 18, 
+                  boxShadow: '0 18px 36px rgba(0,0,0,0.45), 0 0 24px rgba(234,179,8,0.12) inset', 
+                  padding: isNarrow ? '18px 16px' : '26px 20px', 
+                  textAlign: 'center', 
+                  transform: isNarrow ? 'none' : 'translateY(-10px)',
+                  transition: 'transform 0.4s cubic-bezier(0.23, 1, 0.320, 1), box-shadow 0.4s ease',
+                  transformStyle: 'preserve-3d',
+                  cursor: 'pointer'
+                }}
+                onMouseMove={(e) => {
+                  const card = e.currentTarget;
+                  const rect = card.getBoundingClientRect();
+                  const x = (e.clientX - rect.left) / rect.width - 0.5;
+                  const y = (e.clientY - rect.top) / rect.height - 0.5;
+                  card.style.transform = `perspective(1000px) rotateX(${y * 10}deg) rotateY(${x * 10}deg) translateZ(30px) ${isNarrow ? '' : 'translateY(-14px)'}`;
+                  card.style.boxShadow = `0 ${20 + Math.abs(y) * 12}px ${48 + Math.abs(x) * 16}px rgba(250,204,21,${0.3 + Math.sqrt(x*x + y*y) * 0.2}), 0 0 32px rgba(234,179,8,${0.15 + Math.sqrt(x*x + y*y) * 0.15}) inset`;
+                }}
+                onMouseLeave={(e) => {
+                  const card = e.currentTarget;
+                  card.style.transform = isNarrow ? 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)' : 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px) translateY(-10px)';
+                  card.style.boxShadow = '0 18px 36px rgba(0,0,0,0.45), 0 0 24px rgba(234,179,8,0.12) inset';
+                }}
+              >
                 <div style={{ opacity: 0.9, letterSpacing: 1, fontWeight: 800 }}>WINNER</div>
                 <div style={{ fontSize: isNarrow ? 28 : 36, fontWeight: 900, margin: '10px 0 14px', color: '#fde047', textShadow: '0 0 24px rgba(234,179,8,0.3)' }}>₹18,000</div>
                 <a className="btn btn-primary" href="#prizes" style={{ marginTop: 4 }}>View</a>
               </div>
-              <div style={{ background: 'radial-gradient(120% 120% at 0% 0%, rgba(244,63,94,0.12), transparent 60%), rgba(11,12,16,0.7)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, boxShadow: '0 10px 24px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.04)', padding: isNarrow ? '16px 14px' : '22px 18px', textAlign: 'center' }}>
+              <div 
+                className="reward-card-3d"
+                style={{ 
+                  background: 'radial-gradient(120% 120% at 0% 0%, rgba(244,63,94,0.12), transparent 60%), rgba(11,12,16,0.7)', 
+                  border: '1px solid rgba(255,255,255,0.08)', 
+                  borderRadius: 16, 
+                  boxShadow: '0 10px 24px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.04)', 
+                  padding: isNarrow ? '16px 14px' : '22px 18px', 
+                  textAlign: 'center',
+                  transition: 'transform 0.4s cubic-bezier(0.23, 1, 0.320, 1), box-shadow 0.4s ease',
+                  transformStyle: 'preserve-3d',
+                  cursor: 'pointer'
+                }}
+                onMouseMove={(e) => {
+                  const card = e.currentTarget;
+                  const rect = card.getBoundingClientRect();
+                  const x = (e.clientX - rect.left) / rect.width - 0.5;
+                  const y = (e.clientY - rect.top) / rect.height - 0.5;
+                  card.style.transform = `perspective(1000px) rotateX(${y * 8}deg) rotateY(${x * 8}deg) translateZ(20px)`;
+                  card.style.boxShadow = `0 ${12 + Math.abs(y) * 8}px ${32 + Math.abs(x) * 12}px rgba(244,63,94,${0.2 + Math.sqrt(x*x + y*y) * 0.15})`;
+                }}
+                onMouseLeave={(e) => {
+                  const card = e.currentTarget;
+                  card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+                  card.style.boxShadow = '0 10px 24px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.04)';
+                }}
+              >
                 <div style={{ opacity: 0.85, letterSpacing: 1, fontWeight: 700 }}>2ND RUNNER UP</div>
                 <div style={{ fontSize: isNarrow ? 22 : 28, fontWeight: 900, margin: '10px 0 14px', color: '#fca5a5' }}>₹5000</div>
                 <a className="btn btn-ghost" href="#prizes" style={{ marginTop: 4 }}>View</a>
@@ -2004,6 +2273,9 @@ export default function App() {
             </div>
           </div>
         </motion.section>
+
+        {/* Results section temporarily removed. Keep an empty anchor so navbar link remains functional. */}
+        <div id="results" aria-hidden style={{ height: 0, width: 0, overflow: 'hidden' }} />
 
         <motion.section id="contact" className="section" {...sectionMotion}>
           <div className="container">
