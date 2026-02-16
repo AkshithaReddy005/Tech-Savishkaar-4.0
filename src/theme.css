@@ -508,20 +508,116 @@
 
 @media (max-width: 768px) {
   .results-section {
-    padding: 40px 0;
+    padding: 24px 0 32px;
+  }
+
+  .title-nav-container {
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 8px 0;
+  }
+
+  .page-title {
+    font-size: 1.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    margin: 0;
+    max-width: 90%;
+  }
+
+  .nav-btn {
+    position: absolute;
+    left: 12px;
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+
+  .nav-btn span {
+    display: none;
   }
 
   .search-filter-container {
-    flex-direction: column;
-    gap: 12px;
+    flex-direction: row;
+    gap: 8px;
+    padding: 0 16px;
+    margin: 20px 0 16px;
+    align-items: stretch;
+    height: auto;
+  }
+
+  .search-input-wrapper {
+    padding: 6px 10px;
+    border-radius: 6px;
+    flex: 1;
+    border: 1px solid rgba(34, 211, 238, 0.25);
+    background: rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    min-height: 32px;
+    box-sizing: border-box;
+  }
+
+  .search-input {
+    font-size: 0.9rem;
+    width: 100%;
   }
 
   .search-filter-container .domain-dropdown {
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+  }
+
+  .domain-select {
+    font-size: 0.9rem;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(34, 211, 238, 0.25);
+    background: rgba(255, 255, 255, 0.08);
     width: 100%;
+    min-height: 32px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+  }
+
+  .round-filter-pills {
+    margin: 0 0 20px 0;
+    padding: 0 16px;
+  }
+
+  .round-filter-label {
+    display: none;
+  }
+
+  .round-pills {
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .round-pill {
+    padding: 10px 18px;
+    font-size: 0.85rem;
+    border-radius: 25px;
+    min-width: 120px;
+    text-align: center;
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    background: rgba(255, 255, 255, 0.06);
   }
 
   .domain-filters {
     justify-content: center;
+  }
+
+  .table-container {
+    margin: 12px -12px 0;
+    padding: 0 12px 8px;
+    border-radius: 14px;
   }
 
   .results-table {
@@ -530,13 +626,14 @@
 
   .results-table th,
   .results-table td {
-    padding: 12px 8px;
+    padding: 10px 6px;
   }
 
   .table-header {
     flex-direction: column;
     gap: 4px;
   }
+
   .timestamp {
     flex-direction: column;
     align-items: flex-start;
@@ -545,6 +642,29 @@
 
   .stats-container {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Extra-small screens: make rows feel more like tidy cards without touching desktop */
+@media (max-width: 480px) {
+  .results-section .container {
+    padding: 0 12px;
+  }
+
+  .results-table {
+    min-width: 900px;
+  }
+
+  .results-table th {
+    font-size: 0.78rem;
+  }
+
+  .results-table td {
+    font-size: 0.75rem;
+  }
+
+  .table-row {
+    box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.75);
   }
 }
 
@@ -1175,7 +1295,9 @@ html, body {
   z-index: -1; /* Behind all content so it doesn't block sections */
   pointer-events: none;
   opacity: 1;
-  filter: none;
+  filter: saturate(1.2) contrast(1.15) brightness(1.2);
+  /* Ensure it's above the bg div */
+  transform: translateZ(0);
 }
 
 .three-wrap::after {
@@ -1287,7 +1409,7 @@ html, body {
 
 /* Base background with soft blue tint */
 .bg {
-  background: #0a0e17 !important;
+  background: transparent !important;
   position: fixed;
   inset: 0;
   z-index: -2;
@@ -2903,7 +3025,7 @@ html, body {
 
 /* Improve 3D visibility on mobile by softening overlays */
 @media (max-width: 768px) {
-  .bg { background: rgba(0, 0, 0, 0.28); }
+  .bg { background: transparent; }
   .bg-noise { opacity: 0.06; }
 }
 
@@ -3290,10 +3412,7 @@ body.three-enabled {
   overflow-x: hidden;
 }
 
-body.three-enabled .three-wrap {
-  opacity: 1;
-  filter: saturate(1.2) contrast(1.15) brightness(1.2);
-}
+/* Three-wrap is always visible now */
 
 .domain-img {
   will-change: transform;
