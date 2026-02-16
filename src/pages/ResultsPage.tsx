@@ -9,137 +9,494 @@ interface TeamData {
   teamLeaderEmail: string
   collegeName: string
   domain: string
+  round: string
+  cityState: string
+  isWaitingList?: boolean
 }
 
 const mockData: TeamData[] = [
+  // Round 2 Finalists Results
+  // Agritech Finalists
+  {
+    id: 'r2-1',
+    teamName: 'navacharithasriramadasu',
+    teamLeader: 'Navacharitha Sriramadasu',
+    teamLeaderEmail: 'navacharithasriramadasu@gmail.com',
+    collegeName: 'Mvsr engineering college',
+    domain: 'Agritech',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telangana',
+    isWaitingList: false
+  },
+  {
+    id: 'r2-2',
+    teamName: 'Spirit CH',
+    teamLeader: 'Ajith Reddy',
+    teamLeaderEmail: 'ajithreddychittireddy@gmail.com',
+    collegeName: 'Vardhaman College of Engineering',
+    domain: 'Agritech',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telangana',
+    isWaitingList: false
+  },
+  {
+    id: 'r2-3',
+    teamName: 'Vortex 3',
+    teamLeader: 'Chinmanolla Gayathri',
+    teamLeaderEmail: 'gayathrichinmanolla@gmail.com',
+    collegeName: 'NEIL GOGTE INSTITUTE OF TECHNOLOGY',
+    domain: 'Agritech',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telangana',
+    isWaitingList: false
+  },
+  {
+    id: 'r2-4',
+    teamName: 'CodeBlooded',
+    teamLeader: 'B.Hari Sampath',
+    teamLeaderEmail: 'harisampathbellam@gmail.com',
+    collegeName: 'Mahindra University',
+    domain: 'Agritech',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telangana',
+    isWaitingList: false
+  },
+  {
+    id: 'r2-5',
+    teamName: 'Synervate',
+    teamLeader: 'Kolluru Kameswara Suryesh',
+    teamLeaderEmail: 'suryakolluru22@gmail.com',
+    collegeName: 'Amrita Vishwa vidyaapeetham, Chennai',
+    domain: 'Agritech',
+    round: 'Round 2 Finalists',
+    cityState: 'Chennai, Tamilnadu',
+    isWaitingList: false
+  },
+  // Agritech Waiting List
+  {
+    id: 'r2-6',
+    teamName: 'Phoenix',
+    teamLeader: 'Pavan Kumar K',
+    teamLeaderEmail: 'pavankumar200571@gmail.com',
+    collegeName: 'VNRVJIET',
+    domain: 'Agritech',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telangana',
+    isWaitingList: true
+  },
+  {
+    id: 'r2-7',
+    teamName: 'TechHarvesters',
+    teamLeader: 'Kenche Srikar',
+    teamLeaderEmail: '24211a7257@bvrit.ac.in',
+    collegeName: 'BVRIT',
+    domain: 'Agritech',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telangana',
+    isWaitingList: true
+  },
+
+  // Remote Sensing Finalists
+  {
+    id: 'r2-8',
+    teamName: 'Team KanyaRashi',
+    teamLeader: 'Kanaparthi Mohan Reddy',
+    teamLeaderEmail: '239x1a3247@gprec.ac.in',
+    collegeName: 'G Pulla Reddy Engineering College, Kurnool',
+    domain: 'Remote Sensing',
+    round: 'Round 2 Finalists',
+    cityState: 'Kurnool, Andhra Pradesh',
+    isWaitingList: false
+  },
+  {
+    id: 'r2-9',
+    teamName: 'Runtime Terror',
+    teamLeader: 'Jakkampudi Gowtam Sai',
+    teamLeaderEmail: 'gowtamsai911@gmail.com',
+    collegeName: 'Vasavi College of Engineering',
+    domain: 'Remote Sensing',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telangana',
+    isWaitingList: false
+  },
+  {
+    id: 'r2-10',
+    teamName: 'Continuum',
+    teamLeader: 'Jasmitha Veeramachaneni',
+    teamLeaderEmail: 'v.jasmitha143@gmail.com',
+    collegeName: 'Vasavi College of Engineering',
+    domain: 'Remote Sensing',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telangana',
+    isWaitingList: false
+  },
+  {
+    id: 'r2-11',
+    teamName: 'Vasuki',
+    teamLeader: 'M Srikar Rao',
+    teamLeaderEmail: 'mahendarkarsrikarrao@gmail.com',
+    collegeName: 'Vasavi College of Engineering',
+    domain: 'Remote Sensing',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telangana',
+    isWaitingList: false
+  },
+  {
+    id: 'r2-12',
+    teamName: '921132dhanasrisoli',
+    teamLeader: 'Dhana Sri Soli',
+    teamLeaderEmail: '921132dhanasrisoli@gmail.com',
+    collegeName: 'Chaitanya Bharathi Institute of Technology',
+    domain: 'Remote Sensing',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telangana',
+    isWaitingList: false
+  },
+  // Remote Sensing Waiting List
+  {
+    id: 'r2-13',
+    teamName: 'OPS',
+    teamLeader: 'Chakshu Varma',
+    teamLeaderEmail: 'chakshu.akkala@gmail.com',
+    collegeName: 'Vasavi College of Engineering',
+    domain: 'Remote Sensing',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telangana',
+    isWaitingList: true
+  },
+  {
+    id: 'r2-14',
+    teamName: 'KeyNova',
+    teamLeader: 'Lathika',
+    teamLeaderEmail: 'lathikasasimanikandan@gmail.com',
+    collegeName: 'Karpagam college of engineering',
+    domain: 'Remote Sensing',
+    round: 'Round 2 Finalists',
+    cityState: 'Coimbatore, Tamil Nadu',
+    isWaitingList: true
+  },
+
+  // HealthTech Finalists
+  {
+    id: 'r2-15',
+    teamName: '$a✓ishk@²r',
+    teamLeader: 'Thirukovela Moulya',
+    teamLeaderEmail: 'tmoulya2707@gmail.com',
+    collegeName: 'Chaitanya Bharathi Institute of Technology',
+    domain: 'HealthTech',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telangana',
+    isWaitingList: false
+  },
+  {
+    id: 'r2-16',
+    teamName: 'Tech phantoms',
+    teamLeader: 'Pulumamidi Vinay Kumar',
+    teamLeaderEmail: '239x1a33a6@gprec.ac.in',
+    collegeName: 'G. Pulla Reddy Engineering College',
+    domain: 'HealthTech',
+    round: 'Round 2 Finalists',
+    cityState: 'Kurnool, Andhra Pradesh',
+    isWaitingList: false
+  },
+  {
+    id: 'r2-17',
+    teamName: 'MOOD VITALS',
+    teamLeader: 'Kaipa Chaturya Reddy',
+    teamLeaderEmail: 'kaipachaturyareddy7275@gmail.com',
+    collegeName: 'Vasavi College of Engineering',
+    domain: 'HealthTech',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telangana',
+    isWaitingList: false
+  },
+  {
+    id: 'r2-18',
+    teamName: 'MOON KNIGHT',
+    teamLeader: 'Vinay Sanda',
+    teamLeaderEmail: '24215a3206@bvrit.ac.in',
+    collegeName: 'BVRIT NARSAPUR',
+    domain: 'HealthTech',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telangana',
+    isWaitingList: false
+  },
+  {
+    id: 'r2-19',
+    teamName: 'Abcd',
+    teamLeader: 'Panjugula Nitin Kumar Goud',
+    teamLeaderEmail: 'nithinkumargoud1234@gmail.com',
+    collegeName: 'Vasavi College of Engineering',
+    domain: 'HealthTech',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telangana',
+    isWaitingList: false
+  },
+  // HealthTech Waiting List
+  {
+    id: 'r2-20',
+    teamName: 'Redbull Coding',
+    teamLeader: 'Sirna Sai Vishnu',
+    teamLeaderEmail: 'sirna.vishnu05@gmail.com',
+    collegeName: 'Vasavi college of engineering',
+    domain: 'HealthTech',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telangana',
+    isWaitingList: true
+  },
+  {
+    id: 'r2-21',
+    teamName: 'Equilibria',
+    teamLeader: 'A S Sreeram Varun Sharma',
+    teamLeaderEmail: 'varunsreeram29@gmail.com',
+    collegeName: 'Vasavi college of engineering',
+    domain: 'HealthTech',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telangana',
+    isWaitingList: true
+  },
+
+  // Cybersecurity Finalists
+  {
+    id: 'r2-22',
+    teamName: 'ATHENS',
+    teamLeader: 'Bhavesh Dharewa',
+    teamLeaderEmail: 'bhaveshd7701@gmail.com',
+    collegeName: 'Vasavi college of engineering',
+    domain: 'Cybersecurity',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telengana',
+    isWaitingList: false
+  },
+  {
+    id: 'r2-23',
+    teamName: 'Hackaholics',
+    teamLeader: 'Thallapalli Suhaas Rao',
+    teamLeaderEmail: 'suhaasrao28@gmail.com',
+    collegeName: 'Vasavi College of Engineering',
+    domain: 'Cybersecurity',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telengana',
+    isWaitingList: false
+  },
+  {
+    id: 'r2-24',
+    teamName: 'Code blooded',
+    teamLeader: 'P.Uday Kumar',
+    teamLeaderEmail: 'udaykumarpendyalalikki@gmail.com',
+    collegeName: 'Vasavi college of engineering',
+    domain: 'Cybersecurity',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telengana',
+    isWaitingList: false
+  },
+  {
+    id: 'r2-25',
+    teamName: 'Nexora',
+    teamLeader: 'Gourishetti Jayaram',
+    teamLeaderEmail: 'gourishettijayaram123@gmail.com',
+    collegeName: 'Vasavi College Of Engineering',
+    domain: 'Cybersecurity',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telengana',
+    isWaitingList: false
+  },
+  {
+    id: 'r2-26',
+    teamName: 'Alpha Duo',
+    teamLeader: 'Akshitha Reddy',
+    teamLeaderEmail: 'akshithareddy2405@gmail.com',
+    collegeName: 'Vasavi College of Engineering',
+    domain: 'Cybersecurity',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telengana',
+    isWaitingList: false
+  },
+  // Cybersecurity Waiting List
+  {
+    id: 'r2-27',
+    teamName: 'STROM BRAKERS',
+    teamLeader: 'Anil Kumar',
+    teamLeaderEmail: 'ch.anilkumar984@gmail.com',
+    collegeName: 'BV Raju Institute of Technology',
+    domain: 'Cybersecurity',
+    round: 'Round 2 Finalists',
+    cityState: 'Hyderabad, Telengana',
+    isWaitingList: true
+  },
+  {
+    id: 'r2-28',
+    teamName: 'Varanasi',
+    teamLeader: 'ADONI INDIRA',
+    teamLeaderEmail: '239X1A3301@gprec.ac.in',
+    collegeName: 'G. Pulla Reddy Engineering College (Autonomous)',
+    domain: 'Cybersecurity',
+    round: 'Round 2 Finalists',
+    cityState: 'Kurnool, Andhra Pradesh',
+    isWaitingList: true
+  },
+
+  // Round 1 Results (First Round)
   // Agritech Results
   {
-    id: '1',
+    id: '43',
     teamName: 'Synergy',
     teamLeader: 'Madhavi',
     teamLeaderEmail: 'madhavi.2405054@srec.ac.in',
     collegeName: 'Sri Ramakrishna Engineering College',
-    domain: 'Agritech'
+    domain: 'Agritech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '2',
+    id: '44',
     teamName: 'Hydrofusion',
     teamLeader: 'Laasya M',
     teamLeaderEmail: 'm.laasya07@gmail.com',
     collegeName: 'Vasavi college of Engineering',
-    domain: 'Agritech'
+    domain: 'Agritech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '3',
+    id: '45',
     teamName: 'Code 4 Cause',
     teamLeader: 'Veeragandham Shreya',
     teamLeaderEmail: 'sveeragandham@gmail.com',
     collegeName: 'Vasavi College Of Engineering',
-    domain: 'Agritech'
+    domain: 'Agritech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '4',
+    id: '46',
     teamName: 'Null Pointers',
     teamLeader: 'Anshul Singh',
     teamLeaderEmail: 'bt24cs034@nitmz.ac.in',
     collegeName: 'National Institute Of Technology, Mizoram',
-    domain: 'Agritech'
+    domain: 'Agritech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '5',
+    id: '47',
     teamName: 'gnagalahari2005',
     teamLeader: 'G.Naga Lahari',
     teamLeaderEmail: 'gnagalahari2005@gmail.com',
     collegeName: 'G.Pulla Reddy Engineering College',
-    domain: 'Agritech'
+    domain: 'Agritech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '6',
-    teamName: 'Spirit CH',
-    teamLeader: 'Ajith Reddy',
+    id: '48',
+    teamName: 'Spirit',
+    teamLeader: 'CH Ajith Reddy',
     teamLeaderEmail: 'ajithreddychittireddy@gmail.com',
     collegeName: 'Vardhaman College Of Engineering',
-    domain: 'Agritech'
+    domain: 'Agritech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '7',
+    id: '49',
     teamName: 'agro_ally',
     teamLeader: 'hari kaushik',
     teamLeaderEmail: 'harikaushik2005@gmail.com',
     collegeName: 'vasavi college of engineering',
-    domain: 'Agritech'
+    domain: 'Agritech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '8',
+    id: '50',
     teamName: 'Phoenix',
     teamLeader: 'Pavan kumar k',
     teamLeaderEmail: 'pavankumar2005712@gmail.com',
     collegeName: 'VNRVJIET',
-    domain: 'Agritech'
+    domain: 'Agritech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '9',
+    id: '51',
     teamName: 'Tech Titans',
     teamLeader: 'Harsha Vardhan',
     teamLeaderEmail: 'harshavardhanvotte@gmail.com',
     collegeName: 'MVSR Engineering College',
-    domain: 'Agritech'
+    domain: 'Agritech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '10',
+    id: '52',
     teamName: 'Team_Hack',
     teamLeader: 'Patan Sharukhan',
     teamLeaderEmail: 'sharukhan2005786@gmail.com',
     collegeName: 'G Pulla Reddy Engineering College',
-    domain: 'Agritech'
+    domain: 'Agritech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '11',
+    id: '53',
     teamName: 'TRIAD',
     teamLeader: 'Vaishnav Tadakamadla',
     teamLeaderEmail: 'vaishnavtadakamadla5453@gmail.com',
     collegeName: 'Vasavi College Of Engineering',
-    domain: 'Agritech'
+    domain: 'Agritech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '12',
+    id: '54',
     teamName: 'Synervate',
     teamLeader: 'Kolluru Kameswara Suryesh',
     teamLeaderEmail: 'suryakolluru22@gmail.com',
     collegeName: 'Amrita vishwa vidyapeetham, chennai',
-    domain: 'Agritech'
+    domain: 'Agritech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '13',
+    id: '55',
     teamName: 'Vajppp',
     teamLeader: 'Jay Shreeram Yeraballi',
     teamLeaderEmail: '8jayram4@gmail.com',
     collegeName: 'University College Of Engineering, Osmania University',
-    domain: 'Agritech'
+    domain: 'Agritech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '14',
+    id: '56',
     teamName: 'TrailBlazers',
     teamLeader: 'Vikaas Nalajala',
     teamLeaderEmail: 'vikaasnalajala@gmail.com',
     collegeName: 'CBIT',
-    domain: 'Agritech'
+    domain: 'Agritech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '15',
+    id: '57',
     teamName: 'harisampathbellam',
     teamLeader: 'Bellam Hari Sampath',
     teamLeaderEmail: 'harisampathbellam@gmail.com',
     collegeName: 'Mahindra University',
-    domain: 'Agritech'
+    domain: 'Agritech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '16',
+    id: '58',
     teamName: 'Null Pointers',
     teamLeader: 'Anshul Singh',
     teamLeaderEmail: 'bt24cs034@nitmz.ac.in',
     collegeName: 'National Institute Of Technology, Mizoram',
-    domain: 'Agritech'
+    domain: 'Agritech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '17',
@@ -147,7 +504,9 @@ const mockData: TeamData[] = [
     teamLeader: 'Navacharitha Sriramadasu',
     teamLeaderEmail: 'navacharithasriramadasu@gmail.com',
     collegeName: 'MVSR Engineering College',
-    domain: 'Agritech'
+    domain: 'Agritech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '18',
@@ -155,7 +514,9 @@ const mockData: TeamData[] = [
     teamLeader: 'Chethireddy Srikaran Reddy',
     teamLeaderEmail: 'mail2srikaran@gmail.com',
     collegeName: 'VNRVJIET',
-    domain: 'Agritech'
+    domain: 'Agritech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '19',
@@ -163,7 +524,9 @@ const mockData: TeamData[] = [
     teamLeader: 'Chinmanolla Gayathri',
     teamLeaderEmail: 'gayathrichinmanolla@gmail.com',
     collegeName: 'NEIL GOGTE INSTITUTE OF TECHNOLOGY',
-    domain: 'Agritech'
+    domain: 'Agritech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '20',
@@ -171,7 +534,9 @@ const mockData: TeamData[] = [
     teamLeader: 'Hemanth balaji',
     teamLeaderEmail: 'hemanthbalaji021@gmail.com',
     collegeName: 'vasavi college of engineering',
-    domain: 'Agritech'
+    domain: 'Agritech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '21',
@@ -179,17 +544,21 @@ const mockData: TeamData[] = [
     teamLeader: 'KENCHE SRIKAR',
     teamLeaderEmail: '24211a7257@bvrit.ac.in',
     collegeName: 'Bv raju institute of technology',
-    domain: 'Agritech'
+    domain: 'Agritech',
+    round: 'Round 1',
+    cityState: ''
   },
 
-  // Cybersecurity Results
+  // Round 1 Cybersecurity Results
   {
     id: '22',
     teamName: 'MUGEN',
     teamLeader: 'Amrabad Jaideep',
     teamLeaderEmail: 'amarabadjayadeep@gmail.com',
     collegeName: 'Nalla Narasimha Reddy Education Society\'s Group of Institutions',
-    domain: 'Cybersecurity'
+    domain: 'Cybersecurity',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '23',
@@ -197,7 +566,9 @@ const mockData: TeamData[] = [
     teamLeader: 'Swathi Chippa',
     teamLeaderEmail: 'chippaswathi8@gmail.com',
     collegeName: 'Chaitanya Bharathi Institute of Technology, Hyderabad',
-    domain: 'Cybersecurity'
+    domain: 'Cybersecurity',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '24',
@@ -205,7 +576,9 @@ const mockData: TeamData[] = [
     teamLeader: 'ADONI INDIRA',
     teamLeaderEmail: '239X1A3301@gprec.ac.in',
     collegeName: 'G. Pulla Reddy Engineering College (Autonomous)',
-    domain: 'Cybersecurity'
+    domain: 'Cybersecurity',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '25',
@@ -213,7 +586,9 @@ const mockData: TeamData[] = [
     teamLeader: 'Nangunuri Rishwitha',
     teamLeaderEmail: 'nangunuririshwitha@gmail.com',
     collegeName: 'Gokaraju Rangaraju Institute of Engineering & Technology',
-    domain: 'Cybersecurity'
+    domain: 'Cybersecurity',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '26',
@@ -221,7 +596,9 @@ const mockData: TeamData[] = [
     teamLeader: 'Thallapalli Suhaas Rao',
     teamLeaderEmail: 'suhaasrao28@gmail.com',
     collegeName: 'Vasavi College of Engineering',
-    domain: 'Cybersecurity'
+    domain: 'Cybersecurity',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '27',
@@ -229,7 +606,9 @@ const mockData: TeamData[] = [
     teamLeader: 'NITISH J M',
     teamLeaderEmail: 'nitishinwork@gmail.com',
     collegeName: 'SRI KRISHNA COLLEGE OF ENGINEERING AND TECHNOLOGY',
-    domain: 'Cybersecurity'
+    domain: 'Cybersecurity',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '28',
@@ -237,7 +616,9 @@ const mockData: TeamData[] = [
     teamLeader: 'Vishwaruban S',
     teamLeaderEmail: 'vishwarubanofficial@gmail.com',
     collegeName: 'Sri Krishna College of Engineering and Technology',
-    domain: 'Cybersecurity'
+    domain: 'Cybersecurity',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '29',
@@ -245,7 +626,9 @@ const mockData: TeamData[] = [
     teamLeader: 'Vasist K',
     teamLeaderEmail: 'workvasist@gmail.com',
     collegeName: 'Vasavi College of Engineering',
-    domain: 'Cybersecurity'
+    domain: 'Cybersecurity',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '30',
@@ -253,7 +636,9 @@ const mockData: TeamData[] = [
     teamLeader: 'Shirisha',
     teamLeaderEmail: 'mangenapallyshirisha123@gmail.com',
     collegeName: 'Vasavi College of Engineering',
-    domain: 'Cybersecurity'
+    domain: 'Cybersecurity',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '31',
@@ -261,7 +646,9 @@ const mockData: TeamData[] = [
     teamLeader: 'Varshini chilukuru',
     teamLeaderEmail: 'Chilukuruvarshini1405@gmail.com',
     collegeName: 'Vasavi college of engineering',
-    domain: 'Cybersecurity'
+    domain: 'Cybersecurity',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '32',
@@ -269,7 +656,9 @@ const mockData: TeamData[] = [
     teamLeader: 'Deepika Penta',
     teamLeaderEmail: 'deepikapenta@yahoo.com',
     collegeName: 'Vasavi College of Engineering',
-    domain: 'Cybersecurity'
+    domain: 'Cybersecurity',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '33',
@@ -277,7 +666,9 @@ const mockData: TeamData[] = [
     teamLeader: 'Pendyala Uday Kumar',
     teamLeaderEmail: 'udaykumarpendyalalikki@gmail.com',
     collegeName: 'Vasavi college of engineering',
-    domain: 'Cybersecurity'
+    domain: 'Cybersecurity',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '34',
@@ -285,7 +676,9 @@ const mockData: TeamData[] = [
     teamLeader: 'ANIL KUMAR B.V',
     teamLeaderEmail: 'ch.anilkumar984@gmail.com',
     collegeName: 'Raju Institute of Technology',
-    domain: 'Cybersecurity'
+    domain: 'Cybersecurity',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '35',
@@ -293,7 +686,9 @@ const mockData: TeamData[] = [
     teamLeader: 'Helona Aruri',
     teamLeaderEmail: 'helona0211@gmail.com',
     collegeName: 'Keshav Memorial Engineering College',
-    domain: 'Cybersecurity'
+    domain: 'Cybersecurity',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '36',
@@ -301,7 +696,9 @@ const mockData: TeamData[] = [
     teamLeader: 'Sri Aakarsh Nekkanti',
     teamLeaderEmail: 'sriaakarshnekkanti@gmail.com',
     collegeName: 'Vasavi College Of Engineering',
-    domain: 'Cybersecurity'
+    domain: 'Cybersecurity',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '37',
@@ -309,7 +706,9 @@ const mockData: TeamData[] = [
     teamLeader: 'Vikranth Tumma',
     teamLeaderEmail: 'vikrantht32@gmail.com',
     collegeName: 'Vasavi College Of Engineering',
-    domain: 'Cybersecurity'
+    domain: 'Cybersecurity',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '38',
@@ -317,7 +716,9 @@ const mockData: TeamData[] = [
     teamLeader: 'Mohammed Shahzaman',
     teamLeaderEmail: '23h51a04n3@cmrcet.ac.in',
     collegeName: 'CMRCET',
-    domain: 'Cybersecurity'
+    domain: 'Cybersecurity',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '39',
@@ -325,7 +726,9 @@ const mockData: TeamData[] = [
     teamLeader: 'Bhavesh Dharewa',
     teamLeaderEmail: 'bhaveshd7701@gmail.com',
     collegeName: 'Vasavi College of Engineering',
-    domain: 'Cybersecurity'
+    domain: 'Cybersecurity',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '40',
@@ -333,7 +736,9 @@ const mockData: TeamData[] = [
     teamLeader: 'Gourishetti Jayaram',
     teamLeaderEmail: 'gourishettijayaram123@gmail.com',
     collegeName: 'Vasavi College Of Engineering',
-    domain: 'Cybersecurity'
+    domain: 'Cybersecurity',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '41',
@@ -341,7 +746,9 @@ const mockData: TeamData[] = [
     teamLeader: 'Rakesh Manthri',
     teamLeaderEmail: 'manthrirs06@gmail.com',
     collegeName: 'Vasavi College of Engineering',
-    domain: 'Cybersecurity'
+    domain: 'Cybersecurity',
+    round: 'Round 1',
+    cityState: ''
   },
   {
     id: '42',
@@ -349,360 +756,451 @@ const mockData: TeamData[] = [
     teamLeader: 'AKSHITHA REDDY',
     teamLeaderEmail: 'akshithareddy2405@gmail.com',
     collegeName: 'VASAVI COLLEGE OF ENGINEERING',
-    domain: 'Cybersecurity'
+    domain: 'Cybersecurity',
+    round: 'Round 1',
+    cityState: ''
   },
 
-  // HealthTech Results
+  // Round 1 HealthTech Results
   {
-    id: '43',
+    id: '63',
     teamName: 'Vyoma',
     teamLeader: 'Anuja Kuchipudi',
     teamLeaderEmail: 'kuchipudianuja3@gmail.com',
     collegeName: 'Vasavi College of Engineering',
-    domain: 'HealthTech'
+    domain: 'HealthTech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '44',
+    id: '64',
     teamName: 'Moon Knight (old team name: 24215A3206)',
     teamLeader: 'Sanda Vinay',
     teamLeaderEmail: '24215a3206@bvrit.ac.in',
     collegeName: 'BVRIT Narsapur',
-    domain: 'HealthTech'
+    domain: 'HealthTech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '45',
+    id: '65',
     teamName: 'RUN TIME TERRORS',
     teamLeader: 'Kumarkalava Mohammed Sowban',
     teamLeaderEmail: '249xa33106@gprec.ac.in',
     collegeName: 'G.Pulla Reddy Engineering College',
-    domain: 'HealthTech'
+    domain: 'HealthTech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '46',
+    id: '66',
     teamName: 'Equilibria',
     teamLeader: 'A S Sreeram Varun Sharma',
     teamLeaderEmail: 'varunsreeram29@gmail.com',
     collegeName: 'Vasavi College Of Engineering',
-    domain: 'HealthTech'
+    domain: 'HealthTech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '47',
+    id: '67',
     teamName: 'Team binary',
     teamLeader: 'Saatvik Cheruku',
     teamLeaderEmail: 'saatvikcheruku@gmail.com',
     collegeName: 'Lovely Professional University, Punjab',
-    domain: 'HealthTech'
+    domain: 'HealthTech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '48',
+    id: '68',
     teamName: 'House Targaryen',
     teamLeader: 'P.Pardiv Sai Charan',
     teamLeaderEmail: 'pardeevpatti08@gmail.com',
     collegeName: 'Vasavi College of Engineering,Hyderabad',
-    domain: 'HealthTech'
+    domain: 'HealthTech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '49',
+    id: '69',
     teamName: 'Tech phantoms',
     teamLeader: 'Pulumamidi Vinay Kumar',
     teamLeaderEmail: '239x1a33a6@gprec.ac.in',
     collegeName: 'G. Pulla Reddy Engineering College',
-    domain: 'HealthTech'
+    domain: 'HealthTech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '50',
+    id: '70',
     teamName: 'Sriram Girish Chandran',
     teamLeader: 'Sriram Girish Chandran',
     teamLeaderEmail: 'sriramgirishc@gmail.com',
     collegeName: 'Sri Krishna College of Engineering and Technology - SKCET',
-    domain: 'HealthTech'
+    domain: 'HealthTech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '51',
+    id: '71',
     teamName: 'The Debuggers',
     teamLeader: 'Mohammad Afrid Pasha',
     teamLeaderEmail: 'afridpasha1983@gmail.com',
     collegeName: 'Vasavi College of Engineering, Hyderabad',
-    domain: 'HealthTech'
+    domain: 'HealthTech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '52',
+    id: '72',
     teamName: 'TechTeaMakers',
     teamLeader: 'Sri Vaishnavi',
     teamLeaderEmail: 'bondugulasrivaishnavi@gmail.com',
     collegeName: 'VNR VJIET',
-    domain: 'HealthTech'
+    domain: 'HealthTech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '53',
+    id: '73',
     teamName: 'RedBull Coding',
     teamLeader: 'Sirna Sai Vishnu',
     teamLeaderEmail: 'sirna.vishnu05@gmail.com',
     collegeName: 'Vasavi College Of Engineering',
-    domain: 'HealthTech'
+    domain: 'HealthTech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '54',
+    id: '74',
     teamName: 'POKURI SRIRAM',
     teamLeader: 'POKURI SRIRAM',
     teamLeaderEmail: 'pokurisriram55@gmail.com',
     collegeName: 'G Pulla Reddy Engineering College',
-    domain: 'HealthTech'
+    domain: 'HealthTech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '55',
+    id: '75',
     teamName: '$a✓ishk@²r',
     teamLeader: 'Thirukovela Moulya',
     teamLeaderEmail: 'tmoulya2707@gmail.com',
     collegeName: 'Chaitanya Bharathi Institute Of Technology',
-    domain: 'HealthTech'
+    domain: 'HealthTech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '56',
+    id: '76',
     teamName: 'm.saisushanth21',
     teamLeader: 'SAI SUSHANTH MOTURI',
     teamLeaderEmail: 'm.saisushanth21@gmail.com',
     collegeName: 'CBIT',
-    domain: 'HealthTech'
+    domain: 'HealthTech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '57',
+    id: '77',
     teamName: 'MOOD VITALS',
     teamLeader: 'Kaipa Chaturya Reddy',
     teamLeaderEmail: 'kaipachaturyareddy7275@gmail.com',
     collegeName: 'Vasavi College of Engineering',
-    domain: 'HealthTech'
+    domain: 'HealthTech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '58',
+    id: '78',
     teamName: 'Tech Champions',
     teamLeader: 'SADIYA MAHEEN SIDDIQUI',
     teamLeaderEmail: 'adibasadiya9502@gmail.com',
     collegeName: 'University College of Engineering - Osmania University',
-    domain: 'HealthTech'
+    domain: 'HealthTech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '59',
+    id: '79',
     teamName: 'Abcd',
     teamLeader: 'Panjugula Nitin Kumar Goud',
     teamLeaderEmail: 'nithinkumargoud1234@gmail.com',
     collegeName: 'Vasavi College of Engineering',
-    domain: 'HealthTech'
+    domain: 'HealthTech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '60',
+    id: '80',
     teamName: 'The TEAM',
     teamLeader: 'K.SaiRevanth',
     teamLeaderEmail: 'sairevanth040@gmail.com',
     collegeName: 'Vasavi College of Engineering',
-    domain: 'HealthTech'
+    domain: 'HealthTech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '61',
+    id: '81',
     teamName: 'Bridge things',
     teamLeader: 'Vaibhav Shahi',
     teamLeaderEmail: 'theshahivaibhav@gmail.com',
     collegeName: 'Vasavi College of Engineering',
-    domain: 'HealthTech'
+    domain: 'HealthTech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '62',
+    id: '82',
     teamName: 'Krusyatri',
-    teamLeader: 'Laasya CR',
+    teamLeader: 'Laasya',
     teamLeaderEmail: 'mlaasy16@gmail.com',
-    collegeName: 'RAO AIMSCS',
-    domain: 'HealthTech'
+    collegeName: 'CR RAO AIMSCS',
+    domain: 'HealthTech',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '63',
+    id: '83',
     teamName: 'Team Y',
     teamLeader: 'Malluri Vikas',
     teamLeaderEmail: 'vikasmalluri@gmail.com',
     collegeName: 'Mahatma Gandhi Institute of Technology',
-    domain: 'HealthTech'
+    domain: 'HealthTech',
+    round: 'Round 1',
+    cityState: ''
   },
 
-  // Remote Sensing, Environment & Sustainable Development Results
+  // Round 1 Remote Sensing Results
   {
-    id: '64',
+    id: '84',
     teamName: 'WE',
     teamLeader: 'Rathod Rupali',
     teamLeaderEmail: 'rupalirathod026@gmail.com',
     collegeName: 'Vasavi College Of Engineering',
-    domain: 'Remote Sensing'
+    domain: 'Remote Sensing',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '65',
+    id: '85',
     teamName: 'Sentinelx',
     teamLeader: 'Hrithik Tadepalli',
     teamLeaderEmail: 'tadepallihrithik@gmail.com',
     collegeName: 'Vasavi college of engineering',
-    domain: 'Remote Sensing'
+    domain: 'Remote Sensing',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '66',
+    id: '86',
     teamName: 'UrbanSentinels',
     teamLeader: 'Nazia',
     teamLeaderEmail: 'mdnazia1467@gmail.com',
     collegeName: 'Vasavi College of Engineering',
-    domain: 'Remote Sensing'
+    domain: 'Remote Sensing',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '67',
+    id: '87',
     teamName: 'Rural Development',
     teamLeader: 'Gardas Akash',
     teamLeaderEmail: 'akash39g@gmail.com',
     collegeName: 'CVR College of Engineering',
-    domain: 'Remote Sensing'
+    domain: 'Remote Sensing',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '68',
+    id: '88',
     teamName: 'OPS',
     teamLeader: 'Chakshu Varma Akkala',
     teamLeaderEmail: 'chakshu.akkala@gmail.com',
     collegeName: 'Vasavi College of Engineeering',
-    domain: 'Remote Sensing'
+    domain: 'Remote Sensing',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '69',
+    id: '89',
     teamName: 'charan and team',
     teamLeader: 'K Sri Charan Goud',
     teamLeaderEmail: 'katamonisricharan@gmail.com',
     collegeName: 'University College of Engineering, Osmania University (UCEOU)',
-    domain: 'Remote Sensing'
+    domain: 'Remote Sensing',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '70',
+    id: '90',
     teamName: 'Team Sharanga',
     teamLeader: 'Gummadi Karuna Sree',
     teamLeaderEmail: 'karunasreegummadi04@gmail.com',
     collegeName: 'Vasavi College of Engineering',
-    domain: 'Remote Sensing'
+    domain: 'Remote Sensing',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '71',
+    id: '91',
     teamName: 'Code Crusaders',
     teamLeader: 'M Bhuvana',
     teamLeaderEmail: 'miriyalabhuvana14@gmail.com',
     collegeName: 'Vasavi College Of Engineering',
-    domain: 'Remote Sensing'
+    domain: 'Remote Sensing',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '72',
+    id: '92',
     teamName: '921132dhanasrisoli',
     teamLeader: 'Dhana Sri Soli',
     teamLeaderEmail: '921132dhanasrisoli@gmail.com',
     collegeName: 'Chaitanya Bharathi Institute of Technology',
-    domain: 'Remote Sensing'
+    domain: 'Remote Sensing',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '73',
+    id: '93',
     teamName: 'Kanaparthi Mohan Reddy',
     teamLeader: 'Kanaparthi Mohan Reddy',
     teamLeaderEmail: '239x1a3247@gprec.ac.in',
     collegeName: 'G Pulla Reddy Engineering College',
-    domain: 'Remote Sensing'
+    domain: 'Remote Sensing',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '74',
+    id: '94',
     teamName: 'KeyNova',
     teamLeader: 'Lathika',
     teamLeaderEmail: 'lathikasasimanikandan@gmail.com',
     collegeName: 'Karpagam College of Engineering',
-    domain: 'Remote Sensing'
+    domain: 'Remote Sensing',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '75',
+    id: '95',
     teamName: 'NoCode Devs',
     teamLeader: 'J.Akhil',
     teamLeaderEmail: 'akhil.j12314@gmail.com',
     collegeName: 'Vasavi College Of Engineering',
-    domain: 'Remote Sensing'
+    domain: 'Remote Sensing',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '76',
+    id: '96',
     teamName: 'Vasuki',
     teamLeader: 'M Srikar Rao',
     teamLeaderEmail: 'mahendarkarsrikarrao@gmail.com',
     collegeName: 'Vasavi College of Engineering',
-    domain: 'Remote Sensing'
+    domain: 'Remote Sensing',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '77',
+    id: '97',
     teamName: 'Continuum',
     teamLeader: 'Jasmitha V',
     teamLeaderEmail: 'v.jasmitha143@gmail.com',
     collegeName: 'Vasavi College of Engineering',
-    domain: 'Remote Sensing'
+    domain: 'Remote Sensing',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '78',
+    id: '98',
     teamName: 'Runtime Rebel\'s',
     teamLeader: 'Tupakula Siva Shankar',
     teamLeaderEmail: 'tupakulashiva13@gmail.com',
     collegeName: 'vasavi college of Engineering',
-    domain: 'Remote Sensing'
+    domain: 'Remote Sensing',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '79',
+    id: '99',
     teamName: 'Runtime Terror',
     teamLeader: 'Jakkampudi Gowtam Sai',
     teamLeaderEmail: 'gowtamsai911@gmail.com',
     collegeName: 'Vasavi College of Engineering',
-    domain: 'Remote Sensing'
+    domain: 'Remote Sensing',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '80',
+    id: '100',
     teamName: 'Geo Vision',
     teamLeader: 'Gantyala Naveen',
     teamLeaderEmail: 'gantyalanaveen1234@gmail.com',
     collegeName: 'Vasavi College of Engineering',
-    domain: 'Remote Sensing'
+    domain: 'Remote Sensing',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '81',
+    id: '101',
     teamName: 'Crusaders',
     teamLeader: 'Shivani',
     teamLeaderEmail: 'eshivani07@gmail.com',
     collegeName: 'Vasavi College of Enginnerng',
-    domain: 'Remote Sensing'
+    domain: 'Remote Sensing',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '82',
+    id: '102',
     teamName: 'Hackstreet',
-    teamLeader: 'keerthana b',
+    teamLeader: 'keerthana',
     teamLeaderEmail: 'bkeerthana2211@gmail.com',
     collegeName: 'Vasavi College of Enginnerng',
-    domain: 'Remote Sensing'
+    domain: 'Remote Sensing',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '83',
+    id: '103',
     teamName: 'Debugging therapists',
     teamLeader: 'Sriram S',
     teamLeaderEmail: 'sriramvinu2007@gmail.com',
     collegeName: 'Sri Krishna college of engineering and technology',
-    domain: 'Remote Sensing'
+    domain: 'Remote Sensing',
+    round: 'Round 1',
+    cityState: ''
   },
   {
-    id: '84',
+    id: '104',
     teamName: 'Sakha',
     teamLeader: 'Gudipally Nishanth reddy',
     teamLeaderEmail: 'gnishanthreddy0513@gmail.com',
     collegeName: 'Vasavi College of Engineering',
-    domain: 'Remote Sensing'
+    domain: 'Remote Sensing',
+    round: 'Round 1',
+    cityState: ''
   }
 ]
 
 const domains = ['All', 'Agritech', 'Cybersecurity', 'HealthTech', 'Remote Sensing']
+const rounds = ['Round 2 Finalists', 'Round 1']
 
 export default function ResultsPage() {
   const [selectedDomain, setSelectedDomain] = useState('All')
+  const [selectedRound, setSelectedRound] = useState('Round 2 Finalists') // Default to Round 2
   const [searchTerm, setSearchTerm] = useState('')
 
   const filteredData = useMemo(() => {
     let filtered = mockData
     
-    // Filter by domain
+    // Always filter by round (no "All" option)
+    filtered = filtered.filter(team => team.round === selectedRound)
+    
+    // Filter by domain (if not "All")
     if (selectedDomain !== 'All') {
       filtered = filtered.filter(team => team.domain === selectedDomain)
     }
@@ -717,7 +1215,7 @@ export default function ResultsPage() {
     }
     
     return filtered
-  }, [selectedDomain, searchTerm])
+  }, [selectedDomain, selectedRound, searchTerm])
 
   return (
     <div className="results-page">
@@ -729,7 +1227,7 @@ export default function ResultsPage() {
               <Home size={20} />
               <span>Home</span>
             </a>
-            <h1 className="page-title">Tech Savishkaar 4.0 - First Round Results</h1>
+            <h1 className="page-title">Tech Savishkaar 4.0 - Results</h1>
           </div>
         </div>
       </header>
@@ -742,8 +1240,8 @@ export default function ResultsPage() {
         className="results-section"
       >
         <div className="container">
-          {/* Search Input */}
-          <div className="search-container">
+          {/* Search and Filter Bar - Combined */}
+          <div className="search-filter-container">
             <div className="search-input-wrapper">
               <Search size={18} className="search-icon" />
               <input
@@ -754,22 +1252,35 @@ export default function ResultsPage() {
                 className="search-input"
               />
             </div>
+            <div className="domain-dropdown">
+              <select 
+                value={selectedDomain} 
+                onChange={(e) => setSelectedDomain(e.target.value)}
+                className="domain-select"
+              >
+                {domains.map(domain => (
+                  <option key={domain} value={domain}>
+                    {domain}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
           
-          {/* Domain Filter */}
-          <div className="filter-container">
-            <div className="filter-header">
-              <Filter size={20} />
-              <h3>Filter by Domain</h3>
+          {/* Round Filter - Compact Pills */}
+          <div className="round-filter-pills">
+            <div className="round-filter-label">
+              <Filter size={18} />
+              <span>Select Round:</span>
             </div>
-            <div className="domain-filters">
-              {domains.map(domain => (
+            <div className="round-pills">
+              {rounds.map(round => (
                 <button
-                  key={domain}
-                  className={`domain-btn ${selectedDomain === domain ? 'active' : ''}`}
-                  onClick={() => setSelectedDomain(domain)}
+                  key={round}
+                  className={`round-pill ${selectedRound === round ? 'active' : ''}`}
+                  onClick={() => setSelectedRound(round)}
                 >
-                  {domain}
+                  {round}
                 </button>
               ))}
             </div>
@@ -811,6 +1322,18 @@ export default function ResultsPage() {
                         <span>Domain</span>
                       </div>
                     </th>
+                    <th>
+                      <div className="table-header">
+                        <Building size={16} />
+                        <span>City & State</span>
+                      </div>
+                    </th>
+                    <th>
+                      <div className="table-header">
+                        <Filter size={16} />
+                        <span>Status</span>
+                      </div>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -832,6 +1355,16 @@ export default function ResultsPage() {
                       <td className="college">{team.collegeName}</td>
                       <td>
                         <span className="domain-badge">{team.domain}</span>
+                      </td>
+                      <td className="college">{team.cityState}</td>
+                      <td>
+                        {team.round === 'Round 1' ? (
+                          <span className="prefinalist-badge">Prefinalist</span>
+                        ) : team.isWaitingList ? (
+                          <span className="waiting-list-badge">Waiting List</span>
+                        ) : (
+                          <span className="finalist-badge">Finalist</span>
+                        )}
                       </td>
                     </motion.tr>
                   ))}
