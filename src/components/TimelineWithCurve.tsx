@@ -30,17 +30,17 @@ export default function TimelineWithCurve() {
       isCurrent: true
     },
     {
-      date: '1st Feb - 08 Feb 2026',
+      date: '7th Feb - 12 Feb 2026',
       title: 'Idea Submission',
       description: 'Submit your detailed idea along with a video demonstration of your working prototype, highlighting its innovation, feasibility, and potential impact.'
     },
     {
-      date: '12th Feb 2026',
+      date: 'To Be Announced',
       title: 'Final Round',
       description: 'Shortlisted teams will present their projects to a panel of judges. The top teams will be selected based on innovation, technical complexity, and presentation skills.'
     },
     {
-      date: '21st Feb 2026',
+      date: 'To Be Announced',
       title: 'Hackathon Day',
       description: 'Finalists will work on their projects and present their solutions. Winners will be announced at the end of the day.'
     }

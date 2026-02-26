@@ -14,6 +14,218 @@ interface TeamData {
   isWaitingList?: boolean
 }
 
+interface WinnerData {
+  id: string
+  teamName: string
+  teamLeader: string
+  instituteName: string
+  prizeDetails: string
+  prizeMoney: string
+  accountHolderName: string
+  accountNumber: string
+  bankIFSCCode: string
+  bankName: string
+  branch: string
+  panNumber: string
+  verified: string
+  theme: string
+}
+
+const winnersData: WinnerData[] = [
+  {
+    id: '1',
+    teamName: 'Synervate',
+    teamLeader: 'Kolluru Kameswara Suryesh',
+    instituteName: 'Amrita Vishwa Vidyaapeetham, Chennai',
+    prizeDetails: 'First Prize worth of Rs. 18000.00',
+    prizeMoney: '18000',
+    accountHolderName: 'KAMESWARA SURYESH K',
+    accountNumber: '4913155000013434',
+    bankIFSCCode: 'KVBL0004913',
+    bankName: 'KARUR VYSYA BANK',
+    branch: 'VIZIANAGARAM FORT BRANCH',
+    panNumber: 'NA',
+    verified: 'YES',
+    theme: 'AgriTech'
+  },
+  {
+    id: '2',
+    teamName: 'CodeBlooded',
+    teamLeader: 'B.Hari Sampath',
+    instituteName: 'Mahindra University',
+    prizeDetails: 'Second Prize worth of Rs. 8000.00',
+    prizeMoney: '8000',
+    accountHolderName: 'Bellam Hari Sampath',
+    accountNumber: '50100834544620',
+    bankIFSCCode: 'HDFC0000545',
+    bankName: 'HDFC',
+    branch: 'Hitch city',
+    panNumber: 'ISUPB4984C',
+    verified: 'YES',
+    theme: 'AgriTech'
+  },
+  {
+    id: '3',
+    teamName: 'Spirit',
+    teamLeader: 'Chittireddy Ajith Reddy',
+    instituteName: 'Vardhaman College of Engineering, Hyderabad',
+    prizeDetails: 'Consolation Prize Worth of Rs. 5000.00',
+    prizeMoney: '5000',
+    accountHolderName: 'Chittireddy Ajith Reddy',
+    accountNumber: '42088421924',
+    bankIFSCCode: 'SBIN0005325',
+    bankName: 'STATE BANK OF INDIA',
+    branch: 'SHAYAMPET',
+    panNumber: 'GOTPR6642A',
+    verified: 'YES',
+    theme: 'AgriTech'
+  },
+  {
+    id: '4',
+    teamName: 'Team KanyaRasi',
+    teamLeader: 'Kanaparthi Mohan Reddy',
+    instituteName: 'G Pulla Reddy Engineering College, Kurnool',
+    prizeDetails: 'First Prize worth of Rs. 18000.00',
+    prizeMoney: '18000',
+    accountHolderName: 'Mr. Kanaparthi Mohan Reddy',
+    accountNumber: '44178567139',
+    bankIFSCCode: 'SBIN0010600',
+    bankName: 'State Bank of India',
+    branch: 'Proddatur Town Branch',
+    panNumber: 'QCOPK2388M',
+    verified: 'YES',
+    theme: 'Remote Sensing - Environment & Sustainable Development'
+  },
+  {
+    id: '5',
+    teamName: 'Runtime Terror',
+    teamLeader: 'Gowtam Sai Jakkampudi',
+    instituteName: 'Vasavi College of Engineering, Hyderabad',
+    prizeDetails: 'Second Prize worth of Rs. 8000.00',
+    prizeMoney: '8000',
+    accountHolderName: 'Jakkampudi Gowtam Sai',
+    accountNumber: '42681641049',
+    bankIFSCCode: 'SBIN0030488',
+    bankName: 'State Bank of India',
+    branch: 'Madinaguda, Hyderabad',
+    panNumber: 'RYPPS1779J',
+    verified: 'YES',
+    theme: 'Remote Sensing - Environment & Sustainable Development'
+  },
+  {
+    id: '6',
+    teamName: 'Continuum',
+    teamLeader: 'Jasmitha Veeramachaneni',
+    instituteName: 'Vasavi College of Engineering, Hyderabad',
+    prizeDetails: 'Consolation Prize Worth of Rs. 5000.00',
+    prizeMoney: '5000',
+    accountHolderName: 'Jasmitha Veeramachaneni',
+    accountNumber: '110294925876',
+    bankIFSCCode: 'CNRB0013059',
+    bankName: 'Canara Bank',
+    branch: 'Vasavi College of Engineering',
+    panNumber: 'NA',
+    verified: 'YES',
+    theme: 'Remote Sensing - Environment & Sustainable Development'
+  },
+  {
+    id: '7',
+    teamName: 'Tech phantoms',
+    teamLeader: 'Pulumamidi Vinay Kumar',
+    instituteName: 'G. Pulla Reddy Engineering College',
+    prizeDetails: 'First Prize worth of Rs. 18000.00',
+    prizeMoney: '18000',
+    accountHolderName: 'P VINAY KUMAR',
+    accountNumber: '42185292919',
+    bankIFSCCode: 'SBIN0002743',
+    bankName: 'State bank of India (SBI)',
+    branch: 'ACB KODUMURU',
+    panNumber: 'CZRPV9400M',
+    verified: 'YES',
+    theme: 'HEALTHTECH'
+  },
+  {
+    id: '8',
+    teamName: 'Moon Knight',
+    teamLeader: 'Vinay sanda',
+    instituteName: 'BVRIT Narsapur, Medak',
+    prizeDetails: 'Second Prize worth of Rs. 8000.00',
+    prizeMoney: '8000',
+    accountHolderName: 'SANDA VINAY',
+    accountNumber: '455802120001627',
+    bankIFSCCode: 'UBIN0545589',
+    bankName: 'UNION BANK OF INDIA',
+    branch: 'Manakondur, KARIMNAGAR',
+    panNumber: 'QYEPS6291D',
+    verified: 'YES',
+    theme: 'HEALTHTECH'
+  },
+  {
+    id: '9',
+    teamName: 'CodeStorm',
+    teamLeader: 'P. Nitin Kumar Goud',
+    instituteName: 'Vasavi College of Engineering, Hyderabad',
+    prizeDetails: 'Consolation Prize Worth of Rs. 5000.00',
+    prizeMoney: '5000',
+    accountHolderName: 'PANJUGULA NITIN KUMAR GOUD',
+    accountNumber: '110140996415',
+    bankIFSCCode: 'CNRB0013099',
+    bankName: 'CANARA BANK',
+    branch: 'MANNEGUDA',
+    panNumber: 'NA',
+    verified: 'YES',
+    theme: 'HEALTHTECH'
+  },
+  {
+    id: '10',
+    teamName: 'Hackaholics',
+    teamLeader: 'Thallapalli Suhaas Rao',
+    instituteName: 'Vasavi College of Engineering, Hyderabad',
+    prizeDetails: 'First Prize worth of Rs. 18000.00',
+    prizeMoney: '18000',
+    accountHolderName: 'Thallapalli Suhaas Rao',
+    accountNumber: '778401000065',
+    bankIFSCCode: 'ICIC0007784',
+    bankName: 'ICICI Bank',
+    branch: 'Hyderabad - TNGOS Colony Branch',
+    panNumber: 'HDTPR1476L',
+    verified: 'YES',
+    theme: 'CYBERSECURITY'
+  },
+  {
+    id: '11',
+    teamName: 'Alpha Duo',
+    teamLeader: 'Akshitha Reddy',
+    instituteName: 'Vasavi College of Engineering, Hyderabad',
+    prizeDetails: 'Second Prize worth of Rs. 8000.00',
+    prizeMoney: '8000',
+    accountHolderName: 'SUDUGU AKSHITHA REDDY',
+    accountNumber: '88620100000809',
+    bankIFSCCode: 'BARB0CHILKA',
+    bankName: 'Bank of Baroda',
+    branch: 'Chilkanagar, Uppal branch',
+    panNumber: 'GAUPA6366M',
+    verified: 'YES',
+    theme: 'CYBERSECURITY'
+  },
+  {
+    id: '12',
+    teamName: 'ATHENS',
+    teamLeader: 'Bhavesh Dharewa',
+    instituteName: 'Vasavi College of Engineering, Hyderabad',
+    prizeDetails: 'Consolation Prize Worth of Rs. 5000.00',
+    prizeMoney: '5000',
+    accountHolderName: 'BHAVESH DHAREWA',
+    accountNumber: '33900100028851',
+    bankIFSCCode: 'BARB0HIMHYD',
+    bankName: 'Bank of Baroda',
+    branch: 'HIMAYAT NAGAR BRANCH',
+    panNumber: 'KOOPD6820R',
+    verified: 'YES',
+    theme: 'CYBERSECURITY'
+  }
+]
+
 const mockData: TeamData[] = [
   // Round 2 Finalists Results
   // Agritech Finalists
@@ -261,7 +473,7 @@ const mockData: TeamData[] = [
     id: 'r2-22',
     teamName: 'ATHENS',
     teamLeader: 'Bhavesh Dharewa',
-    teamLeaderEmail: 'bhaveshd7701@gmail.com',
+    teamLeaderEmail: 'bhaveshd77701@gmail.com',
     collegeName: 'Vasavi college of engineering',
     domain: 'Cybersecurity',
     round: 'Round 2 Finalists',
@@ -1193,6 +1405,7 @@ export default function ResultsPage() {
   const [selectedDomain, setSelectedDomain] = useState('All')
   const [selectedRound, setSelectedRound] = useState('Round 2 Finalists') // Default to Round 2
   const [searchTerm, setSearchTerm] = useState('')
+  const [showWinners] = useState(true)
 
   const filteredData = useMemo(() => {
     let filtered = mockData
@@ -1240,154 +1453,200 @@ export default function ResultsPage() {
         className="results-section"
       >
         <div className="container">
-          {/* Search and Filter Bar - Combined */}
-          <div className="search-filter-container">
-            <div className="search-input-wrapper">
-              <Search size={18} className="search-icon" />
-              <input
-                type="text"
-                placeholder="Search by team name, leader, or college..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="search-input"
-              />
-            </div>
-            <div className="domain-dropdown">
-              <select 
-                value={selectedDomain} 
-                onChange={(e) => setSelectedDomain(e.target.value)}
-                className="domain-select"
-              >
-                {domains.map(domain => (
-                  <option key={domain} value={domain}>
-                    {domain}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          
-          {/* Round Filter - Compact Pills */}
-          <div className="round-filter-pills">
-            <div className="round-filter-label">
-              <Filter size={18} />
-              <span>Select Round:</span>
-            </div>
-            <div className="round-pills">
-              {rounds.map(round => (
-                <button
-                  key={round}
-                  className={`round-pill ${selectedRound === round ? 'active' : ''}`}
-                  onClick={() => setSelectedRound(round)}
-                >
-                  {round}
-                </button>
-              ))}
-            </div>
-          </div>
+          {/* Winners Section */}
+          {showWinners && (
+            <div className="winners-section">
+              <h2 className="winners-title">🏆 Final Winners</h2>
 
-          {/* Results Table */}
-          <div className="table-container">
-            <div className="table-wrapper">
-              <table className="results-table">
-                <thead>
-                  <tr>
-                    <th>
-                      <div className="table-header">
-                        <Users size={16} />
-                        <span>Team Name</span>
-                      </div>
-                    </th>
-                    <th>
-                      <div className="table-header">
-                        <Users size={16} />
-                        <span>Team Leader</span>
-                      </div>
-                    </th>
-                    <th>
-                      <div className="table-header">
-                        <Mail size={16} />
-                        <span>Email</span>
-                      </div>
-                    </th>
-                    <th>
-                      <div className="table-header">
-                        <Building size={16} />
-                        <span>College</span>
-                      </div>
-                    </th>
-                    <th>
-                      <div className="table-header">
-                        <Filter size={16} />
-                        <span>Domain</span>
-                      </div>
-                    </th>
-                    <th>
-                      <div className="table-header">
-                        <Building size={16} />
-                        <span>City & State</span>
-                      </div>
-                    </th>
-                    <th>
-                      <div className="table-header">
-                        <Filter size={16} />
-                        <span>Status</span>
-                      </div>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredData.map((team, index) => (
-                    <motion.tr
-                      key={team.id}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.1 }}
-                      className="table-row"
-                    >
-                      <td className="team-name">{team.teamName}</td>
-                      <td className="team-leader">{team.teamLeader}</td>
-                      <td className="email">
-                        <a href={`mailto:${team.teamLeaderEmail}`} className="email-link">
-                          {team.teamLeaderEmail}
-                        </a>
-                      </td>
-                      <td className="college">{team.collegeName}</td>
-                      <td>
-                        <span className="domain-badge">{team.domain}</span>
-                      </td>
-                      <td className="college">{team.cityState}</td>
-                      <td>
-                        {team.round === 'Round 1' ? (
-                          <span className="prefinalist-badge">Prefinalist</span>
-                        ) : team.isWaitingList ? (
-                          <span className="waiting-list-badge">Waiting List</span>
-                        ) : (
-                          <span className="finalist-badge">Finalist</span>
-                        )}
-                      </td>
-                    </motion.tr>
+              {/* Winners Table */}
+              <div className="table-container">
+                <div className="table-wrapper winners-table-wrapper">
+                  <table className="results-table winners-table">
+                    <thead>
+                      <tr>
+                        <th>S No</th>
+                        <th>Team Name</th>
+                        <th>Team Leader Name</th>
+                        <th>Institute Name</th>
+                        <th>Prize Money</th>
+                        <th>Theme</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {winnersData.map((winner, index) => (
+                        <motion.tr
+                          key={winner.id}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.3, delay: index * 0.05 }}
+                          className="table-row winner-row"
+                        >
+                          <td>{index + 1}</td>
+                          <td className="team-name">{winner.teamName}</td>
+                          <td className="team-leader">{winner.teamLeader}</td>
+                          <td className="college">{winner.instituteName}</td>
+                          <td className="prize-money">₹{winner.prizeMoney}</td>
+                          <td className="theme-text">{winner.theme}</td>
+                        </motion.tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Regular Participants Section */}
+          <div className="participants-section">
+            {/* Search and Filter Bar - Combined */}
+            <div className="search-filter-container">
+              <div className="search-input-wrapper">
+                <Search size={18} className="search-icon" />
+                <input
+                  type="text"
+                  placeholder="Search by team name, leader, or college..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="search-input"
+                />
+              </div>
+              <div className="domain-dropdown">
+                <select 
+                  value={selectedDomain} 
+                  onChange={(e) => setSelectedDomain(e.target.value)}
+                  className="domain-select"
+                >
+                  {domains.map(domain => (
+                    <option key={domain} value={domain}>
+                      {domain}
+                    </option>
                   ))}
-                </tbody>
-              </table>
+                </select>
+              </div>
             </div>
             
-            {filteredData.length === 0 && (
-              <div className="no-results">
-                <p>No teams found for the selected domain.</p>
+            {/* Round Filter - Compact Pills */}
+            <div className="round-filter-pills">
+              <div className="round-filter-label">
+                <Filter size={18} />
+                <span>Select Round:</span>
               </div>
-            )}
-          </div>
-
-          {/* Summary Stats */}
-          <div className="stats-container">
-            <div className="stat-card">
-              <h4>Total Teams</h4>
-              <span className="stat-number">{filteredData.length}</span>
+              <div className="round-pills">
+                {rounds.map(round => (
+                  <button
+                    key={round}
+                    className={`round-pill ${selectedRound === round ? 'active' : ''}`}
+                    onClick={() => setSelectedRound(round)}
+                  >
+                    {round}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="stat-card">
-              <h4>Domains</h4>
-              <span className="stat-number">{selectedDomain === 'All' ? domains.length - 1 : 1}</span>
+
+            {/* Results Table */}
+            <div className="table-container">
+              <div className="table-wrapper">
+                <table className="results-table">
+                  <thead>
+                    <tr>
+                      <th>
+                        <div className="table-header">
+                          <Users size={16} />
+                          <span>Team Name</span>
+                        </div>
+                      </th>
+                      <th>
+                        <div className="table-header">
+                          <Users size={16} />
+                          <span>Team Leader</span>
+                        </div>
+                      </th>
+                      <th>
+                        <div className="table-header">
+                          <Mail size={16} />
+                          <span>Email</span>
+                        </div>
+                      </th>
+                      <th>
+                        <div className="table-header">
+                          <Building size={16} />
+                          <span>College</span>
+                        </div>
+                      </th>
+                      <th>
+                        <div className="table-header">
+                          <Filter size={16} />
+                          <span>Domain</span>
+                        </div>
+                      </th>
+                      <th>
+                        <div className="table-header">
+                          <Building size={16} />
+                          <span>City & State</span>
+                        </div>
+                      </th>
+                      <th>
+                        <div className="table-header">
+                          <Filter size={16} />
+                          <span>Status</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredData.map((team, index) => (
+                      <motion.tr
+                        key={team.id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3, delay: index * 0.1 }}
+                        className="table-row"
+                      >
+                        <td className="team-name">{team.teamName}</td>
+                        <td className="team-leader">{team.teamLeader}</td>
+                        <td className="email">
+                          <a href={`mailto:${team.teamLeaderEmail}`} className="email-link">
+                            {team.teamLeaderEmail}
+                          </a>
+                        </td>
+                        <td className="college">{team.collegeName}</td>
+                        <td>
+                          <span className="domain-badge">{team.domain}</span>
+                        </td>
+                        <td className="college">{team.cityState}</td>
+                        <td>
+                          {team.round === 'Round 1' ? (
+                            <span className="prefinalist-badge">Prefinalist</span>
+                          ) : team.isWaitingList ? (
+                            <span className="waiting-list-badge">Waiting List</span>
+                          ) : (
+                            <span className="finalist-badge">Finalist</span>
+                          )}
+                        </td>
+                      </motion.tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              
+              {filteredData.length === 0 && (
+                <div className="no-results">
+                  <p>No teams found for the selected domain.</p>
+                </div>
+              )}
+            </div>
+
+            {/* Summary Stats */}
+            <div className="stats-container">
+              <div className="stat-card">
+                <h4>Total Teams</h4>
+                <span className="stat-number">{filteredData.length}</span>
+              </div>
+              <div className="stat-card">
+                <h4>Domains</h4>
+                <span className="stat-number">{selectedDomain === 'All' ? domains.length - 1 : 1}</span>
+              </div>
             </div>
           </div>
         </div>

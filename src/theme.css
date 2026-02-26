@@ -6253,3 +6253,112 @@ textarea:focus {
   .hex:nth-child(odd) { transform: translateY(12px); }
 }
 
+/* Winners Section Styles */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #22d3ee;
+  margin: 0;
+}
+
+.toggle-btn {
+  padding: 0.5rem 1rem;
+  background: rgba(167, 139, 250, 0.2);
+  border: 1px solid rgba(167, 139, 250, 0.4);
+  border-radius: 6px;
+  color: #a78bfa;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.toggle-btn:hover {
+  background: rgba(167, 139, 250, 0.3);
+  transform: translateY(-1px);
+}
+
+.winners-section {
+  margin-bottom: 3rem;
+}
+
+.winners-table-wrapper {
+  max-width: 100%;
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.winners-table {
+  min-width: 600px;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+.winners-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #22d3ee;
+  margin: 0 0 2rem 0;
+  text-align: center;
+}
+
+.winner-row {
+  background: rgba(34, 211, 238, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.winner-row:hover {
+  background: rgba(34, 211, 238, 0.1);
+}
+
+.prize-money {
+  font-weight: 600;
+  color: #10b981;
+  font-family: 'Lato', sans-serif;
+}
+
+.theme-text {
+  color: #a78bfa;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.participants-section {
+  margin-top: 2rem;
+}
+
+/* Responsive styles for winners section */
+@media (max-width: 768px) {
+  .winners-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .winners-table {
+    min-width: 450px;
+  }
+}
+
+@media (max-width: 640px) {
+  .winners-table {
+    min-width: 400px;
+  }
+  
+  .winners-title {
+    font-size: 1.3rem;
+  }
+}
+

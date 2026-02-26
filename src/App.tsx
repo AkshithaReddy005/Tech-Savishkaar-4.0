@@ -1690,8 +1690,8 @@ export default function App() {
             <div className="timeline-road">
               {[
                 { title: 'Coding & Ideation Round', date: '1st Feb 2026', mode: 'Online', desc: 'Test your coding skills and showcase your innovative thinking through a coding challenge. Keep your tech stack and project abstract ready to upload immediately after the test..' },
-                { title: 'Idea Submission', date: '1st Feb – 08 Feb 2026', mode: 'Online', desc: 'Submit your detailed idea along with a video demonstration of your working prototype, highlighting its innovation, feasibility, and potential impact.' },
-                { title: 'Build & Present Prototype', date: '21 Feb 2026', mode: 'Offline', desc: 'Present your complete and functional prototype before the jury panel to demonstrate your solution\'s real-world applicability and technical execution.' },
+                { title: 'Idea Submission', date: '7th Feb – 12 Feb 2026', mode: 'Online', desc: 'Submit your detailed idea along with a video demonstration of your working prototype, highlighting its innovation, feasibility, and potential impact.' },
+                { title: 'Build & Present Prototype', date: 'To Be Announced', mode: 'Offline', desc: 'Present your complete and functional prototype before the jury panel to demonstrate your solution\'s real-world applicability and technical execution.' },
               ].map((item, index) => (
                 <motion.article
                   key={`${item.title}-${index}`}
@@ -1870,9 +1870,9 @@ export default function App() {
               {[
                 { title: 'Registrations Close', date: '31 Jan 2026', desc: 'Last date to register for the hackathon' },
                 { title: 'Online Test', date: '1 Feb 2026', desc: 'Aptitude and technical evaluation' },
-                { title: 'PPT Submission Closes', date: '8 Feb 2026', desc: 'Deadline for Round 2 submissions' },
-                { title: 'Final Shortlists Announced', date: '12 Feb 2026', desc: 'Teams selected for final round' },
-                { title: 'Final Hackathon', date: '21 Feb 2026', desc: 'Offline hackathon and presentations' },
+                { title: 'PPT Submission Closes', date: '12 Feb 2026', desc: 'Deadline for Round 2 submissions' },
+                { title: 'Final Shortlists Announced', date: 'To Be Announced', desc: 'Teams selected for final round' },
+                { title: 'Final Hackathon', date: 'To Be Announced', desc: 'Offline hackathon and presentations' },
               ].map((item, index) => {
                 const isLeft = index % 2 === 0
                 return (
